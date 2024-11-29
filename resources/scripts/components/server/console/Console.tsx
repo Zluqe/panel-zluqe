@@ -23,6 +23,7 @@ import 'xterm/css/xterm.css';
 import styles from './style.module.css';
 import { useStoreState } from '@/state/hooks';
 import { ArrowsExpandIcon } from '@heroicons/react/outline';
+import IntelligenceButton from './IntelligenceButton';
 
 const theme: ITheme = {
     background: '#000000',
@@ -230,7 +231,10 @@ export default ({ expand, setExpand }: Props) => {
             <div
                 className={classNames(styles.container, styles.overflows_container, { 'rounded-b': !canSendCommands })}
             >
-                <div className={'h-full'}>
+                <div className={'h-full static'}>
+                    <div className={'absolute top-0 right-0 p-5 z-10'}>
+                        <IntelligenceButton />
+                    </div>
                     <div id={styles.terminal} ref={ref} />
                 </div>
             </div>
