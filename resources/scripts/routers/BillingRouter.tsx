@@ -11,7 +11,6 @@ import ProductsContainer from '@/components/billing/ProductsContainer';
 import OverviewContainer from '@/components/billing/OverviewContainer';
 import OrderContainer from '@/components/billing/order/OrderContainer';
 import Processing from '@/components/billing/order/summary/Processing';
-import ViewPlanContainer from '@/components/billing/plans/ViewPlanContainer';
 import Avatar from '@/components/Avatar';
 import Sidebar from '@/components/elements/Sidebar';
 import { usePersistedState } from '@/plugins/usePersistedState';
@@ -101,7 +100,6 @@ export default () => {
                         <Route path={'/order'} element={<ProductsContainer />} />
                         <Route path={'/order/:id'} element={<OrderContainer />} />
                         <Route path={'/plans'} element={<PlansContainer />} />
-                        <Route path={'/plans/:id'} element={<ViewPlanContainer />} />
 
                         <Route path={'/order/:id/processing'} element={<Processing />} />
                         <Route path={'/success'} element={<Success />} />

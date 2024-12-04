@@ -1,3 +1,4 @@
+/**
 import Pill from '@elements/Pill';
 import Spinner from '@elements/Spinner';
 import useFlash from '@/plugins/useFlash';
@@ -13,44 +14,10 @@ import StatBlock from '@/components/server/console/StatBlock';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { format, type } from '@/components/billing/plans/PlansContainer';
-import { BillingPlan, getBillingPlan } from '@/api/billing/getBillingPlans';
 import CancelPlanButton from '@/components/billing/plans/forms/CancelPlanButton';
 import { faHdd, faIdBadge, faMemory, faMicrochip, faNewspaper, faServer } from '@fortawesome/free-solid-svg-icons';
 
 export default () => {
-    const params = useParams<'id'>();
-    const [server, setServer] = useState<Server>();
-    const [plan, setPlan] = useState<BillingPlan>();
-    const { colors } = useStoreState(s => s.theme.data!);
-    const [loading, setLoading] = useState<boolean>(false);
-
-    const { clearFlashes, clearAndAddHttpError } = useFlash();
-
-    useEffect(() => {
-        clearFlashes();
-        setLoading(true);
-
-        getBillingPlan(Number(params.id))
-            .then(data => {
-                setPlan(data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setLoading(false);
-                clearAndAddHttpError({ key: 'billing:plans:view', error });
-            });
-    }, []);
-
-    useEffect(() => {
-        if (!plan || server) return;
-
-        getServer(plan.serverId)
-            .then(data => setServer(data[0]))
-            .catch(error => console.error(error));
-    }, [plan]);
-
-    if (!plan) return <Spinner centered />;
-
     return (
         <PageContentBlock>
             <div className={'text-3xl lg:text-5xl font-bold mt-8 mb-12'}>
@@ -160,3 +127,4 @@ export default () => {
         </PageContentBlock>
     );
 };
+*/

@@ -1,11 +1,7 @@
-import Spinner from '@elements/Spinner';
-import useFlash from '@/plugins/useFlash';
-import { useEffect, useState } from 'react';
+import Pill, { PillStatus } from '../../elements/Pill';
 import PageContentBlock from '@elements/PageContentBlock';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { Body, BodyItem, Header, HeaderItem, Table } from '@elements/Table';
-import { BillingPlan, BillingPlanState, getBillingPlans } from '@/api/billing/getBillingPlans';
-import Pill, { PillStatus } from '../../elements/Pill';
 
 export function format(date: number): string {
     let prefix = 'th';
@@ -30,7 +26,7 @@ export function format(date: number): string {
     return `${date}${prefix}`;
 }
 
-export function type(state: BillingPlanState): PillStatus {
+export function type(state: string): PillStatus {
     switch (state) {
         case 'paid':
             return 'success';
@@ -47,24 +43,6 @@ export function type(state: BillingPlanState): PillStatus {
 }
 
 export default () => {
-    const [plans, setPlans] = useState<BillingPlan[] | undefined>();
-    const [loading, setLoading] = useState<boolean>(false);
-
-    const { clearFlashes, clearAndAddHttpError } = useFlash();
-
-    useEffect(() => {
-        clearFlashes();
-        setLoading(true);
-
-        getBillingPlans()
-            .then(data => setPlans(data))
-            .then(() => setLoading(false))
-            .catch(error => {
-                setLoading(false);
-                clearAndAddHttpError({ key: 'billing:plans', error });
-            });
-    }, []);
-
     return (
         <PageContentBlock>
             <div className={'text-3xl lg:text-5xl font-bold mt-8 mb-12'}>
@@ -75,11 +53,6 @@ export default () => {
                 <FlashMessageRender byKey={'billing:plans'} className={'mt-4'} />
             </div>
             <div className={'text-gray-400 text-center'}>
-                {loading ? (
-                    <Spinner centered />
-                ) : !plans || plans.length < 1 ? (
-                    "No items could be found. Create a new plan on the 'Order' tab."
-                ) : (
                     <Table>
                         <Header>
                             <HeaderItem>Name</HeaderItem>
@@ -89,19 +62,16 @@ export default () => {
                             <HeaderItem>&nbsp;</HeaderItem>
                         </Header>
                         <Body>
-                            {plans.map(plan => (
-                                <BodyItem item={plan.name} key={plan.id} to={`/billing/plans/${plan.id}`}>
-                                    <td className={'px-6 py-4 text-white'}>${plan.price}/mo</td>
-                                    <td className={'px-6 py-4'}>{format(plan.billDate)} of month</td>
-                                    <td className={'px-6 py-4'}>{plan.description}</td>
+                                <BodyItem item={'Example Order'} key={1} to={`/billing/orders/1`}>
+                                    <td className={'px-6 py-4 text-white'}>$14.00/mo</td>
+                                    <td className={'px-6 py-4'}>{format(31)} of month</td>
+                                    <td className={'px-6 py-4'}>This is a server plan.</td>
                                     <td className={'pr-12 py-4 text-right'}>
-                                        <Pill type={type(plan.state)}>{plan.state}</Pill>
+                                        <Pill type={type('cancelled')}>Expired</Pill>
                                     </td>
                                 </BodyItem>
-                            ))}
                         </Body>
                     </Table>
-                )}
             </div>
         </PageContentBlock>
     );

@@ -10,9 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Everest\Models\Billing\Product;
 use Illuminate\Http\RedirectResponse;
-use Everest\Models\Billing\BillingPlan;
 use Everest\Services\Billing\CreateServerService;
-use Everest\Services\Billing\CreateBillingPlanService;
 use Everest\Http\Controllers\Api\Client\ClientApiController;
 use Everest\Repositories\Wings\DaemonConfigurationRepository;
 use Everest\Exceptions\Http\Connection\DaemonConnectionException;
@@ -21,7 +19,6 @@ class OrderController extends ClientApiController
 {
     public function __construct(
         private CreateServerService $serverCreation,
-        private CreateBillingPlanService $planCreation,
         private DaemonConfigurationRepository $repository,
     ) {
         parent::__construct();
