@@ -28,7 +28,7 @@ export const rawDataToOrder = ({ attributes: data }: FractalResponseData): Order
     updated_at: data.updated_at ? new Date(data.updated_at) : null,
 });
 
-export default (): Promise<Order[]> => {
+export const getOrders = (): Promise<Order[]> => {
     return new Promise((resolve, reject) => {
         http.get(`/api/client/billing/orders`)
             .then(({ data }) => resolve((data.data || []).map((datum: any) => rawDataToOrder(datum))))

@@ -3,7 +3,6 @@
 namespace Everest\Models\Billing;
 
 use Everest\Models\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id

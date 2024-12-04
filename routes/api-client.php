@@ -65,8 +65,9 @@ Route::prefix('/billing')->group(function () {
 
     Route::post('/products/{id}/intent', [Client\Billing\StripeController::class, 'intent']);
     Route::put('/products/{id}/intent', [Client\Billing\StripeController::class, 'updateIntent']);
+    Route::post('/process', [Client\Billing\StripeController::class, 'process'])->name('api:client.billing.process');
 
-    Route::post('/process', [Client\Billing\OrderController::class, 'process'])->name('api:client.billing.process');
+    Route::get('/orders', [Client\Billing\OrderController::class, 'index']);
 });
 
 /*

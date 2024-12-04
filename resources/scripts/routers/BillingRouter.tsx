@@ -6,7 +6,7 @@ import CollapsedIcon from '@/assets/images/logo.png';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import Cancel from '@/components/billing/order/summary/Cancel';
 import Success from '@/components/billing/order/summary/Success';
-import PlansContainer from '@/components/billing/plans/PlansContainer';
+import OrdersContainer from '@/components/billing/orders/OrdersContainer';
 import ProductsContainer from '@/components/billing/ProductsContainer';
 import OverviewContainer from '@/components/billing/OverviewContainer';
 import OrderContainer from '@/components/billing/order/OrderContainer';
@@ -61,11 +61,11 @@ export default () => {
                     </NavLink>
                     <NavLink to={'/billing/order'}>
                         <ShoppingCartIcon />
-                        <span>Order</span>
+                        <span>Store</span>
                     </NavLink>
-                    <NavLink to={'/billing/plans'}>
+                    <NavLink to={'/billing/orders'}>
                         <ViewListIcon />
-                        <span>Active Plans</span>
+                        <span>Orders</span>
                     </NavLink>
                 </Sidebar.Wrapper>
                 <span className={'mt-auto mb-3 mr-auto'}>
@@ -99,7 +99,7 @@ export default () => {
                         <Route path={'/'} element={<OverviewContainer />} />
                         <Route path={'/order'} element={<ProductsContainer />} />
                         <Route path={'/order/:id'} element={<OrderContainer />} />
-                        <Route path={'/plans'} element={<PlansContainer />} />
+                        <Route path={'/orders'} element={<OrdersContainer />} />
 
                         <Route path={'/order/:id/processing'} element={<Processing />} />
                         <Route path={'/success'} element={<Success />} />

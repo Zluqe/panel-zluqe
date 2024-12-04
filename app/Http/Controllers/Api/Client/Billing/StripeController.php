@@ -2,20 +2,16 @@
 
 namespace Everest\Http\Controllers\Api\Client\Billing;
 
-use Everest\Models\Node;
 use Stripe\StripeClient;
 use Illuminate\Http\Request;
-use Laravel\Cashier\Cashier;
 use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
 use Everest\Models\Billing\Order;
+use Illuminate\Http\JsonResponse;
 use Everest\Models\Billing\Product;
-use Illuminate\Http\RedirectResponse;
 use Everest\Services\Billing\CreateOrderService;
 use Everest\Services\Billing\CreateServerService;
 use Everest\Http\Controllers\Api\Client\ClientApiController;
 use Everest\Repositories\Wings\DaemonConfigurationRepository;
-use Everest\Exceptions\Http\Connection\DaemonConnectionException;
 
 class StripeController extends ClientApiController
 {
@@ -27,7 +23,6 @@ class StripeController extends ClientApiController
         parent::__construct();
 
         $this->stripe = new StripeClient(env('STRIPE_SECRET'));
-
     }
 
     /**
@@ -80,7 +75,7 @@ class StripeController extends ClientApiController
      */
     public function process(Request $request): Response
     {
-        $order = Order::where('user_id', $request->user()->id)->first();
+        $order = Order::where('user_id', $request->user()->id)->latest()->first();
         $intent = $this->stripe->paymentIntents->retrieve($request->input('intent'));
 
         if (!$intent) {
@@ -91,7 +86,7 @@ class StripeController extends ClientApiController
 
         $this->serverCreation->process($request, $product, $intent->metadata);
 
-        $this->orderService->update($order, ['status' => Order::STATUS_PROCESSED]);
+        $order->update(['status' => Order::STATUS_PROCESSED]);
 
         return $this->returnNoContent();
     }
