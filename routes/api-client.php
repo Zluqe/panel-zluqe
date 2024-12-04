@@ -64,9 +64,10 @@ Route::prefix('/billing')->group(function () {
     Route::get('/products/{id}/variables', [Client\Billing\EggController::class, 'index']);
     Route::post('/products/{id}', [Client\Billing\OrderController::class, 'order']);
 
-    Route::get('/cancel', [Client\Billing\OrderController::class, 'cancel'])->name('api:client.billing.cancel');
+    Route::post('/products/{id}/intent', [Client\Billing\OrderController::class, 'intent']);
+    Route::put('/products/{id}/intent', [Client\Billing\OrderController::class, 'updateIntent']);
+
     Route::post('/process', [Client\Billing\OrderController::class, 'process'])->name('api:client.billing.process');
-    Route::get('/callback', [Client\Billing\OrderController::class, 'callback'])->name('api:client.billing.callback');
 
     Route::get('/plans', [Client\Billing\PlanController::class, 'index']);
     Route::get('/plans/{id}', [Client\Billing\PlanController::class, 'view']);

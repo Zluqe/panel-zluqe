@@ -1,9 +1,9 @@
 import http from '@/api/http';
 
-export default (sessionId: string): Promise<void> => {
+export default (intent: string): Promise<string> => {
     return new Promise((resolve, reject) => {
-        http.post(`/api/client/billing/process`, { session_id: sessionId })
-            .then(() => resolve())
+        http.post(`/api/client/billing/process`, { intent })
+            .then(({ data }) => resolve(data))
             .catch(reject);
     });
 };

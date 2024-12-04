@@ -3,9 +3,11 @@
 namespace Everest\Http\Controllers\Api\Client\Billing;
 
 use Everest\Models\Node;
+use Stripe\StripeClient;
 use Illuminate\Http\Request;
 use Laravel\Cashier\Cashier;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Everest\Models\Billing\Product;
 use Illuminate\Http\RedirectResponse;
 use Everest\Models\Billing\BillingPlan;
@@ -23,56 +25,52 @@ class OrderController extends ClientApiController
         private DaemonConfigurationRepository $repository,
     ) {
         parent::__construct();
+
+        $this->stripe = new StripeClient(env('STRIPE_SECRET'));
+
     }
 
     /**
-     * Order a new product.
+     * Create a Stripe payment intent.
      */
-    public function order(Request $request, int $id): string
+    public function intent(Request $request, int $id): JsonResponse
     {
         $product = Product::findOrFail($id);
-        $node = Node::findOrFail($request->input('node'));
 
-        $data = $this->repository->setNode($node)->getSystemInformation();
+        $paymentIntent = $this->stripe->paymentIntents->create([
+            'amount' => $product->price * 100,
+            'currency' => 'usd',
+            'payment_method_types' => [
+                'card',
+                'paypal',
+                'link',
+            ],
+        ]);
 
-        if (!$data['version']) {
-            throw new DaemonConnectionException();
-        }
-
-        return $this->generateStripeUrl($request, $product);
+        return response()->json([
+            'id' => $paymentIntent->id,
+            'secret' => $paymentIntent->client_secret,
+        ]);
     }
 
     /**
-     * Get the Stripe Checkout URL for payment.
+     * Update a Payment Intent with new data from the UI.
      */
-    private function generateStripeUrl(Request $request, Product $product): string
+    public function updateIntent(Request $request, int $id): Response
     {
-        $session = $request
-            ->user()
-            ->newSubscription($product->uuid, $product->stripe_id)
-            ->checkout([
-                'success_url' => route('api:client.billing.callback') . '?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => route('api:client.billing.cancel') . '?session_id={CHECKOUT_SESSION_ID}',
-                'metadata' => [
-                    'node_id' => $request->input('node'),
-                    'user_id' => $request->user()->id,
-                    'product_id' => $product->id,
-                    'plan_uuid' => $product->uuid,
-                    'username' => $request->user()->username,
-                    'environment' => json_encode($request->input('data')),
-                ],
-            ])
-            ->url;
+        $intent = $this->stripe->paymentIntents->retrieve($request->input('intent'));
 
-        return $session;
-    }
+        $intent->metadata = [
+            'customer_email' => $request->user()->email,
+            'customer_name' => $request->user()->username,
+            'product_id' => $id,
+            'variables' => $request->input('variables'),
+            'node_id' => $request->input('node_id'),
+        ];
 
-    /**
-     * Redirect to the UI to process the order.
-     */
-    public function callback(Request $request): RedirectResponse
-    {
-        return redirect('/billing/process/' . $request->get('session_id'));
+        $intent->save();
+
+        return $this->returnNoContent();
     }
 
     /**
@@ -80,61 +78,16 @@ class OrderController extends ClientApiController
      */
     public function process(Request $request): Response
     {
-        $id = $request->get('session_id');
+        $intent = $this->stripe->paymentIntents->retrieve($request->input('intent'));
 
-        if (!$id) {
-            throw new \Exception('Unable to fetch payment session from Stripe.');
+        if (!$intent) {
+            throw new \Exception('Unable to fetch payment intent from Stripe.');
         }
 
-        $session = Cashier::stripe()->checkout->sessions->retrieve($id);
+        $product = Product::findOrFail($intent->metadata->product_id);
 
-        if ($session->payment_status !== 'paid') {
-            $this->planCreation->process(
-                $request,
-                $product,
-                BillingPlan::STATUS_CANCELLED,
-            );
-
-            throw new \Exception('This plan has not been paid, so the order has been cancelled.');
-        }
-
-        $product = Product::findOrFail($session['metadata']['product_id']);
-
-        $server = $this->serverCreation->process($request, $product, $session['metadata']);
-
-        $this->planCreation->process(
-            $session['metadata']['user_id'],
-            $session['metadata']['plan_uuid'],
-            $product,
-            $server,
-            BillingPlan::STATUS_PAID
-        );
+        $server = $this->serverCreation->process($request, $product, $intent->metadata);
 
         return $this->returnNoContent();
-    }
-
-    /**
-     * Process a cancelled subscription purchase.
-     */
-    public function cancel(Request $request): RedirectResponse
-    {
-        $id = $request->get('session_id');
-
-        $session = Cashier::stripe()->checkout->sessions->retrieve($id);
-
-        if (!$session) {
-            return redirect('/');
-        }
-
-        $product = Product::findOrFail($session['metadata']['product_id']);
-
-        $this->planCreation->process(
-            $session['metadata']['user_id'],
-            $product,
-            null,
-            BillingPlan::STATUS_CANCELLED,
-        );
-
-        return redirect('/billing/cancel');
     }
 }

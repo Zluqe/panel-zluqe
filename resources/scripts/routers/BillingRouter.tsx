@@ -30,6 +30,7 @@ export default () => {
     const enabled = useStoreState(state => state.everest.data!.billing.enabled);
     const [collapsed, setCollapsed] = usePersistedState<boolean>(`sidebar_user_${user.uuid}`, false);
 
+
     if (!enabled) {
         return <NotFound />;
     }
@@ -92,6 +93,7 @@ export default () => {
                     </div>
                 </Sidebar.User>
             </Sidebar>
+
             <div className={'flex-1 overflow-x-hidden p-4 lg:p-8'}>
                 <Suspense fallback={<Spinner centered />}>
                     <Routes>
@@ -101,7 +103,7 @@ export default () => {
                         <Route path={'/plans'} element={<PlansContainer />} />
                         <Route path={'/plans/:id'} element={<ViewPlanContainer />} />
 
-                        <Route path={'/process/:session_id'} element={<Processing />} />
+                        <Route path={'/order/:id/processing'} element={<Processing />} />
                         <Route path={'/success'} element={<Success />} />
                         <Route path={'/cancel'} element={<Cancel />} />
 

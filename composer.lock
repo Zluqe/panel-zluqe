@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d96028ee511eb451a7cb66564fbc5f1",
+    "content-hash": "da2d5457e36aa2078975683e85035d13",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1663,16 +1663,16 @@
         },
         {
             "name": "laravel/cashier",
-            "version": "v15.3.2",
+            "version": "v15.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/cashier-stripe.git",
-                "reference": "f468fb187b2229a0f1b7d20e2a619369eb4a36e7"
+                "reference": "a934a85540f21c60f55e47c226f8ef9e8f201384"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/cashier-stripe/zipball/f468fb187b2229a0f1b7d20e2a619369eb4a36e7",
-                "reference": "f468fb187b2229a0f1b7d20e2a619369eb4a36e7",
+                "url": "https://api.github.com/repos/laravel/cashier-stripe/zipball/a934a85540f21c60f55e47c226f8ef9e8f201384",
+                "reference": "a934a85540f21c60f55e47c226f8ef9e8f201384",
                 "shasum": ""
             },
             "require": {
@@ -1708,13 +1708,13 @@
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "15.x-dev"
-                },
                 "laravel": {
                     "providers": [
                         "Laravel\\Cashier\\CashierServiceProvider"
                     ]
+                },
+                "branch-alias": {
+                    "dev-master": "15.x-dev"
                 }
             },
             "autoload": {
@@ -1747,7 +1747,7 @@
                 "issues": "https://github.com/laravel/cashier/issues",
                 "source": "https://github.com/laravel/cashier"
             },
-            "time": "2024-04-12T09:45:48+00:00"
+            "time": "2024-09-03T14:51:03+00:00"
         },
         {
             "name": "laravel/framework",
@@ -12018,7 +12018,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -12030,7 +12030,7 @@
         "ext-posix": "*",
         "ext-zip": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.1.0"
     },

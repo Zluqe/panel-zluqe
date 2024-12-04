@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useStoreState } from '@/state/hooks';
 import PageContentBlock from '@elements/PageContentBlock';
 import { useEffect } from 'react';
@@ -8,15 +8,18 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import Spinner from '@/components/elements/Spinner';
 
 export default () => {
+    const location = useLocation();
     const navigate = useNavigate();
-    const params = useParams<'session_id'>();
+    const params = new URLSearchParams(location.search);
     const { colors } = useStoreState(s => s.theme.data!);
     const { addFlash, clearAndAddHttpError, clearFlashes } = useFlash();
 
     useEffect(() => {
         clearFlashes();
 
-        if (!params.session_id) {
+        const intent = params.get('payment_intent');
+
+        if (!intent) {
             addFlash({
                 key: 'billing:process',
                 type: 'error',
@@ -26,7 +29,7 @@ export default () => {
             return;
         }
 
-        processOrder(params.session_id)
+        processOrder(intent)
             .then(() => {
                 navigate('/billing/success');
             })
@@ -53,7 +56,7 @@ export default () => {
                         Our systems are currently working on deploying your server to our systems. Sit tight while your
                         new server is deployed!
                     </p>
-                    <p className={'text-2xs text-neutral-400 mt-8'}>Session {params.session_id ?? 'unknown'}</p>
+                    <p className={'text-2xs text-neutral-400 mt-8'}>Session unknown</p>
                 </div>
             </div>
         </PageContentBlock>
