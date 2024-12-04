@@ -62,10 +62,9 @@ Route::prefix('/billing')->group(function () {
     Route::get('/categories/{id}', [Client\Billing\ProductController::class, 'index']);
     Route::get('/products/{id}', [Client\Billing\ProductController::class, 'view']);
     Route::get('/products/{id}/variables', [Client\Billing\EggController::class, 'index']);
-    Route::post('/products/{id}', [Client\Billing\OrderController::class, 'order']);
 
-    Route::post('/products/{id}/intent', [Client\Billing\OrderController::class, 'intent']);
-    Route::put('/products/{id}/intent', [Client\Billing\OrderController::class, 'updateIntent']);
+    Route::post('/products/{id}/intent', [Client\Billing\StripeController::class, 'intent']);
+    Route::put('/products/{id}/intent', [Client\Billing\StripeController::class, 'updateIntent']);
 
     Route::post('/process', [Client\Billing\OrderController::class, 'process'])->name('api:client.billing.process');
 });

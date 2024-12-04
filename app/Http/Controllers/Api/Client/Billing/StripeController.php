@@ -17,7 +17,7 @@ use Everest\Http\Controllers\Api\Client\ClientApiController;
 use Everest\Repositories\Wings\DaemonConfigurationRepository;
 use Everest\Exceptions\Http\Connection\DaemonConnectionException;
 
-class OrderController extends ClientApiController
+class StripeController extends ClientApiController
 {
     public function __construct(
         private CreateOrderService $orderService,
