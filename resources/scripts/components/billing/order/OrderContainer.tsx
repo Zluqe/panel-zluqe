@@ -83,9 +83,20 @@ export default () => {
 
     if (!product || !intent) return <Spinner centered />;
 
+
+    const options = {
+        clientSecret: intent.secret,
+        appearance: {
+            theme: "night",
+            variables: {
+              colorText: '#ffffff',
+            },
+          },
+    }
+
     return (
         <PageContentBlock title={'Your Order'}>
-            <Elements stripe={stripePromise} options={{ clientSecret: intent.secret }}>
+            <Elements stripe={stripePromise} options={options}>
                 <div className={'text-3xl lg:text-5xl font-bold mt-8 mb-12'}>
                     Your Order
                     <p className={'text-gray-400 font-normal text-sm mt-1'}>

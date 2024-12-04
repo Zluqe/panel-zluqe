@@ -38,11 +38,11 @@ export default (data: Props) => {
     };
 
     return (
-        <form className={'bg-gray-900'} onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
             <PaymentElement />
             <FlashMessageRender byKey={'store:order'} className={'mb-4'} />
             <div className={'text-right'}>
-                <Button disabled={!data.selectedNode}>
+                <Button disabled={!data.selectedNode} className={'mt-4'} size={Button.Sizes.Large}>
                     Pay Now
                 </Button>
             </div>
