@@ -19,6 +19,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Order extends Model
 {
+    public const STATUS_FAILED = 'failed';
+    public const STATUS_EXPIRED = 'expired';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_PROCESSED = 'processed';
+
     /**
      * The resource name for this model when it is transformed into an
      * API representation using fractal.
@@ -52,8 +57,8 @@ class Order extends Model
         'name' => 'string|required|min:3',
         'user_id' => 'required|exists:users,id',
         'description' => 'required|string|min:3',
-        'total' => 'required|double|min:0',
-        'status' => 'required|in:expired,failed,processed',
+        'total' => 'required|min:0',
+        'status' => 'required|in:expired,pending,failed,processed',
         'product_id' => 'exists:products,id',
         'is_renewal' => 'nullable|bool',
     ];

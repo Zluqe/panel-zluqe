@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 use Laravel\Cashier\Cashier;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Everest\Models\Billing\Order;
 use Everest\Models\Billing\Product;
 use Illuminate\Http\RedirectResponse;
+use Everest\Services\Billing\CreateOrderService;
 use Everest\Services\Billing\CreateServerService;
 use Everest\Http\Controllers\Api\Client\ClientApiController;
 use Everest\Repositories\Wings\DaemonConfigurationRepository;
@@ -18,6 +20,7 @@ use Everest\Exceptions\Http\Connection\DaemonConnectionException;
 class OrderController extends ClientApiController
 {
     public function __construct(
+        private CreateOrderService $orderService,
         private CreateServerService $serverCreation,
         private DaemonConfigurationRepository $repository,
     ) {
@@ -43,6 +46,8 @@ class OrderController extends ClientApiController
                 'link',
             ],
         ]);
+
+        $this->orderService->create($request->user(), $product, Order::STATUS_PENDING);
 
         return response()->json([
             'id' => $paymentIntent->id,
@@ -75,6 +80,7 @@ class OrderController extends ClientApiController
      */
     public function process(Request $request): Response
     {
+        $order = Order::where('user_id', $request->user()->id)->first();
         $intent = $this->stripe->paymentIntents->retrieve($request->input('intent'));
 
         if (!$intent) {
@@ -83,7 +89,9 @@ class OrderController extends ClientApiController
 
         $product = Product::findOrFail($intent->metadata->product_id);
 
-        $server = $this->serverCreation->process($request, $product, $intent->metadata);
+        $this->serverCreation->process($request, $product, $intent->metadata);
+
+        $this->orderService->update($order, ['status' => Order::STATUS_PROCESSED]);
 
         return $this->returnNoContent();
     }
