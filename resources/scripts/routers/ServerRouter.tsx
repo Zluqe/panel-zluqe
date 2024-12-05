@@ -4,7 +4,7 @@ import { NavLink, Route, Routes, useParams } from 'react-router-dom';
 import WebsocketHandler from '@/components/server/WebsocketHandler';
 import { ServerContext } from '@/state/server';
 import Spinner from '@elements/Spinner';
-import { NotFound, ServerError } from '@elements/ScreenBlock';
+import { NotFound, ServerError, Suspended } from '@elements/ScreenBlock';
 import { httpErrorToHuman } from '@/api/http';
 import { useStoreState } from 'easy-peasy';
 import InstallListener from '@/components/server/InstallListener';
@@ -46,12 +46,14 @@ function ServerRouter() {
     const id = ServerContext.useStoreState(state => state.server.data?.id);
     const uuid = ServerContext.useStoreState(state => state.server.data?.uuid);
     const inConflictState = ServerContext.useStoreState(state => state.server.inConflictState);
+    const status = ServerContext.useStoreState(state => state.server.data?.status);
     const getServer = ServerContext.useStoreActions(actions => actions.server.getServer);
     const clearServerState = ServerContext.useStoreActions(actions => actions.clearServerState);
     const [collapsed, setCollapsed] = usePersistedState<boolean>(`sidebar_user_${user.uuid}`, false);
     const serverId = ServerContext.useStoreState(state => state.server.data?.internalId);
     const billable = ServerContext.useStoreState(state => state.server.data?.orderId);
-    
+    const daysUntilRenewal = ServerContext.useStoreState(state => state.server.data?.daysUntilRenewal);
+
     useEffect(() => {
         clearServerState();
     }, []);
@@ -72,6 +74,8 @@ function ServerRouter() {
             clearServerState();
         };
     }, [params.id]);
+
+    if (status === 'suspended' && billable) return <Suspended days={daysUntilRenewal ?? 0} />;
 
     return (
         <Fragment key={'server-router'}>
