@@ -63,6 +63,8 @@ Route::prefix('/billing')->group(function () {
     Route::get('/products/{id}', [Client\Billing\ProductController::class, 'view']);
     Route::get('/products/{id}/variables', [Client\Billing\EggController::class, 'index']);
 
+    Route::get('/products/{id}/key', [Client\Billing\StripeController::class, 'publicKey']);
+
     Route::post('/products/{id}/intent', [Client\Billing\StripeController::class, 'intent']);
     Route::put('/products/{id}/intent', [Client\Billing\StripeController::class, 'updateIntent']);
     Route::post('/process', [Client\Billing\StripeController::class, 'process'])->name('api:client.billing.process');

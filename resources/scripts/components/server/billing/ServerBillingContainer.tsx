@@ -8,8 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { getOrder, Order } from '@/api/billing/orders';
 import useFlash from '@/plugins/useFlash';
-import getProduct from '@/api/billing/getProduct';
-import { Product } from '@/api/billing/getProducts';
+import { getProduct } from '@/api/billing/products';
+import { Product } from '@/api/billing/products';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Alert } from '@/components/elements/alert';
 

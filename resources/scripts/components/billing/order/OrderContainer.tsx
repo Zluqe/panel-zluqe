@@ -2,8 +2,8 @@ import Spinner from '@elements/Spinner';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useStoreState } from '@/state/hooks';
-import getProduct from '@/api/billing/getProduct';
-import { Product } from '@/api/billing/getProducts';
+import { Product } from '@/api/billing/products';
+import { getProduct } from '@/api/billing/products';
 import { ServerEggVariable } from '@/api/server/types';
 import NodeBox from '@/components/billing/order/NodeBox';
 import PageContentBlock from '@elements/PageContentBlock';
@@ -27,7 +27,8 @@ import useFlash from '@/plugins/useFlash';
 import { getIntent, PaymentIntent } from '@/api/billing/intent';
 import PaymentButton from './PaymentButton';
 import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe, Stripe } from '@stripe/stripe-js';
+import { getPublicKey } from '@/api/billing/key';
 
 const LimitBox = ({ icon, content }: { icon: IconDefinition; content: string }) => {
     return (
@@ -38,65 +39,77 @@ const LimitBox = ({ icon, content }: { icon: IconDefinition; content: string }) 
     );
 };
 
-const stripePromise = await loadStripe('pk_test_51JsAckCl8lsZFqcAk26ZvDE9y4RI7oXnp3jYKO4Lyb0y3RGI3IHxSaBmm9jP9LyzhvEfQwMM6B6aeoXgd8jRE71W00twg9IYYk');
-
 export default () => {
     const params = useParams<'id'>();
 
     const vars = new Map<string, string>();
     const { clearFlashes } = useFlash();
+
+    const [stripe, setStripe] = useState<Stripe | null>(null);
     const [intent, setIntent] = useState<PaymentIntent | null>(null);
-
     const [nodes, setNodes] = useState<Node[] | undefined>();
-    const [selectedNode, setSelectedNode] = useState<number>();
-
+    const [selectedNode, setSelectedNode] = useState<number>(0);
     const [product, setProduct] = useState<Product | undefined>();
     const [eggs, setEggs] = useState<ServerEggVariable[] | undefined>();
 
     const { colors } = useStoreState(state => state.theme.data!);
 
     useEffect(() => {
-        getProduct(Number(params.id))
-            .then(data => setProduct(data))
-            .catch(error => console.error(error));
+        const fetchData = async () => {
+            try {
+                // Fetch product details
+                const productData = await getProduct(Number(params.id));
+                setProduct(productData);
 
-        getNodes()
-            .then(data => {
-                setNodes(data);
-                setSelectedNode(Number(data[0]?.id) ?? 0);
-            })
-            .catch(error => console.error(error));
+                // Fetch nodes
+                const nodesData = await getNodes();
+                setNodes(nodesData);
+                setSelectedNode(Number(nodesData[0]?.id) ?? 0);
 
-        getIntent(Number(params.id))
-            .then(data => setIntent({ id: data.id, secret: data.secret }))
-    }, []);
+                // Fetch payment intent
+                const intentData = await getIntent(Number(params.id));
+                setIntent({ id: intentData.id, secret: intentData.secret });
+
+                // Fetch Stripe public key and initialize Stripe
+                const stripePublicKey = await getPublicKey(Number(params.id));
+                const stripeInstance = await loadStripe(stripePublicKey.key);
+                setStripe(stripeInstance);
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [params.id]);
 
     useEffect(() => {
         clearFlashes();
 
         if (!product || eggs) return;
 
+        // Fetch product variables (egg data)
         getProductVariables(Number(product.eggId))
             .then(data => setEggs(data))
             .catch(error => console.error(error));
     }, [product]);
 
-    if (!product || !intent) return <Spinner centered />;
-
+    if (!product || !intent || !stripe) return <Spinner centered />;
 
     const options = {
         clientSecret: intent.secret,
         appearance: {
             theme: "night",
             variables: {
-              colorText: '#ffffff',
+                colorText: '#ffffff',
             },
-          },
-    }
+        },
+    };
 
     return (
         <PageContentBlock title={'Your Order'}>
-            <Elements stripe={stripePromise} options={options}>
+            {/* @ts-expect-error this is fine, stripe library is just weird */}
+            <Elements stripe={stripe} options={options}>
                 <div className={'text-3xl lg:text-5xl font-bold mt-8 mb-12'}>
                     Your Order
                     <p className={'text-gray-400 font-normal text-sm mt-1'}>
@@ -164,13 +177,11 @@ export default () => {
                                         </div>
                                         <div className={'grid lg:grid-cols-2 gap-4'}>
                                             {eggs?.map(variable => (
-                                                <>
+                                                <div key={variable.envVariable}>
                                                     {variable.isEditable && (
-                                                        <div key={variable.envVariable}>
-                                                            <VariableBox variable={variable} vars={vars} />
-                                                        </div>
+                                                        <VariableBox variable={variable} vars={vars} />
                                                     )}
-                                                </>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>

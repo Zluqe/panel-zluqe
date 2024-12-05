@@ -5,7 +5,7 @@ import { useStoreState } from '@/state/hooks';
 import ContentBox from '@elements/ContentBox';
 import { ReactElement, useEffect, useState } from 'react';
 import PageContentBlock from '@elements/PageContentBlock';
-import getProducts, { Product } from '@/api/billing/getProducts';
+import { getProducts, Product } from '@/api/billing/products';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import getCategories, { Category } from '@/api/billing/getCategories';
 import {

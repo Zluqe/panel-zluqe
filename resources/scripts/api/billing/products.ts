@@ -34,10 +34,18 @@ export const rawDataToProduct = ({ attributes: data }: FractalResponseData): Pro
     },
 });
 
-export default (id: number): Promise<Product[]> => {
+export const getProducts = (id: number): Promise<Product[]> => {
     return new Promise((resolve, reject) => {
         http.get(`/api/client/billing/categories/${id}`)
             .then(({ data }) => resolve((data.data || []).map((datum: any) => rawDataToProduct(datum))))
+            .catch(reject);
+    });
+};
+
+export const getProduct = (id: number): Promise<Product> => {
+    return new Promise((resolve, reject) => {
+        http.get(`/api/client/billing/products/${id}`)
+            .then(({ data }) => resolve(rawDataToProduct(data)))
             .catch(reject);
     });
 };

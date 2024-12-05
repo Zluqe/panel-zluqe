@@ -27,6 +27,16 @@ class StripeController extends ClientApiController
     }
 
     /**
+     * Send the Stripe public key to the frontend.
+     */
+    public function publicKey(Request $request, int $id): JsonResponse
+    {
+        return response()->json([
+            'key' => env('STRIPE_KEY'),
+        ]);
+    }
+
+    /**
      * Create a Stripe payment intent.
      */
     public function intent(Request $request, int $id): JsonResponse

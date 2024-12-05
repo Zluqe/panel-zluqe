@@ -8,7 +8,7 @@ import classNames from 'classnames';
 interface Props {
     node: Node;
     selected: number | undefined;
-    setSelected: Dispatch<SetStateAction<number | undefined>>;
+    setSelected: Dispatch<SetStateAction<number>>;
 }
 
 export default ({ node, selected, setSelected }: Props) => {
