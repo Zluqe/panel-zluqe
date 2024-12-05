@@ -75,7 +75,7 @@ export default () => {
                     </Header>
                     <Body>
                         {orders.map((order) => (
-                            <BodyItem item={order.name.split('-')[0]!.toString()} key={1} to={`/billing/orders/${order.id}`}>
+                            <BodyItem item={order.name.split('-')[0]!.toString()} key={1} to={`/billing/order/${order.product_id}`}>
                                 <td className={'px-6 py-4 text-white font-bold'}>${order.total}/mo</td>
                                 <td className={'px-6 py-4'}>{order.description}</td>
                                 <td className={'px-6 py-4'}>{formatDistanceToNowStrict(order.created_at, { addSuffix: true })}</td>

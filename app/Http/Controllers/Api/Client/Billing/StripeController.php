@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Everest\Models\Billing\Order;
 use Illuminate\Http\JsonResponse;
 use Everest\Models\Billing\Product;
+use Everest\Exceptions\DisplayException;
 use Everest\Services\Billing\CreateOrderService;
 use Everest\Services\Billing\CreateServerService;
 use Everest\Http\Controllers\Api\Client\ClientApiController;
@@ -79,13 +80,18 @@ class StripeController extends ClientApiController
         $intent = $this->stripe->paymentIntents->retrieve($request->input('intent'));
 
         if (!$intent) {
-            throw new \Exception('Unable to fetch payment intent from Stripe.');
+            throw new DisplayException('Unable to fetch payment intent from Stripe.');
+        }
+        
+        if ($intent->status !== 'processed') {
+            $order->update(['status' => Order::STATUS_FAILED]);
+            throw new DisplayException('THe order has been canceled.');
         }
 
         $product = Product::findOrFail($intent->metadata->product_id);
 
         $this->serverCreation->process($request, $product, $intent->metadata);
-
+    
         $order->update(['status' => Order::STATUS_PROCESSED]);
 
         return $this->returnNoContent();

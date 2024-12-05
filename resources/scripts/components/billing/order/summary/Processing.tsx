@@ -12,7 +12,7 @@ export default () => {
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search);
     const { colors } = useStoreState(s => s.theme.data!);
-    const { addFlash, clearAndAddHttpError, clearFlashes } = useFlash();
+    const { addFlash, clearFlashes } = useFlash();
 
     useEffect(() => {
         clearFlashes();
@@ -33,11 +33,8 @@ export default () => {
             .then(() => {
                 navigate('/billing/success');
             })
-            .catch(error => {
-                clearAndAddHttpError({
-                    key: 'billing:process',
-                    error,
-                });
+            .catch(() => {
+                navigate('/billing/cancel');
             });
     }, []);
 
