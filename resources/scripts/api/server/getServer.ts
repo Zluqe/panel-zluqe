@@ -35,6 +35,8 @@ export interface Server {
         threads: string;
     };
     eggFeatures: string[];
+    orderId: number;
+    daysUntilRenewal: number;
     featureLimits: {
         databases: number;
         allocations: number;
@@ -63,6 +65,8 @@ export const rawDataToServerObject = ({ attributes: data }: FractalResponseData)
     description: data.description ? (data.description.length > 0 ? data.description : null) : null,
     limits: { ...data.limits },
     eggFeatures: data.egg_features || [],
+    orderId: data.order_id,
+    daysUntilRenewal: data.days_until_renewal,
     featureLimits: { ...data.feature_limits },
     isTransferring: data.is_transferring,
     variables: ((data.relationships?.variables as FractalResponseList | undefined)?.data || []).map(

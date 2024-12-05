@@ -21,6 +21,7 @@ import {
     ArchiveIcon,
     ClockIcon,
     CogIcon,
+    CurrencyDollarIcon,
     DatabaseIcon,
     DesktopComputerIcon,
     DocumentIcon,
@@ -49,7 +50,10 @@ function ServerRouter() {
     const clearServerState = ServerContext.useStoreActions(actions => actions.clearServerState);
     const [collapsed, setCollapsed] = usePersistedState<boolean>(`sidebar_user_${user.uuid}`, false);
     const serverId = ServerContext.useStoreState(state => state.server.data?.internalId);
+    const billable = ServerContext.useStoreState(state => state.server.data);
 
+    console.log(billable);
+    
     useEffect(() => {
         clearServerState();
     }, []);
@@ -97,6 +101,12 @@ function ServerRouter() {
                             <TerminalIcon />
                             <span>Console</span>
                         </NavLink>
+                        {billable && (
+                            <NavLink to={`/server/${id}/billing`}>
+                            <CurrencyDollarIcon />
+                            <span>Billing</span>
+                        </NavLink>
+                        )}
                         <NavLink to={`/server/${id}/activity`}>
                             <DocumentIcon />
                             <span>Activity</span>

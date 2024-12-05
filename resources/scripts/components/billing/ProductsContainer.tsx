@@ -76,11 +76,12 @@ export default () => {
                         </div>
                     )}
                     {categories?.map(cat => (
-                        <div
+                        <button
                             className={classNames(
-                                'font-semibold my-4 hover:brightness-150 duration-300 cursor-pointer line-clamp-1',
+                                'font-semibold my-4 w-full text-left hover:brightness-150 duration-300 cursor-pointer line-clamp-1',
                                 Number(cat.id) === category && 'brightness-150',
                             )}
+                            disabled={category === Number(cat.id)}
                             style={{ color: colors.primary }}
                             onClick={() => {
                                 setCategory(Number(cat.id));
@@ -91,7 +92,7 @@ export default () => {
                             {cat.icon && <img src={cat.icon} className={'w-7 h-7 inline-flex rounded-full mr-3'} />}
                             {cat.name}
                             <div className={'h-0.5 mt-4 bg-gray-600 mr-8 rounded-full'} />
-                        </div>
+                        </button>
                     ))}
                 </div>
                 <div className={'lg:col-span-3'}>

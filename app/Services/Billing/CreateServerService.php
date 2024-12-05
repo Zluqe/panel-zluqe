@@ -49,6 +49,7 @@ class CreateServerService
                 'startup' => $egg->startup,
                 'environment' => [], // todo(jex): pass environment through to backend
                 'image' => current($egg->docker_images),
+                'order_id' => $order->id,
                 'days_until_renewal' => 30,
                 'database_limit' => $product->database_limit,
                 'backup_limit' => $product->backup_limit,

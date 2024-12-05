@@ -9,7 +9,6 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Everest\Http\Controllers\Controller;
 use Everest\Repositories\Eloquent\ServerRepository;
-use Everest\Events\Server\Installed as ServerInstalled;
 use Everest\Http\Requests\Api\Remote\InstallationDataRequest;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 
@@ -65,15 +64,6 @@ class ServerInstallController extends Controller
         }
 
         $this->repository->update($server->id, ['status' => $status, 'installed_at' => CarbonImmutable::now()], true, true);
-
-        // If the server successfully installed, fire installed event.
-        // This logic allows individually disabling install and reinstall notifications separately.
-        $isInitialInstall = is_null($server->installed_at);
-        if ($isInitialInstall && config()->get('everest.email.send_install_notification', true)) {
-            $this->eventDispatcher->dispatch(new ServerInstalled($server));
-        } elseif (!$isInitialInstall && config()->get('everest.email.send_reinstall_notification', true)) {
-            $this->eventDispatcher->dispatch(new ServerInstalled($server));
-        }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
