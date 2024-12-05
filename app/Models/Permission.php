@@ -65,6 +65,10 @@ class Permission extends Model
 
     public const ACTION_ACTIVITY_READ = 'activity.read';
 
+    public const ACTION_BILLING_READ = 'billing.read';
+    public const ACTION_BILLING_RENEW = 'billing.renew';
+    public const ACTION_BILLING_UPDATE = 'billing.update';
+
     /**
      * Should timestamps be used on this model.
      */
@@ -204,6 +208,15 @@ class Permission extends Model
             'description' => 'Permissions that control a user\'s access to the server activity logs.',
             'keys' => [
                 'read' => 'Allows a user to view the activity logs for the server.',
+            ],
+        ],
+
+        'billing' => [
+            'description' => 'Permissions that control whether a user can interact with the billing system.',
+            'keys' => [
+                'read' => 'Allows a user to view billing details for the server.',
+                'renew' => 'Allows a user to renew the server with their payment details.',
+                'update' => 'Update general billing settings for the server.',
             ],
         ],
     ];

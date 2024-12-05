@@ -68,6 +68,7 @@ Route::prefix('/billing')->group(function () {
     Route::post('/process', [Client\Billing\StripeController::class, 'process'])->name('api:client.billing.process');
 
     Route::get('/orders', [Client\Billing\OrderController::class, 'index']);
+    Route::get('/orders/{id}', [Client\Billing\OrderController::class, 'view']);
 });
 
 /*

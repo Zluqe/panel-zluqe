@@ -50,9 +50,7 @@ function ServerRouter() {
     const clearServerState = ServerContext.useStoreActions(actions => actions.clearServerState);
     const [collapsed, setCollapsed] = usePersistedState<boolean>(`sidebar_user_${user.uuid}`, false);
     const serverId = ServerContext.useStoreState(state => state.server.data?.internalId);
-    const billable = ServerContext.useStoreState(state => state.server.data);
-
-    console.log(billable);
+    const billable = ServerContext.useStoreState(state => state.server.data?.orderId);
     
     useEffect(() => {
         clearServerState();

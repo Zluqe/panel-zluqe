@@ -35,3 +35,11 @@ export const getOrders = (): Promise<Order[]> => {
             .catch(reject);
     });
 };
+
+export const getOrder = (id: number): Promise<Order> => {
+    return new Promise((resolve, reject) => {
+        http.get(`/api/client/billing/orders/${id}`)
+            .then(({ data }) => resolve(rawDataToOrder(data)))
+            .catch(reject);
+    });
+};
