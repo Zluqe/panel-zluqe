@@ -37,6 +37,8 @@ use Everest\Exceptions\Http\Server\ServerStateConflictException;
  * @property int $egg_id
  * @property string|null $startup
  * @property string $image
+ * @property int|null $order_id
+ * @property int|null $days_until_renewal
  * @property int|null $allocation_limit
  * @property int|null $database_limit
  * @property int $backup_limit
@@ -166,6 +168,8 @@ class Server extends Model
         'startup' => 'nullable|string',
         'skip_scripts' => 'sometimes|boolean',
         'image' => 'required|string|max:191',
+        'order_id' => 'nullable|int|exists:orders,id',
+        'days_until_renewal' => 'nullable|int',
         'database_limit' => 'present|nullable|integer|min:0',
         'allocation_limit' => 'sometimes|nullable|integer|min:0',
         'backup_limit' => 'present|nullable|integer|min:0',
@@ -188,6 +192,8 @@ class Server extends Model
         'allocation_id' => 'integer',
         'nest_id' => 'integer',
         'egg_id' => 'integer',
+        'order_id' => 'integer',
+        'days_until_renewal' => 'integer',
         'database_limit' => 'integer',
         'allocation_limit' => 'integer',
         'backup_limit' => 'integer',
@@ -345,6 +351,14 @@ class Server extends Model
     public function activity(): MorphToMany
     {
         return $this->morphToMany(ActivityLog::class, 'subject', 'activity_log_subjects');
+    }
+
+    /**
+     * Finds out whether a server is billable.
+     */
+    public function billable(): bool
+    {
+        return $this->order_id ? true : false;
     }
 
     /**

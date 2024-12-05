@@ -8,6 +8,7 @@ use Everest\Models\Server;
 use Illuminate\Http\Request;
 use Everest\Models\Allocation;
 use Everest\Models\EggVariable;
+use Everest\Models\Billing\Order;
 use Everest\Models\Billing\Product;
 use Everest\Exceptions\DisplayException;
 use Everest\Services\Servers\ServerCreationService;
@@ -26,7 +27,7 @@ class CreateServerService
     /**
      * Process the creation of a server.
      */
-    public function process(Request $request, Product $product, StripeObject $metadata): Server
+    public function process(Request $request, Product $product, StripeObject $metadata, Order $order): Server
     {
         $egg = Egg::findOrFail($product->category->egg_id);
 
@@ -48,6 +49,7 @@ class CreateServerService
                 'startup' => $egg->startup,
                 'environment' => [], // todo(jex): pass environment through to backend
                 'image' => current($egg->docker_images),
+                'days_until_renewal' => 30,
                 'database_limit' => $product->database_limit,
                 'backup_limit' => $product->backup_limit,
                 'allocation_limit' => $product->allocation_limit,

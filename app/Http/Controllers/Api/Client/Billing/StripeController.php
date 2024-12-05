@@ -64,6 +64,7 @@ class StripeController extends ClientApiController
             'product_id' => $id,
             'variables' => $request->input('variables'),
             'node_id' => $request->input('node_id'),
+            'server_id' => $request->input('server_id') ?? 0,
         ];
 
         $intent->save();
@@ -88,9 +89,17 @@ class StripeController extends ClientApiController
             throw new DisplayException('THe order has been canceled.');
         }
 
-        $product = Product::findOrFail($intent->metadata->product_id);
+        if ($order->is_renewal && $intent->metadata->server_id != 0) {
+            $server = Server::findOrFail($intent->metadata->server_id);
 
-        $this->serverCreation->process($request, $product, $intent->metadata);
+            $server->update([
+                'days_until_renewal', $server->days_until_renewal + 30,
+            ]);
+        } else {
+            $product = Product::findOrFail($intent->metadata->product_id);
+
+            $this->serverCreation->process($request, $product, $intent->metadata, $order);
+        }
     
         $order->update(['status' => Order::STATUS_PROCESSED]);
 
