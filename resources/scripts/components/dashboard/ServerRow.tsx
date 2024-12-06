@@ -1,31 +1,56 @@
 import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import {
+    faFloppyDisk,
+    faInfoCircle,
+    faMemory,
+    faMicrochip,
+    faPowerOff,
+    IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Server } from '@/api/server/getServer';
 import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/server/getServerResourceUsage';
-import { bytesToString, mbToBytes } from '@/lib/formatters';
-import { Button } from '@elements/button';
-import ServerRowDialog from './ServerRowDialog';
 import { useStoreState } from '@/state/hooks';
+import classNames from 'classnames';
 
 export function statusToColor(state?: ServerPowerState): string {
     switch (state) {
         case 'running':
             return 'text-green-500';
-        case 'starting' || 'stopping':
+        case 'starting':
+        case 'stopping':
             return 'text-yellow-500';
         default:
             return 'text-red-500';
     }
 }
 
+const UtilBox = ({ utilised, icon, rounded }: { utilised: number; icon: IconDefinition; rounded?: string }) => {
+    return (
+        <div
+            className={classNames(
+                'w-full h-full bg-white/10 shadow-xl m-auto px-4 py-2',
+                rounded === 'left' && 'rounded-l-lg',
+                rounded === 'right' && 'rounded-r-lg',
+                rounded === 'full' && 'rounded-lg col-span-3',
+            )}
+        >
+            <div className={'text-gray-300 font-bold text-center'}>
+                <p className={'my-auto inline-flex text-sm'}>
+                    <FontAwesomeIcon icon={icon} className={'my-auto mr-1'} size={'xs'} />
+                    <p className={'my-auto'}>{utilised > -1 ? `${utilised}%` : 'Server is offline'}</p>
+                </p>
+            </div>
+        </div>
+    );
+};
+
 type Timer = ReturnType<typeof setInterval>;
 
 export default ({ server }: { server: Server }) => {
-    const [open, setOpen] = useState<boolean>(false);
-    const [stats, setStats] = useState<ServerStats | null>(null);
+    const [stats, setStats] = useState<ServerStats>();
     const colors = useStoreState(state => state.theme.data!.colors);
     const interval = useRef<Timer>(null) as React.MutableRefObject<Timer>;
     const [isSuspended, setIsSuspended] = useState(server.status === 'suspended');
@@ -53,41 +78,42 @@ export default ({ server }: { server: Server }) => {
         };
     }, [isSuspended]);
 
-    const memoryLimit = server.limits.memory !== 0 ? bytesToString(mbToBytes(server.limits.memory)) : 'Unlimited';
+    const cpuUsed =
+        server.limits.cpu === 0 ? stats?.cpuUsagePercent : (stats?.cpuUsagePercent ?? 0) / (server.limits.cpu / 100);
+    const diskUsed = ((stats?.diskUsageInBytes ?? 0) / 1024 / 1024 / server.limits.disk) * 100;
+    const memoryUsed = ((stats?.memoryUsageInBytes ?? 0) / 1024 / 1024 / server.limits.memory) * 100;
 
     return (
         <>
-            <tr className={'w-full'} style={{ backgroundColor: colors.secondary }}>
-                <Link to={`/server/${server.id}`}>
-                    <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <Link to={`/server/${server.id}`}>
+                <div
+                    className={
+                        'w-full p-4 rounded-lg grid grid-cols-12 mb-2 hover:brightness-150 transition duration-300'
+                    }
+                    style={{ backgroundColor: colors.background }}
+                >
+                    <FontAwesomeIcon
+                        className={classNames(statusToColor(stats?.status ?? 'offline'), 'my-auto ml-4')}
+                        icon={faPowerOff}
+                        size={'lg'}
+                    />
+                    <div className="whitespace-nowrap text-white col-span-7">
                         {server.name}
-                    </td>
-                </Link>
-                {!stats || stats.status === 'offline' ? (
-                    <>
-                        <td className="px-6 py-4 text-red-400 capitalize">{server.status ?? 'offline'}</td>
-                        <td className="px-6 py-4">...</td>
-                        <td className="px-6p y-4">...</td>
-                    </>
-                ) : (
-                    <>
-                        <td className="px-6 py-4 capitalize">
-                            <span className={statusToColor(stats.status)}>{stats.status}</span>
-                        </td>
-                        <td className="px-6 py-4">{stats.cpuUsagePercent.toFixed(2)}%</td>
-                        <td className="px-6 py-4">{`${bytesToString(stats.memoryUsageInBytes)} of ${memoryLimit}`}</td>
-                    </>
-                )}
-                <Link to={`/server/${server.id}`}>
-                    <Button size={Button.Sizes.Small} className={'mt-2 text-white'}>
-                        <FontAwesomeIcon icon={faArrowRight} />
-                    </Button>
-                </Link>
-                <Button.Text size={Button.Sizes.Small} className={'mt-2 ml-2'} onClick={() => setOpen(true)}>
-                    <FontAwesomeIcon icon={faEllipsis} />
-                </Button.Text>
-            </tr>
-            {open && <ServerRowDialog open={open} setOpen={setOpen} server={server} stats={stats} />}
+                        <div className={'text-gray-500 text-xs my-auto'}>
+                            {server.allocations[0]?.ip.toString()}:{server.allocations[0]?.port.toString()}
+                        </div>
+                    </div>
+                    {stats?.status === 'offline' ? (
+                        <UtilBox rounded={'full'} utilised={-1} icon={faInfoCircle} />
+                    ) : (
+                        <>
+                            <UtilBox rounded={'left'} utilised={Number(cpuUsed?.toFixed(0))} icon={faMicrochip} />
+                            <UtilBox utilised={Number(memoryUsed.toFixed(0))} icon={faMemory} />
+                            <UtilBox rounded={'right'} utilised={Number(diskUsed.toFixed(0))} icon={faFloppyDisk} />
+                        </>
+                    )}
+                </div>
+            </Link>
         </>
     );
 };
