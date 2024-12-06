@@ -74,7 +74,6 @@ export default () => {
                 const stripePublicKey = await getPublicKey(Number(params.id));
                 const stripeInstance = await loadStripe(stripePublicKey.key);
                 setStripe(stripeInstance);
-
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -99,7 +98,7 @@ export default () => {
     const options = {
         clientSecret: intent.secret,
         appearance: {
-            theme: "night",
+            theme: 'night',
             variables: {
                 colorText: '#ffffff',
             },
@@ -151,7 +150,8 @@ export default () => {
                                 <div className={'grid lg:grid-cols-2 gap-4'}>
                                     {(!nodes || nodes.length < 1) && (
                                         <Alert type={'danger'} className={'col-span-2'}>
-                                            There are no nodes available for deployment. Please contact an administrator.
+                                            There are no nodes available for deployment. Please contact an
+                                            administrator.
                                         </Alert>
                                     )}
                                     {nodes?.map(node => (
@@ -171,8 +171,8 @@ export default () => {
                                         <div className={'text-xl lg:text-3xl font-semibold mb-4'}>
                                             Plan Variables
                                             <p className={'text-gray-400 font-normal text-sm mt-1'}>
-                                                Modify your server variables before your server is even created for ease of
-                                                use.
+                                                Modify your server variables before your server is even created for ease
+                                                of use.
                                             </p>
                                         </div>
                                         <div className={'grid lg:grid-cols-2 gap-4'}>
@@ -189,7 +189,12 @@ export default () => {
                                 </>
                             )}
                             <div className={'w-full mt-8'}>
-                                <PaymentButton selectedNode={selectedNode} product={product} vars={vars} intent={intent} />
+                                <PaymentButton
+                                    selectedNode={selectedNode}
+                                    product={product}
+                                    vars={vars}
+                                    intent={intent}
+                                />
                             </div>
                         </div>
                     </div>

@@ -48,8 +48,8 @@ export default () => {
 
     useEffect(() => {
         getOrders()
-            .then((data) => setOrders(data))
-            .catch((error) => console.log(error));
+            .then(data => setOrders(data))
+            .catch(error => console.log(error));
     }, []);
 
     if (!orders) return <Spinner size={'small'} centered />;
@@ -74,16 +74,26 @@ export default () => {
                         <HeaderItem>&nbsp;</HeaderItem>
                     </Header>
                     <Body>
-                        {orders.map((order) => (
-                            <BodyItem item={order.name.split('-')[0]!.toString()} key={1} to={`/billing/order/${order.product_id}`}>
+                        {orders.map(order => (
+                            <BodyItem
+                                item={order.name.split('-')[0]!.toString()}
+                                key={1}
+                                to={`/billing/order/${order.product_id}`}
+                            >
                                 <td className={'px-6 py-4 text-white font-bold'}>${order.total}/mo</td>
                                 <td className={'px-6 py-4'}>{order.description}</td>
-                                <td className={'px-6 py-4'}>{formatDistanceToNowStrict(order.created_at, { addSuffix: true })}</td>
+                                <td className={'px-6 py-4'}>
+                                    {formatDistanceToNowStrict(order.created_at, { addSuffix: true })}
+                                </td>
                                 <td className={'px-6 py-4 text-left'}>
-                                    <Pill small type={type(order.status)}>{order.status}</Pill>
+                                    <Pill small type={type(order.status)}>
+                                        {order.status}
+                                    </Pill>
                                 </td>
                                 <td className={'pr-12 py-4 text-right'}>
-                                    <Pill small type={order.is_renewal ? 'info' : 'success'}>{order.is_renewal ? 'Upgrade' : 'New Server'}</Pill>
+                                    <Pill small type={order.is_renewal ? 'info' : 'success'}>
+                                        {order.is_renewal ? 'Upgrade' : 'New Server'}
+                                    </Pill>
                                 </td>
                             </BodyItem>
                         ))}

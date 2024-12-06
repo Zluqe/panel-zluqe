@@ -9,7 +9,7 @@ interface UpdatePaymentIntent {
     id: number;
     node_id?: number;
     intent: string;
-    vars?: { key: string, value: string }[];
+    vars?: { key: string; value: string }[];
     serverId?: number;
 }
 

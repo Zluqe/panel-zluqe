@@ -29,7 +29,6 @@ export default () => {
     const enabled = useStoreState(state => state.everest.data!.billing.enabled);
     const [collapsed, setCollapsed] = usePersistedState<boolean>(`sidebar_user_${user.uuid}`, false);
 
-
     if (!enabled) {
         return <NotFound />;
     }

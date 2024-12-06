@@ -98,18 +98,16 @@ const Suspended = ({ days }: { days: number }) => {
                     css={tw`w-full sm:w-3/4 md:w-1/2 p-12 md:p-20 rounded-lg shadow-lg text-center relative`}
                     style={{ backgroundColor: secondary }}
                 >
-                        <div css={tw`absolute left-0 top-0 ml-4 mt-4`}>
-                            <ActionButton
-                                onClick={() => navigate('/')}
-                            >
-                                <FontAwesomeIcon icon={faArrowLeft} />
-                            </ActionButton>
-                        </div>
+                    <div css={tw`absolute left-0 top-0 ml-4 mt-4`}>
+                        <ActionButton onClick={() => navigate('/')}>
+                            <FontAwesomeIcon icon={faArrowLeft} />
+                        </ActionButton>
+                    </div>
                     <img src={NotFoundSvg} css={tw`w-2/3 h-auto select-none mx-auto`} />
                     <h2 css={tw`mt-10 text-white font-bold text-4xl`}>Suspended - No Payment</h2>
                     <p css={tw`text-sm text-neutral-400 mt-2`}>
-                        Your server has been suspended due to a lack of payment.
-                        Your server will be deleted <span className={'font-bold'}>in {days + 7} day(s) </span>
+                        Your server has been suspended due to a lack of payment. Your server will be deleted{' '}
+                        <span className={'font-bold'}>in {days + 7} day(s) </span>
                         if you do not choose to pay the monthly cost for your server.
                     </p>
                 </div>

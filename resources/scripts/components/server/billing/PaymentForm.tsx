@@ -1,11 +1,11 @@
-import { FormEvent, useState } from "react";
-import useFlash from "@/plugins/useFlash";
-import { Button } from "@/components/elements/button";
-import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
-import { updateIntent } from "@/api/billing/intent";
+import { FormEvent, useState } from 'react';
+import useFlash from '@/plugins/useFlash';
+import { Button } from '@/components/elements/button';
+import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import { updateIntent } from '@/api/billing/intent';
 
-export default ({ id, serverId, intent }: { id?: number, serverId: number; intent: string }) => {
+export default ({ id, serverId, intent }: { id?: number; serverId: number; intent: string }) => {
     const stripe = useStripe();
     const elements = useElements();
     const { clearFlashes } = useFlash();
@@ -19,15 +19,14 @@ export default ({ id, serverId, intent }: { id?: number, serverId: number; inten
 
         if (!stripe || !elements) return;
 
-        updateIntent({ id: id!, intent, serverId })
-            .then(() => {
-                stripe.confirmPayment({
-                    elements,
-                    confirmParams: {
-                        return_url: window.location.origin + '/billing/processing',
-                    },
-                })
+        updateIntent({ id: id!, intent, serverId }).then(() => {
+            stripe.confirmPayment({
+                elements,
+                confirmParams: {
+                    return_url: window.location.origin + '/billing/processing',
+                },
             });
+        });
     };
 
     return (

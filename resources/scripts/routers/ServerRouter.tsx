@@ -105,9 +105,9 @@ function ServerRouter() {
                         </NavLink>
                         {billable && (
                             <NavLink to={`/server/${id}/billing`}>
-                            <CurrencyDollarIcon />
-                            <span>Billing</span>
-                        </NavLink>
+                                <CurrencyDollarIcon />
+                                <span>Billing</span>
+                            </NavLink>
                         )}
                         <NavLink to={`/server/${id}/activity`}>
                             <DocumentIcon />

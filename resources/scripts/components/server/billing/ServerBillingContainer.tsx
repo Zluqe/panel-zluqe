@@ -21,7 +21,7 @@ function futureDate(days: number): string {
     futureDate.setDate(today.getDate() + days);
 
     return futureDate.toDateString();
-};
+}
 
 export default () => {
     const [order, setOrder] = useState<Order>();
@@ -36,23 +36,23 @@ export default () => {
         clearFlashes();
 
         getOrder(orderId)
-            .then((data) => setOrder(data))
-            .catch((error) => {
+            .then(data => setOrder(data))
+            .catch(error => {
                 setLoading(false);
                 console.error(error);
-            })
+            });
     }, []);
 
     useEffect(() => {
         if (!order) return;
 
         getProduct(order.product_id)
-            .then((data) => setProduct(data))
+            .then(data => setProduct(data))
             .then(() => setLoading(false))
-            .catch((error) => {
+            .catch(error => {
                 setLoading(false);
                 console.error(error);
-            })
+            });
     }, [order]);
 
     return (
@@ -74,19 +74,13 @@ export default () => {
                     </div>
                     <div className={'my-6'}>
                         <Label>Your package</Label>
-                        <p className={'text-gray-400 text-sm'}>
-                            {product ? product.name : 'Unknown'}
-                        </p>
-                        <p className={'text-gray-500 text-xs'}>
-                            {product && product.description}
-                        </p>
+                        <p className={'text-gray-400 text-sm'}>{product ? product.name : 'Unknown'}</p>
+                        <p className={'text-gray-500 text-xs'}>{product && product.description}</p>
                     </div>
                     <div>
                         <Label>Plan cost</Label>
                         <div className={'flex justify-between'}>
-                            <p className={'text-gray-400 text-sm'}>
-                                ${product ? product.price : '...'} every 30 days
-                            </p>
+                            <p className={'text-gray-400 text-sm'}>${product ? product.price : '...'} every 30 days</p>
                             <Link to={'/billing/orders'} className={'text-green-400 text-xs'}>
                                 View order <FontAwesomeIcon icon={faArrowRight} />
                             </Link>
@@ -96,13 +90,20 @@ export default () => {
                 <ContentBox title={'Renew Server'} className={'lg:col-span-2'}>
                     <div className={'mb-4'}>
                         <p className={'text-gray-400 text-xs'}>
-                            If you renew now, your server will be active for a further 30 days, making
-                            your next renewal date {futureDate(daysUntilRenewal + 30)} ({daysUntilRenewal + 30} days).
+                            If you renew now, your server will be active for a further 30 days, making your next renewal
+                            date {futureDate(daysUntilRenewal + 30)} ({daysUntilRenewal + 30} days).
                         </p>
                     </div>
-                    <PaymentContainer id={Number(product?.id)} />
+                    {!product ? (
+                        <Alert type={'danger'}>
+                            The product package that the server was made with no longer exists. In order to renew your
+                            server, you&apos;ll need to speak to an administrator.
+                        </Alert>
+                    ) : (
+                        <PaymentContainer id={Number(product!.id)} />
+                    )}
                 </ContentBox>
             </div>
         </ServerContentBlock>
-    )
-}
+    );
+};
