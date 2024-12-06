@@ -7,7 +7,6 @@ import { SocketEvent } from '@/components/server/events';
 import Dialog from '@/components/elements/dialog/Dialog';
 import Spinner from '@/components/elements/Spinner';
 import { handleQuery } from '@/api/server/ai';
-import Markdown from 'react-markdown';
 
 type Visibility = 'none' | 'button' | 'dialog';
 
@@ -68,7 +67,7 @@ export default () => {
             {loading ? (
                 <Spinner centered />
             ) : response ? (
-                <Markdown className={'overflow-x-hidden bg-black/50 rounded-lg p-3'}>{response}</Markdown>
+                <div className={'overflow-x-hidden bg-black/50 rounded-lg p-3'}>{response}</div>
             ) : (
                 'Error'
             )}

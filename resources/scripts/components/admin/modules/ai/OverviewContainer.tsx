@@ -9,7 +9,6 @@ import { KeyboardEvent as ReactKeyboardEvent, useState } from 'react';
 import { handleQuery } from '@/api/admin/ai/handleQuery';
 import { useFlashKey } from '@/plugins/useFlash';
 import Spinner from '@/components/elements/Spinner';
-import Markdown from 'react-markdown';
 import { Alert } from '@/components/elements/alert';
 
 interface Props {
@@ -23,7 +22,7 @@ function DisplayMessage({ primary, result, loading }: Props) {
         return (
             <>
                 <SparklesIcon className={'w-4 h-4 inline-flex'} style={{ color: primary }} />
-                <Markdown>{result}</Markdown>
+                <div>{result}</div>
             </>
         );
     }
