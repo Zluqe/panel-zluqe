@@ -7,6 +7,7 @@ import {
     faMemory,
     faMicrochip,
     faPowerOff,
+    faXmarkCircle,
     IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
@@ -27,7 +28,17 @@ export function statusToColor(state?: ServerPowerState): string {
     }
 }
 
-const UtilBox = ({ utilised, icon, rounded }: { utilised: number; icon: IconDefinition; rounded?: string }) => {
+const UtilBox = ({
+    utilised,
+    icon,
+    rounded,
+    server,
+}: {
+    utilised: number;
+    icon: IconDefinition;
+    rounded?: string;
+    server?: Server;
+}) => {
     return (
         <div
             className={classNames(
@@ -40,7 +51,11 @@ const UtilBox = ({ utilised, icon, rounded }: { utilised: number; icon: IconDefi
             <div className={'text-gray-300 font-bold text-center'}>
                 <p className={'my-auto inline-flex text-sm'}>
                     <FontAwesomeIcon icon={icon} className={'my-auto mr-1'} size={'xs'} />
-                    <p className={'my-auto'}>{utilised > -1 ? `${utilised}%` : 'Server is offline'}</p>
+                    <p className={'my-auto'}>
+                        {utilised > -1
+                            ? `${utilised}%`
+                            : `Server is ${server?.isTransferring ? 'transferring' : server?.status ?? 'offline'}`}
+                    </p>
                 </p>
             </div>
         </div>
@@ -94,7 +109,7 @@ export default ({ server }: { server: Server }) => {
                 >
                     <FontAwesomeIcon
                         className={classNames(statusToColor(stats?.status ?? 'offline'), 'my-auto ml-4')}
-                        icon={faPowerOff}
+                        icon={!stats?.isSuspended ? faPowerOff : faXmarkCircle}
                         size={'lg'}
                     />
                     <div className="whitespace-nowrap text-white col-span-7">
@@ -104,7 +119,7 @@ export default ({ server }: { server: Server }) => {
                         </div>
                     </div>
                     {stats?.status === 'offline' ? (
-                        <UtilBox rounded={'full'} utilised={-1} icon={faInfoCircle} />
+                        <UtilBox rounded={'full'} utilised={-1} icon={faInfoCircle} server={server} />
                     ) : (
                         <>
                             <UtilBox rounded={'left'} utilised={Number(cpuUsed?.toFixed(0))} icon={faMicrochip} />
