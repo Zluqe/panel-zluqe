@@ -1,0 +1,44 @@
+import { FormEvent, useState } from "react";
+import useFlash from "@/plugins/useFlash";
+import { Button } from "@/components/elements/button";
+import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
+import { updateIntent } from "@/api/billing/intent";
+
+export default ({ id, serverId, intent }: { id?: number, serverId: number; intent: string }) => {
+    const stripe = useStripe();
+    const elements = useElements();
+    const { clearFlashes } = useFlash();
+
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const handleSubmit = async (event: FormEvent) => {
+        clearFlashes();
+        setLoading(true);
+        event.preventDefault();
+
+        if (!stripe || !elements) return;
+
+        updateIntent({ id: id!, intent, serverId })
+            .then(() => {
+                stripe.confirmPayment({
+                    elements,
+                    confirmParams: {
+                        return_url: window.location.origin + '/billing/processing',
+                    },
+                })
+            });
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <SpinnerOverlay visible={loading} />
+            <PaymentElement />
+            <div className={'text-right'}>
+                <Button className={'mt-4'} size={Button.Sizes.Large}>
+                    Pay Now
+                </Button>
+            </div>
+        </form>
+    );
+};

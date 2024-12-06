@@ -3,6 +3,7 @@
 namespace Everest\Http\Controllers\Api\Client\Billing;
 
 use Stripe\StripeClient;
+use Everest\Models\Server;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Everest\Models\Billing\Order;
@@ -53,7 +54,13 @@ class StripeController extends ClientApiController
             ],
         ]);
 
-        $this->orderService->create($request->user(), $product, Order::STATUS_PENDING);
+        $this->orderService->create(
+            $paymentIntent->id,
+            $request->user(),
+            $product,
+            Order::STATUS_PENDING,
+            boolval($request->input('renewal') ?? false),
+        );
 
         return response()->json([
             'id' => $paymentIntent->id,
@@ -64,7 +71,7 @@ class StripeController extends ClientApiController
     /**
      * Update a Payment Intent with new data from the UI.
      */
-    public function updateIntent(Request $request, int $id): Response
+    public function updateIntent(Request $request, ?int $id = null): Response
     {
         $intent = $this->stripe->paymentIntents->retrieve($request->input('intent'));
 
@@ -72,8 +79,8 @@ class StripeController extends ClientApiController
             'customer_email' => $request->user()->email,
             'customer_name' => $request->user()->username,
             'product_id' => $id,
-            'variables' => $request->input('variables'),
-            'node_id' => $request->input('node_id'),
+            'variables' => $request->input('variables') ?? [],
+            'node_id' => $request->input('node_id') ?? null,
             'server_id' => $request->input('server_id') ?? 0,
         ];
 
@@ -97,17 +104,24 @@ class StripeController extends ClientApiController
         if (!$intent) {
             throw new DisplayException('Unable to fetch payment intent from Stripe.');
         }
+
+        if (
+            $order->status === Order::STATUS_PROCESSED
+            && $intent->id === $order->payment_intent_id
+        ) {
+            throw new DisplayException('This order has already been processed.');
+        };
         
         if ($intent->status !== 'succeeded') {
             $order->update(['status' => Order::STATUS_FAILED]);
-            throw new DisplayException('THe order has been canceled.');
+            throw new DisplayException('The order has been canceled.');
         }
 
-        if ($order->is_renewal && $intent->metadata->server_id != 0) {
-            $server = Server::findOrFail($intent->metadata->server_id);
+        if ($order->is_renewal && ((int) $intent->metadata->server_id != 0)) {
+            $server = Server::findOrFail((int) $intent->metadata->server_id);
 
             $server->update([
-                'days_until_renewal', $server->days_until_renewal + 30,
+                'days_until_renewal' => $server->days_until_renewal + 30,
             ]);
         } else {
             $product = Product::findOrFail($intent->metadata->product_id);
@@ -115,7 +129,9 @@ class StripeController extends ClientApiController
             $this->serverCreation->process($request, $product, $intent->metadata, $order);
         }
     
-        $order->update(['status' => Order::STATUS_PROCESSED]);
+        $order->update([
+            'status' => Order::STATUS_PROCESSED
+        ]);
 
         return $this->returnNoContent();
     }

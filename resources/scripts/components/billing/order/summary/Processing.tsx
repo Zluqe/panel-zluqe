@@ -18,6 +18,7 @@ export default () => {
         clearFlashes();
 
         const intent = params.get('payment_intent');
+        const renewal = Boolean(params.get('renewal'));
 
         if (!intent) {
             addFlash({
@@ -29,7 +30,7 @@ export default () => {
             return;
         }
 
-        processOrder(intent)
+        processOrder(intent, renewal)
             .then(() => {
                 navigate('/billing/success');
             })

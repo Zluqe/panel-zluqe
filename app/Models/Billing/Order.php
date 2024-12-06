@@ -13,6 +13,7 @@ use Everest\Models\Model;
  * @property string $status
  * @property int $product_id
  * @property bool $is_renewal
+ * @property string $payment_intent_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */
@@ -38,7 +39,7 @@ class Order extends Model
      * Fields that are mass assignable.
      */
     protected $fillable = [
-        'name', 'user_id', 'description',
+        'name', 'user_id', 'description', 'payment_intent_id',
         'total', 'status', 'product_id', 'is_renewal',
     ];
 
@@ -60,5 +61,6 @@ class Order extends Model
         'status' => 'required|in:expired,pending,failed,processed',
         'product_id' => 'exists:products,id',
         'is_renewal' => 'nullable|bool',
+        'payment_intent_id' => 'required|string|unique:orders,payment_intent_id',
     ];
 }

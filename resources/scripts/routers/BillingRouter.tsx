@@ -101,7 +101,7 @@ export default () => {
                         <Route path={'/order/:id'} element={<OrderContainer />} />
                         <Route path={'/orders'} element={<OrdersContainer />} />
 
-                        <Route path={'/order/:id/processing'} element={<Processing />} />
+                        <Route path={'/processing'} element={<Processing />} />
                         <Route path={'/success'} element={<Success />} />
                         <Route path={'/cancel'} element={<Cancel />} />
 

@@ -12,6 +12,7 @@ import { getProduct } from '@/api/billing/products';
 import { Product } from '@/api/billing/products';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Alert } from '@/components/elements/alert';
+import PaymentContainer from './PaymentContainer';
 
 function futureDate(days: number): string {
     const today = new Date();
@@ -99,6 +100,7 @@ export default () => {
                             your next renewal date {futureDate(daysUntilRenewal + 30)} ({daysUntilRenewal + 30} days).
                         </p>
                     </div>
+                    <PaymentContainer id={Number(product?.id)} />
                 </ContentBox>
             </div>
         </ServerContentBlock>

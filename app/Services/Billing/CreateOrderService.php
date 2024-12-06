@@ -11,11 +11,12 @@ class CreateOrderService
     /**
      * Process the creation of an order.
      */
-    public function create(User $user, Product $product, ?string $status = Order::STATUS_EXPIRED, ?bool $renewal = false): Order
+    public function create(string $intent, User $user, Product $product, ?string $status = Order::STATUS_EXPIRED, ?bool $renewal = false): Order
     {
         $order = new Order();
 
-        $order->name = 'Order ' . uuid_create();
+        $order->name = uuid_create();
+        $order->payment_intent_id = $intent;
         $order->user_id = $user->id;
         $order->description = 'Placeholder';
         $order->total = $product->price;
@@ -24,16 +25,6 @@ class CreateOrderService
         $order->is_renewal = $renewal ?? false;
 
         $order->saveOrFail();
-
-        return $order;
-    }
-
-    /**
-     * Update an order.
-     */
-    public function update(Order $order, array $data): Order
-    {
-        $order->fill($data);
 
         return $order;
     }
