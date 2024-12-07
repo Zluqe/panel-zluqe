@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property string $uuid
  * @property int $category_id
- * @property string $stripe_id
  * @property string $name
  * @property string $icon
  * @property float $price
@@ -40,7 +39,7 @@ class Product extends Model
      * Fields that are mass assignable.
      */
     protected $fillable = [
-        'uuid', 'category_id', 'stripe_id',
+        'uuid', 'category_id',
         'name', 'icon', 'price', 'description',
         'cpu_limit', 'memory_limit', 'disk_limit',
         'backup_limit', 'database_limit', 'allocation_limit',
@@ -61,7 +60,6 @@ class Product extends Model
 
     public static array $validationRules = [
         'uuid' => 'required|string|size:36',
-        'stripe_id' => 'required|string',
         'category_id' => 'sometimes|int|exists:categories,id',
 
         'name' => 'required|string|min:3|max:191',

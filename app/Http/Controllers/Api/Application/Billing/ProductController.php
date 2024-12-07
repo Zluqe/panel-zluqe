@@ -54,7 +54,6 @@ class ProductController extends ApplicationApiController
             $product = Product::create([
                 'uuid' => Uuid::uuid4()->toString(),
                 'category_id' => $category->id,
-                'stripe_id' => $request->input('stripeId'),
                 'name' => $request->input('name'),
                 'icon' => $request->input('icon'),
                 'price' => (float) $request->input('price'),
@@ -82,7 +81,6 @@ class ProductController extends ApplicationApiController
     {
         try {
             $product->update([
-                'stripe_id' => $request->input('stripeId'),
                 'name' => $request->input('name'),
                 'icon' => $request->input('icon'),
                 'price' => (float) $request->input('price'),

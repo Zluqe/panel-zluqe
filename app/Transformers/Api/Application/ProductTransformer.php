@@ -23,7 +23,6 @@ class ProductTransformer extends Transformer
         return [
             'id' => $model->id,
             'uuid' => $model->uuid,
-            'stripe_id' => $model->stripe_id,
             'category_id' => $model->category_id,
             'name' => $model->name,
             'icon' => $model->icon,
