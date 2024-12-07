@@ -54,7 +54,11 @@ export default () => {
             <div className={'w-full flex flex-row items-center mb-8'}>
                 <div className={'flex flex-col flex-shrink'} style={{ minWidth: '0' }}>
                     <h2 className={'text-2xl text-neutral-50 font-header font-medium'}>Tickets</h2>
-                    <p className={'text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden'}>
+                    <p
+                        className={
+                            'hidden lg:block text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden'
+                        }
+                    >
                         Update settings and manage user tickets.
                     </p>
                 </div>

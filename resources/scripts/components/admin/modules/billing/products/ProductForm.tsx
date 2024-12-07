@@ -2,7 +2,7 @@ import type { Actions } from 'easy-peasy';
 import { useStoreActions } from 'easy-peasy';
 import type { FormikHelpers } from 'formik';
 import { Form, Formik } from 'formik';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Field, { FieldRow } from '@elements/Field';
 import tw from 'twin.macro';
 import AdminContentBlock from '@elements/AdminContentBlock';
@@ -10,11 +10,13 @@ import { Button } from '@elements/button';
 import type { ApplicationStore } from '@/state';
 import AdminBox from '@elements/AdminBox';
 import { object, string, number } from 'yup';
-import { faBell, faMicrochip, faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faBell, faMicrochip, faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
 import { useStoreState } from '@/state/hooks';
 import { createProduct, updateProduct } from '@/api/admin/billing/products';
 import type { Product, Values } from '@/api/admin/billing/products';
 import ProductDeleteButton from './ProductDeleteButton';
+import { CubeIcon } from '@heroicons/react/outline';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Props {
     product?: Product;
@@ -57,6 +59,31 @@ export default ({ product }: Props) => {
 
     return (
         <AdminContentBlock title={'New Product'}>
+            <div css={tw`w-full flex flex-row items-center m-8`}>
+                {product?.icon ? (
+                    <img src={product.icon} className={'ww-8 h-8 mr-4'} />
+                ) : (
+                    <CubeIcon className={'w-8 h-8 mr-4'} />
+                )}
+                <div css={tw`flex flex-col flex-shrink`} style={{ minWidth: '0' }}>
+                    <h2 css={tw`text-2xl text-neutral-50 font-header font-medium`}>{product?.name ?? 'New Product'}</h2>
+                    <p
+                        css={tw`hidden lg:block text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden`}
+                    >
+                        {product?.uuid ?? 'Add a new product to the billing interface.'}
+                    </p>
+                </div>
+                {product && (
+                    <div className={'hidden md:flex ml-auto mr-12'}>
+                        <Link to={`/admin/billing/categories/${product?.categoryId}`}>
+                            <Button>
+                                <FontAwesomeIcon icon={faArrowLeft} className={'mr-2'} />
+                                Return to Category
+                            </Button>
+                        </Link>
+                    </div>
+                )}
+            </div>
             <Formik
                 onSubmit={submit}
                 initialValues={{

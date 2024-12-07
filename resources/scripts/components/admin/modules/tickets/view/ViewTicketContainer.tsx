@@ -22,6 +22,7 @@ import NewMessageDialog from '@admin/modules/tickets/view/NewMessageDialog';
 import MessageTable from './MessageTable';
 import { useNavigate } from 'react-router-dom';
 import DeleteTicketDialog from './DeleteTicketDialog';
+import { Alert } from '@/components/elements/alert';
 
 export default () => {
     const navigate = useNavigate();
@@ -43,6 +44,14 @@ export default () => {
             })
             .catch(error => clearAndAddHttpError({ key: 'tickets:view', error }));
     };
+
+    if (!ticket.user)
+        return (
+            <Alert type={'danger'}>
+                This ticket was created without an assigned user. This ticket must be deleted.&nbsp;
+                <DeleteTicketDialog />
+            </Alert>
+        );
 
     return (
         <AdminContentBlock title={`View ticket: ${ticket.title}`}>

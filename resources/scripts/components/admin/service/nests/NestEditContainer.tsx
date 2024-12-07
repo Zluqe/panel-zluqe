@@ -213,7 +213,9 @@ const NestEditContainer = () => {
                             <span css={tw`italic`}>No description</span>
                         </p>
                     ) : (
-                        <p css={tw`text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden`}>
+                        <p
+                            css={tw`hidden md:block text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden`}
+                        >
                             {nest.description}
                         </p>
                     )}

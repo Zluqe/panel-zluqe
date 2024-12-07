@@ -58,11 +58,30 @@ import AdminIndicators from '@/components/admin/AdminIndicators';
 import AlertRouter from '@/components/admin/modules/alert/AlertRouter';
 import { usePersistedState } from '@/plugins/usePersistedState';
 import AIRouter from '@/components/admin/modules/ai/AIRouter';
+import MobileSidebar from '@/components/elements/MobileSidebar';
+import {
+    faCog,
+    faDatabase,
+    faDesktop,
+    faDollar,
+    faEgg,
+    faExclamationTriangle,
+    faFolder,
+    faIdBadge,
+    faKey,
+    faLayerGroup,
+    faLocation,
+    faPaintBrush,
+    faServer,
+    faTicket,
+    faUser,
+    faWandSparkles,
+} from '@fortawesome/free-solid-svg-icons';
 
 function AdminRouter() {
     const theme = useStoreState(state => state.theme.data!);
-    const mode = useStoreState(state => state.settings.data!.mode);
     const user = useStoreState((state: ApplicationStore) => state.user.data!);
+    const standard = useStoreState(state => state.settings.data!.mode) === 'standard';
     const settings = useStoreState((state: ApplicationStore) => state.settings.data!);
 
     const [collapsed, setCollapsed] = usePersistedState<boolean>(`sidebar_admin_${user.uuid}`, false);
@@ -70,6 +89,29 @@ function AdminRouter() {
     return (
         <div css={tw`h-screen flex`}>
             {settings.indicators && <AdminIndicators />}
+            <MobileSidebar>
+                <MobileSidebar.Home />
+                <MobileSidebar.Link icon={faDesktop} text={'Overview'} linkTo={'/admin'} end />
+                <MobileSidebar.Link icon={faCog} text={'Settings'} linkTo={'/admin/settings'} />
+                {standard && (
+                    <>
+                        <MobileSidebar.Link icon={faIdBadge} text={'API'} linkTo={'/admin/api'} />
+                        <MobileSidebar.Link icon={faKey} text={'Auth'} linkTo={'/admin/auth'} />
+                        <MobileSidebar.Link icon={faDollar} text={'Billing'} linkTo={'/admin/billing'} />
+                        <MobileSidebar.Link icon={faTicket} text={'Tickets'} linkTo={'/admin/tickets'} />
+                        <MobileSidebar.Link icon={faWandSparkles} text={'AI'} linkTo={'/admin/ai'} />
+                    </>
+                )}
+                <MobileSidebar.Link icon={faExclamationTriangle} text={'Alerts'} linkTo={'/admin/alerts'} />
+                <MobileSidebar.Link icon={faPaintBrush} text={'Theme'} linkTo={'/admin/theme'} />
+                <MobileSidebar.Link icon={faDatabase} text={'Databases'} linkTo={'/admin/databases'} />
+                <MobileSidebar.Link icon={faLocation} text={'Locations'} linkTo={'/admin/locations'} />
+                <MobileSidebar.Link icon={faLayerGroup} text={'Nodes'} linkTo={'/admin/nodes'} />
+                <MobileSidebar.Link icon={faServer} text={'Servers'} linkTo={'/admin/servers'} />
+                <MobileSidebar.Link icon={faUser} text={'Users'} linkTo={'/admin/users'} />
+                <MobileSidebar.Link icon={faFolder} text={'Mounts'} linkTo={'/admin/mounts'} />
+                <MobileSidebar.Link icon={faEgg} text={'Nests'} linkTo={'/admin/nests'} />
+            </MobileSidebar>
             <Sidebar css={tw`flex-none`} $collapsed={collapsed} theme={theme}>
                 <div
                     css={tw`h-16 w-full flex flex-col items-center justify-center mt-1 mb-3 select-none cursor-pointer`}
@@ -95,14 +137,14 @@ function AdminRouter() {
                         <CogIcon />
                         <span>Settings</span>
                     </NavLink>
-                    {mode === 'standard' && (
+                    {standard && (
                         <NavLink to="/admin/api">
                             <CodeIcon />
                             <span>API</span>
                         </NavLink>
                     )}
                     <Sidebar.Section>Modules</Sidebar.Section>
-                    {mode === 'standard' && (
+                    {standard && (
                         <>
                             <NavLink to="/admin/auth">
                                 <KeyIcon />
@@ -132,7 +174,7 @@ function AdminRouter() {
                         <span>Theme</span>
                     </NavLink>
                     <Sidebar.Section>Management</Sidebar.Section>
-                    {mode === 'standard' && (
+                    {standard && (
                         <NavLink to="/admin/databases">
                             <DatabaseIcon />
                             <span>Databases</span>
@@ -159,7 +201,7 @@ function AdminRouter() {
                         <ViewGridIcon />
                         <span>Nests</span>
                     </NavLink>
-                    {mode === 'standard' && (
+                    {standard && (
                         <NavLink to="/admin/mounts">
                             <FolderIcon />
                             <span>Mounts</span>

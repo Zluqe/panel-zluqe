@@ -170,7 +170,9 @@ export default ({ category }: { category?: Category }) => {
                     <h2 css={tw`text-2xl text-neutral-50 font-header font-medium`}>
                         {category?.name ?? 'New Product Category'}
                     </h2>
-                    <p css={tw`text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden`}>
+                    <p
+                        css={tw`hidden lg:block text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden`}
+                    >
                         {category?.uuid ?? 'Add a new category to the billing interface.'}
                     </p>
                 </div>

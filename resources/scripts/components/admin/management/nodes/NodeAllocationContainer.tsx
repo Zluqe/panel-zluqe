@@ -11,12 +11,12 @@ export default () => {
 
     return (
         <>
-            <div css={tw`w-full grid grid-cols-12 gap-x-8`}>
-                <div css={tw`w-full flex col-span-8`}>
+            <div css={tw`w-full grid grid-cols-1 lg:grid-cols-12 gap-8`}>
+                <div css={tw`lg:col-span-8`}>
                     <AllocationTable nodeId={Number(params.id)} />
                 </div>
 
-                <div css={tw`w-full flex col-span-4`}>
+                <div css={tw`lg:col-span-4`}>
                     <AdminBox icon={faNetworkWired} title={'Allocations'} css={tw`h-auto w-full`}>
                         <CreateAllocationForm nodeId={Number(params.id)} />
                     </AdminBox>

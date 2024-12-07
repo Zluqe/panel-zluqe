@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 
 export const SubNavigation = styled.div<{ theme: SiteTheme }>`
-    ${tw`flex flex-row items-center flex-shrink-0 h-12 mb-4 border-b border-neutral-700`};
+    ${tw`flex flex-row items-center flex-shrink-0 h-12 mb-4 border-b border-neutral-700 overflow-x-auto`};
 
     & > a {
         ${tw`flex flex-row items-center h-full px-4 border-b text-neutral-300 text-base whitespace-nowrap border-transparent`};

@@ -18,13 +18,17 @@ export default () => {
             <div className={'w-full flex flex-row items-center p-8'}>
                 <div className={'flex flex-col flex-shrink'} style={{ minWidth: '0' }}>
                     <h2 className={'text-2xl text-neutral-50 font-header font-medium'}>Products</h2>
-                    <p className={'text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden'}>
+                    <p
+                        className={
+                            'hidden lg:block text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden'
+                        }
+                    >
                         A list of the available products in the {data.name} category.
                     </p>
                 </div>
                 <div className={'flex ml-auto pl-4'}>
                     <Link to={`/admin/billing/categories/${data.id}/products/new`}>
-                        <Button>Add Product to {data.name}</Button>
+                        <Button>Create Product</Button>
                     </Link>
                 </div>
             </div>

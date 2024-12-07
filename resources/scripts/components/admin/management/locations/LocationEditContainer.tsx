@@ -157,7 +157,9 @@ const LocationEditContainer = () => {
                             <span css={tw`italic`}>No long name</span>
                         </p>
                     ) : (
-                        <p css={tw`text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden`}>
+                        <p
+                            css={tw`hidden md:block text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden`}
+                        >
                             {location.long}
                         </p>
                     )}

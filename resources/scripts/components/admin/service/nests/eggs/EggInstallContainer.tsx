@@ -77,7 +77,7 @@ export default function EggInstallContainer() {
                             />
 
                             <div css={tw`mx-6 mb-4`}>
-                                <div css={tw`grid grid-cols-3 gap-x-8 gap-y-6`}>
+                                <div css={tw`grid lg:grid-cols-3 gap-x-8 gap-y-6`}>
                                     <Field
                                         id={'scriptContainer'}
                                         name={'scriptContainer'}

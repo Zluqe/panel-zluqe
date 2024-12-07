@@ -41,8 +41,12 @@ export default () => {
         <>
             <div className={'w-full flex flex-row items-center my-8 px-8'}>
                 <div className={'flex flex-col flex-shrink'} style={{ minWidth: '0' }}>
-                    <h2 className={'text-2xl text-neutral-50 font-header font-medium'}>Product Categories</h2>
-                    <p className={'text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden'}>
+                    <h2 className={'text-2xl text-neutral-50 font-header font-medium'}>Categories</h2>
+                    <p
+                        className={
+                            'hidden lg:block text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden'
+                        }
+                    >
                         These categories are used to contain your products.
                     </p>
                 </div>

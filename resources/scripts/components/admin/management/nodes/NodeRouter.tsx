@@ -76,7 +76,9 @@ const NodeRouter = () => {
                         {node.name}
                         <NodeStatus node={node.id} className={'ml-2 mb-0.5'} />
                     </h2>
-                    <p css={tw`text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden`}>
+                    <p
+                        css={tw`hidden md:block text-base text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden`}
+                    >
                         {node.uuid}
                     </p>
                 </div>

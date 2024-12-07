@@ -14,7 +14,7 @@ const MobileSidebar = ({ children }: { children: ReactNode[] }) => {
     );
 };
 
-const Link = ({ icon, text, linkTo, end }: { icon: IconDefinition; text: string; linkTo: string; end?: boolean }) => {
+const Link = ({ icon, text, linkTo, end }: { icon: IconDefinition; text?: string; linkTo: string; end?: boolean }) => {
     const [active, setActive] = useState<boolean>(false);
     const { colors } = useStoreState(s => s.theme.data!);
 
