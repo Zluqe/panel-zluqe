@@ -18,7 +18,7 @@ class CreateOrderService
         $order->name = uuid_create();
         $order->payment_intent_id = $intent;
         $order->user_id = $user->id;
-        $order->description = 'Placeholder';
+        $order->description = 'Order for ' . $product->name;
         $order->total = $product->price;
         $order->status = $status ?? Order::STATUS_EXPIRED;
         $order->product_id = $product->id;

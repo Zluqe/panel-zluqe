@@ -5,8 +5,10 @@ namespace Everest\Console;
 use Everest\Models\ActivityLog;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\Console\PruneCommand;
+use Everest\Console\Commands\Billing\CleanupOrdersCommand;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Everest\Console\Commands\Schedule\ProcessRunnableCommand;
+use Everest\Console\Commands\Billing\ProcessBillableServersCommand;
 use Everest\Console\Commands\Maintenance\PruneOrphanedBackupsCommand;
 use Everest\Console\Commands\Maintenance\CleanServiceBackupFilesCommand;
 
@@ -43,6 +45,11 @@ class Kernel extends ConsoleKernel
 
         if (config('app.auto_update')) {
             $schedule->command(AutoUpdateCommand::class)->daily();
+        }
+
+        if (config('modules.billing.enabled')) {
+            $schedule->command(CleanupOrdersCommand::class)->daily();
+            $schedule->command(ProcessBillableServersCommand::class)->daily();
         }
     }
 }
