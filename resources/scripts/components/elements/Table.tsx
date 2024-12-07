@@ -42,12 +42,16 @@ const PaginatedFooter = ({ pagination }: { pagination: UsePaginationResult<any> 
     return (
         <div style={{ backgroundColor: colors.secondary }} className={'rounded-b-lg py-2 px-4'}>
             <div className={'flex justify-between space-x-2'}>
-                <p className={'text-xs font-bold text-gray-400 my-auto mr-2'}>
+                <p className={'text-xs font-bold text-gray-400 my-auto'}>
                     Showing <span className={'text-white'}>{pagination.startIndex + 1}</span> to{' '}
                     <span className={'text-white'}>{pagination.endIndex}</span> of{' '}
-                    <span className={'text-white'}>{pagination.totalItems}</span> results.
+                    <span className={'text-white'}>{pagination.totalItems}</span> results
                 </p>
-                <div className={'space-x-2'}>
+                <div className={'inline-flex space-x-2'}>
+                    <p className={'text-xs font-bold text-gray-400 my-auto'}>
+                        Page <span className={'text-white'}>{pagination.currentPage}</span> of{' '}
+                        <span className={'text-white'}>{pagination.totalPages}</span>
+                    </p>
                     <Button.Text size={Button.Sizes.Small} onClick={pagination.goToPreviousPage}>
                         <FontAwesomeIcon icon={faChevronLeft} />
                     </Button.Text>
