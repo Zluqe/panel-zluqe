@@ -45,7 +45,7 @@ function ServerConsoleContainer() {
                 </div>
                 <div className={'col-span-4 self-end sm:col-span-2 lg:col-span-1'}>
                     <Can action={['control.start', 'control.stop', 'control.restart']} matchAny>
-                        <PowerButtons className={'flex space-x-2 sm:justify-end'} />
+                        <PowerButtons className={'flex space-x-2 sm:justify-center'} />
                     </Can>
                 </div>
             </div>

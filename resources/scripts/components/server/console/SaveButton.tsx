@@ -49,7 +49,7 @@ export default () => {
     return (
         <div
             className={classNames(
-                'px-4 py-2 inline-flex items-center justify-center',
+                'hidden md:flex px-4 py-2 inline-flex items-center justify-center',
                 'font-semibold hover:bg-slate-700 rounded duration-300 cursor-pointer',
             )}
             onClick={submit}

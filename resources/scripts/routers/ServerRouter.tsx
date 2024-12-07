@@ -11,6 +11,7 @@ import InstallListener from '@/components/server/InstallListener';
 import ErrorBoundary from '@elements/ErrorBoundary';
 import { useLocation } from 'react-router';
 import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
+import MobileSidebar from '@/components/elements/MobileSidebar';
 import PermissionRoute from '@elements/PermissionRoute';
 import routes from '@/routers/routes';
 import Sidebar from '@/components/elements/Sidebar';
@@ -32,6 +33,19 @@ import {
     UsersIcon,
     WifiIcon,
 } from '@heroicons/react/outline';
+import {
+    faArchive,
+    faClock,
+    faCog,
+    faDatabase,
+    faDollar,
+    faEthernet,
+    faEye,
+    faFolder,
+    faPlay,
+    faTerminal,
+    faUsers,
+} from '@fortawesome/free-solid-svg-icons';
 
 function ServerRouter() {
     const params = useParams<'id'>();
@@ -80,6 +94,22 @@ function ServerRouter() {
     return (
         <Fragment key={'server-router'}>
             <div className={'h-screen flex'}>
+                <MobileSidebar>
+                    <MobileSidebar.Home />
+                    <MobileSidebar.Link icon={faTerminal} text={'Console'} linkTo={`/server/${id}`} end />
+                    {billable && (
+                        <MobileSidebar.Link icon={faDollar} text={'Billing'} linkTo={`/server/${id}/billing`} />
+                    )}
+                    <MobileSidebar.Link icon={faEye} text={'Activity'} linkTo={`/server/${id}/activity`} />
+                    <MobileSidebar.Link icon={faFolder} text={'Files'} linkTo={`/server/${id}/files`} />
+                    <MobileSidebar.Link icon={faDatabase} text={'Databases'} linkTo={`/server/${id}/databases`} />
+                    <MobileSidebar.Link icon={faArchive} text={'Backups'} linkTo={`/server/${id}/backups`} />
+                    <MobileSidebar.Link icon={faClock} text={'Tasks'} linkTo={`/server/${id}/schedules`} />
+                    <MobileSidebar.Link icon={faUsers} text={'Subusers'} linkTo={`/server/${id}/users`} />
+                    <MobileSidebar.Link icon={faEthernet} text={'Network'} linkTo={`/server/${id}/network`} />
+                    <MobileSidebar.Link icon={faPlay} text={'Startup'} linkTo={`/server/${id}/startup`} />
+                    <MobileSidebar.Link icon={faCog} text={'Settings'} linkTo={`/server/${id}/settings`} />
+                </MobileSidebar>
                 <Sidebar className={'flex-none'} $collapsed={collapsed} theme={theme}>
                     <div
                         className={

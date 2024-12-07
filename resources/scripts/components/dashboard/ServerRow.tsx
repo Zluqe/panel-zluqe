@@ -42,10 +42,10 @@ const UtilBox = ({
     return (
         <div
             className={classNames(
-                'w-full h-full bg-white/10 shadow-xl m-auto px-4 py-2',
-                rounded === 'left' && 'rounded-l-lg',
-                rounded === 'right' && 'rounded-r-lg',
-                rounded === 'full' && 'rounded-lg col-span-3',
+                'col-span-2 lg:col-span-1 w-full h-full bg-white/10 lg:shadow-xl m-auto px-4 py-2',
+                rounded === 'left' && 'lg:rounded-l-lg',
+                rounded === 'right' && 'lg:rounded-r-lg',
+                rounded === 'full' && 'lg:rounded-lg lg:col-span-3',
             )}
         >
             <div className={'text-gray-300 font-bold text-center'}>
@@ -103,16 +103,16 @@ export default ({ server }: { server: Server }) => {
             <Link to={`/server/${server.id}`}>
                 <div
                     className={
-                        'w-full p-4 rounded-lg grid grid-cols-12 mb-2 hover:brightness-150 transition duration-300'
+                        'w-full p-4 rounded-lg grid grid-cols-2 lg:grid-cols-12 mb-2 hover:brightness-150 transition duration-300'
                     }
                     style={{ backgroundColor: colors.background }}
                 >
                     <FontAwesomeIcon
-                        className={classNames(statusToColor(stats?.status ?? 'offline'), 'my-auto ml-4')}
+                        className={classNames(statusToColor(stats?.status ?? 'offline'), 'my-auto ml-4 col-span-1')}
                         icon={!stats?.isSuspended ? faPowerOff : faXmarkCircle}
                         size={'lg'}
                     />
-                    <div className="whitespace-nowrap text-white col-span-7">
+                    <div className="whitespace-nowrap text-white col-span-1 lg:col-span-7 mb-4 lg:mb-0">
                         {server.name}
                         <div className={'text-gray-500 text-xs my-auto'}>
                             {server.allocations[0]?.ip.toString()}:{server.allocations[0]?.port.toString()}

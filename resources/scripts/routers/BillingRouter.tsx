@@ -21,6 +21,8 @@ import {
     ShoppingCartIcon,
     ViewListIcon,
 } from '@heroicons/react/outline';
+import MobileSidebar from '@/components/elements/MobileSidebar';
+import { faDesktop, faList, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 export default () => {
     const user = useStoreState(state => state.user.data!);
@@ -35,6 +37,12 @@ export default () => {
 
     return (
         <div className={'h-screen flex'}>
+            <MobileSidebar>
+                <MobileSidebar.Home />
+                <MobileSidebar.Link icon={faDesktop} text={'Overview'} linkTo={'/billing'} end />
+                <MobileSidebar.Link icon={faShoppingCart} text={'Store'} linkTo={'/billing/order'} />
+                <MobileSidebar.Link icon={faList} text={'Orders'} linkTo={'/billing/orders'} />
+            </MobileSidebar>
             <Sidebar className={'flex-none'} $collapsed={collapsed} theme={theme}>
                 <div
                     className={

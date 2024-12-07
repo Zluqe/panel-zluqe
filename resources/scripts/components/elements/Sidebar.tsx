@@ -41,7 +41,7 @@ const User = styled.div`
 `;
 
 const Sidebar = styled.div<{ $collapsed?: boolean; theme: SiteTheme }>`
-    ${tw`h-screen flex flex-col items-center flex-shrink-0 overflow-x-hidden ease-linear`};
+    ${tw`hidden md:flex h-screen flex-col items-center flex-shrink-0 overflow-x-hidden ease-linear`};
     ${tw`transition-all duration-500`};
     ${tw`w-[15rem]`};
 

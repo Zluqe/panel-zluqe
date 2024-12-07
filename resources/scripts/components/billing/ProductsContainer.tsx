@@ -109,7 +109,7 @@ export default () => {
                                     No products could be found in this category.
                                 </div>
                             )}
-                            <div className={'grid grid-cols-2 xl:grid-cols-3 gap-4'}>
+                            <div className={'grid grid-cols-1 xl:grid-cols-3 gap-4'}>
                                 {products?.map(product => (
                                     <ContentBox key={product.id}>
                                         <div className={'p-3 lg:p-6'}>

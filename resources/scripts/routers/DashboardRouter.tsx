@@ -19,6 +19,8 @@ import {
     TicketIcon,
 } from '@heroicons/react/outline';
 import Avatar from '@/components/Avatar';
+import MobileSidebar from '@/components/elements/MobileSidebar';
+import { faKey, faShoppingBag, faTerminal, faTicket, faUser } from '@fortawesome/free-solid-svg-icons';
 
 function DashboardRouter() {
     const user = useStoreState(s => s.user.data!);
@@ -29,6 +31,14 @@ function DashboardRouter() {
 
     return (
         <div className={'h-screen flex'}>
+            <MobileSidebar>
+                <MobileSidebar.Home />
+                <MobileSidebar.Link icon={faUser} text={'Account'} linkTo={'/account'} end />
+                <MobileSidebar.Link icon={faKey} text={'API'} linkTo={'/account/api'} />
+                <MobileSidebar.Link icon={faTerminal} text={'SSH'} linkTo={'/account/ssh'} />
+                {tickets.enabled && <MobileSidebar.Link icon={faTicket} text={'Tickets'} linkTo={'/account/tickets'} />}
+                {billing.enabled && <MobileSidebar.Link icon={faShoppingBag} text={'Billing'} linkTo={'billing'} />}
+            </MobileSidebar>
             <Sidebar className={'flex-none'} $collapsed={collapsed} theme={theme}>
                 <div
                     className={
