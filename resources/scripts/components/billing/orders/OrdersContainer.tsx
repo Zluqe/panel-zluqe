@@ -1,14 +1,11 @@
-import Pill, { PillStatus } from '../../elements/Pill';
+import Pill, { PillStatus } from '@elements/Pill';
 import PageContentBlock from '@elements/PageContentBlock';
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Body, BodyItem, Header, HeaderItem, Table } from '@elements/Table';
+import { Body, BodyItem, PaginatedFooter, Header, HeaderItem, Table } from '@elements/Table';
 import { useEffect, useState } from 'react';
 import { getOrders, Order } from '@/api/billing/orders';
 import Spinner from '@/components/elements/Spinner';
 import { formatDistanceToNowStrict } from 'date-fns';
-import { Button } from '@/components/elements/button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import usePagination from '@/plugins/usePagination';
 
 export function format(date: number): string {
@@ -25,6 +22,7 @@ export function format(date: number): string {
             prefix = 'nd';
             break;
         case 3:
+        case 23:
             prefix = 'rd';
             break;
         default:
@@ -58,10 +56,7 @@ export default () => {
 
     if (!orders) return <Spinner size={'small'} centered />;
 
-    const { paginatedItems, totalItems, startIndex, endIndex, goToNextPage, goToPreviousPage } = usePagination<Order>(
-        orders,
-        10,
-    );
+    const pagination = usePagination<Order>(orders, 10);
 
     return (
         <PageContentBlock>
@@ -83,7 +78,7 @@ export default () => {
                         <HeaderItem>&nbsp;</HeaderItem>
                     </Header>
                     <Body>
-                        {paginatedItems.map(order => (
+                        {pagination.paginatedItems.map(order => (
                             <BodyItem
                                 item={order.name.split('-')[0]!.toString()}
                                 key={1}
@@ -108,19 +103,7 @@ export default () => {
                         ))}
                     </Body>
                 </Table>
-                <div className={'text-right text-white mt-2'}>
-                    <div className={'inline-flex space-x-2'}>
-                        <p className={'text-xs font-bold text-gray-400 my-auto'}>
-                            Showing {startIndex + 1}-{endIndex} of {totalItems} results
-                        </p>
-                        <Button.Text size={Button.Sizes.Small} onClick={goToPreviousPage}>
-                            <FontAwesomeIcon icon={faChevronLeft} />
-                        </Button.Text>
-                        <Button.Text size={Button.Sizes.Small} onClick={goToNextPage}>
-                            <FontAwesomeIcon icon={faChevronRight} />
-                        </Button.Text>
-                    </div>
-                </div>
+                <PaginatedFooter pagination={pagination} />
             </div>
         </PageContentBlock>
     );

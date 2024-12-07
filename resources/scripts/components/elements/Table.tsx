@@ -1,6 +1,10 @@
-import { useStoreState } from '@/state/hooks';
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import { useStoreState } from '@/state/hooks';
+import { UsePaginationResult } from '@/plugins/usePagination';
+import { Button } from './button';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Header = ({ children }: { children: ReactNode }) => {
     const { colors } = useStoreState(s => s.theme.data!);
@@ -32,6 +36,30 @@ const BodyItem = ({ item, to, children }: { item: string; to?: string; children:
     );
 };
 
+const PaginatedFooter = ({ pagination }: { pagination: UsePaginationResult<any> }) => {
+    const { colors } = useStoreState(s => s.theme.data!);
+
+    return (
+        <div style={{ backgroundColor: colors.secondary }} className={'rounded-b-lg py-2 px-4'}>
+            <div className={'flex justify-between space-x-2'}>
+                <p className={'text-xs font-bold text-gray-400 my-auto mr-2'}>
+                    Showing <span className={'text-white'}>{pagination.startIndex + 1}</span> to{' '}
+                    <span className={'text-white'}>{pagination.endIndex}</span> of{' '}
+                    <span className={'text-white'}>{pagination.totalItems}</span> results.
+                </p>
+                <div className={'space-x-2'}>
+                    <Button.Text size={Button.Sizes.Small} onClick={pagination.goToPreviousPage}>
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </Button.Text>
+                    <Button.Text size={Button.Sizes.Small} onClick={pagination.goToNextPage}>
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </Button.Text>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const Table = ({ children }: { children: ReactNode[] }) => {
     return (
         <div className={'relative overflow-x-auto'}>
@@ -40,4 +68,4 @@ const Table = ({ children }: { children: ReactNode[] }) => {
     );
 };
 
-export { Table, Header, HeaderItem, Body, BodyItem };
+export { Table, Header, HeaderItem, Body, BodyItem, PaginatedFooter };
