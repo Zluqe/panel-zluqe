@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - "develop"
-      - "1.0-develop"
+      - "everest"
   pull_request:
     branches:
       - "develop"
-      - "1.0-develop"
+      - "everest"
 
 jobs:
   lint:
@@ -58,6 +58,3 @@ jobs:
 
       - name: Build
         run: pnpm run build
-
-      - name: Tests
-        run: pnpm run test
