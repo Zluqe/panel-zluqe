@@ -9,10 +9,10 @@ import CategoryForm from '@admin/modules/billing/products/CategoryForm';
 import { SubNavigation, SubNavigationLink } from '@admin/SubNavigation';
 import OverviewContainer from '@admin/modules/billing/OverviewContainer';
 import CategoryTable from '@admin/modules/billing/products/CategoryTable';
+import OrdersContainer from '@admin/modules/billing/orders/OrdersContainer';
 import ProductContainer from '@admin/modules/billing/products/ProductContainer';
 import CategoryContainer from '@admin/modules/billing/products/CategoryContainer';
-import { DesktopComputerIcon, ShoppingBagIcon, UsersIcon } from '@heroicons/react/outline';
-import BillingAccountsContainer from '@admin/modules/billing/accounts/BillingAccountsContainer';
+import { DesktopComputerIcon, ShoppingCartIcon, ViewGridIcon } from '@heroicons/react/outline';
 
 export default () => {
     const theme = useStoreState(state => state.theme.data!);
@@ -38,10 +38,10 @@ export default () => {
                     <DesktopComputerIcon />
                 </SubNavigationLink>
                 <SubNavigationLink to={'/admin/billing/categories'} name={'Products'}>
-                    <ShoppingBagIcon />
+                    <ViewGridIcon />
                 </SubNavigationLink>
-                <SubNavigationLink to={'/admin/billing/accounts'} name={'Accounts'}>
-                    <UsersIcon />
+                <SubNavigationLink to={'/admin/billing/orders'} name={'Orders'}>
+                    <ShoppingCartIcon />
                 </SubNavigationLink>
             </SubNavigation>
             <Routes>
@@ -54,7 +54,7 @@ export default () => {
                 <Route path={'/categories/:id/products/new'} element={<ProductForm />} />
                 <Route path={'/categories/:id/products/:productId'} element={<ProductContainer />} />
 
-                <Route path={'/accounts'} element={<BillingAccountsContainer />} />
+                <Route path={'/orders'} element={<OrdersContainer />} />
 
                 <Route path={'/*'} element={<NotFound />} />
             </Routes>
