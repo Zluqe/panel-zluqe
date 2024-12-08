@@ -66,6 +66,7 @@ function ServerRouter() {
     const [collapsed, setCollapsed] = usePersistedState<boolean>(`sidebar_user_${user.uuid}`, false);
     const serverId = ServerContext.useStoreState(state => state.server.data?.internalId);
     const billable = ServerContext.useStoreState(state => state.server.data?.orderId);
+    const orderId = ServerContext.useStoreState(state => state.server.data?.orderId);
     const daysUntilRenewal = ServerContext.useStoreState(state => state.server.data?.daysUntilRenewal);
 
     useEffect(() => {
@@ -89,7 +90,7 @@ function ServerRouter() {
         };
     }, [params.id]);
 
-    if (status === 'suspended' && billable) return <Suspended days={daysUntilRenewal ?? 0} />;
+    if (status === 'suspended' && billable) return <Suspended id={orderId} days={daysUntilRenewal ?? 0} />;
 
     return (
         <Fragment key={'server-router'}>

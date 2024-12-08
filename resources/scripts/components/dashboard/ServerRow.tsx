@@ -109,7 +109,7 @@ export default ({ server }: { server: Server }) => {
                 >
                     <FontAwesomeIcon
                         className={classNames(statusToColor(stats?.status ?? 'offline'), 'my-auto ml-4 col-span-1')}
-                        icon={!stats?.isSuspended ? faPowerOff : faXmarkCircle}
+                        icon={server.status === 'suspended' ? faXmarkCircle : faPowerOff}
                         size={'lg'}
                     />
                     <div className="whitespace-nowrap text-white col-span-1 lg:col-span-7 mb-4 lg:mb-0">
@@ -118,7 +118,7 @@ export default ({ server }: { server: Server }) => {
                             {server.allocations[0]?.ip.toString()}:{server.allocations[0]?.port.toString()}
                         </div>
                     </div>
-                    {stats?.status === 'offline' ? (
+                    {server.status || stats?.status === 'offline' ? (
                         <UtilBox rounded={'full'} utilised={-1} icon={faInfoCircle} server={server} />
                     ) : (
                         <>

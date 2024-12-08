@@ -122,6 +122,7 @@ class StripeController extends ClientApiController
 
             $server->update([
                 'days_until_renewal' => $server->days_until_renewal + 30,
+                'status' => $server->isSuspended() ? null : $server->status,
             ]);
         } else {
             $product = Product::findOrFail($intent->metadata->product_id);

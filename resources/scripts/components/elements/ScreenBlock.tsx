@@ -8,6 +8,12 @@ import NotFoundSvg from '@/assets/images/not_found.svg';
 import ServerErrorSvg from '@/assets/images/server_error.svg';
 import { useStoreState } from '@/state/hooks';
 import { useNavigate } from 'react-router-dom';
+import PaymentContainer from '../server/billing/PaymentContainer';
+import { getOrder } from '@/api/billing/orders';
+import { Product, getProduct } from '@/api/billing/products';
+import { Order } from '@/api/billing/orders';
+import { useState, useEffect } from 'react';
+import Spinner from './Spinner';
 
 interface BaseProps {
     title: string;
@@ -87,15 +93,38 @@ const NotFound = ({ title, message, onBack }: Partial<Pick<ScreenBlockProps, 'ti
     />
 );
 
-const Suspended = ({ days }: { days: number }) => {
+const Suspended = ({ days, id }: { days: number; id?: number }) => {
+    const [order, setOrder] = useState<Order>();
+    const [product, setProduct] = useState<Product>();
+
     const navigate = useNavigate();
     const { secondary } = useStoreState(state => state.theme.data!.colors);
+
+    useEffect(() => {
+        getOrder(id!)
+            .then(data => setOrder(data))
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (!order) return;
+
+        getProduct(order.product_id)
+            .then(data => setProduct(data))
+            .catch(error => {
+                console.error(error);
+            });
+    }, [order]);
+
+    if (!product) return <Spinner centered />;
 
     return (
         <PageContentBlock>
             <div css={tw`flex justify-center`}>
                 <div
-                    css={tw`w-full sm:w-3/4 md:w-1/2 p-12 md:p-20 rounded-lg shadow-lg text-center relative`}
+                    css={tw`w-full sm:w-3/4 md:w-1/2 p-12 md:p-20 rounded-lg shadow-lg text-left relative`}
                     style={{ backgroundColor: secondary }}
                 >
                     <div css={tw`absolute left-0 top-0 ml-4 mt-4`}>
@@ -103,13 +132,18 @@ const Suspended = ({ days }: { days: number }) => {
                             <FontAwesomeIcon icon={faArrowLeft} />
                         </ActionButton>
                     </div>
-                    <img src={NotFoundSvg} css={tw`w-2/3 h-auto select-none mx-auto`} />
-                    <h2 css={tw`mt-10 text-white font-bold text-4xl`}>Suspended - No Payment</h2>
+                    <h2 css={tw`text-white font-bold text-4xl`}>Suspended - No Payment</h2>
                     <p css={tw`text-sm text-neutral-400 mt-2`}>
                         Your server has been suspended due to a lack of payment. Your server will be deleted{' '}
                         <span className={'font-bold'}>in {days + 7} day(s) </span>
                         if you do not choose to pay the monthly cost for your server.
+                        <div className={'mt-2 text-gray-300 font-semibold'}>
+                            Your outstanding balance is <span className={'text-white'}>${product.price}</span>
+                        </div>
                     </p>
+                    <div className={'mt-6'}>
+                        <PaymentContainer id={Number(product.id)} />
+                    </div>
                 </div>
             </div>
         </PageContentBlock>
