@@ -96,18 +96,16 @@ function DashboardRouter() {
                     )}
                 </Sidebar.Wrapper>
                 <span className={'mt-auto mb-3 mr-auto'}>
-                    {links?.map(link => (
-                        <a
-                            key={link.id}
-                            href={link.url}
-                            target={'_blank'}
-                            rel={'noreferrer'}
-                            className={collapsed ? 'hidden' : ''}
-                        >
-                            <ExternalLinkIcon />
-                            <span>{link.name}</span>
-                        </a>
-                    ))}
+                    {!collapsed && (
+                        <>
+                            {links?.map(link => (
+                                <a key={link.id} href={link.url} target={'_blank'} rel={'noreferrer'}>
+                                    <ExternalLinkIcon />
+                                    <span>{link.name}</span>
+                                </a>
+                            ))}
+                        </>
+                    )}
                     {user.rootAdmin && (
                         <NavLink to={'/admin'}>
                             <CogIcon />
