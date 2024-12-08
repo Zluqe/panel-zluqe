@@ -73,6 +73,7 @@ Route::group(['prefix' => '/billing'], function () {
 
     Route::group(['prefix' => '/orders'], function () {
         Route::get('/', [Application\Billing\OrderController::class, 'index']);
+
     });
 });
 
@@ -148,6 +149,22 @@ Route::group(['prefix' => '/theme'], function () {
     Route::put('/colors', [Application\Theme\ThemeController::class, 'colors']);
 
     Route::post('/reset', [Application\Theme\ThemeController::class, 'reset']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Link controller routes
+|--------------------------------------------------------------------------
+|
+| Endpoint: /api/application/links
+|
+*/
+Route::group(['prefix' => '/links'], function () {
+    Route::get('/', [Application\Links\LinkController::class, 'index']);
+    Route::post('/', [Application\Links\LinkController::class, 'store']);
+
+    Route::patch('/{id}', [Application\Links\LinkController::class, 'update']);
+    Route::delete('/{id}', [Application\Links\LinkController::class, 'delete']);
 });
 
 /*

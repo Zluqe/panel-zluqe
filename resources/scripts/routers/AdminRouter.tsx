@@ -6,6 +6,7 @@ import {
     FolderIcon,
     GlobeIcon,
     KeyIcon,
+    LinkIcon,
     OfficeBuildingIcon,
     PencilIcon,
     ReplyIcon,
@@ -70,6 +71,7 @@ import {
     faIdBadge,
     faKey,
     faLayerGroup,
+    faLink,
     faLocation,
     faPaintBrush,
     faServer,
@@ -77,6 +79,7 @@ import {
     faUser,
     faWandSparkles,
 } from '@fortawesome/free-solid-svg-icons';
+import LinksTable from '@/components/admin/modules/links/LinksTable';
 
 function AdminRouter() {
     const theme = useStoreState(state => state.theme.data!);
@@ -104,6 +107,7 @@ function AdminRouter() {
                 )}
                 <MobileSidebar.Link icon={faExclamationTriangle} text={'Alerts'} linkTo={'/admin/alerts'} />
                 <MobileSidebar.Link icon={faPaintBrush} text={'Theme'} linkTo={'/admin/theme'} />
+                <MobileSidebar.Link icon={faLink} text={'Links'} linkTo={'/admin/links'} />
                 <MobileSidebar.Link icon={faDatabase} text={'Databases'} linkTo={'/admin/databases'} />
                 <MobileSidebar.Link icon={faLocation} text={'Locations'} linkTo={'/admin/locations'} />
                 <MobileSidebar.Link icon={faLayerGroup} text={'Nodes'} linkTo={'/admin/nodes'} />
@@ -173,6 +177,10 @@ function AdminRouter() {
                         <PencilIcon />
                         <span>Theme</span>
                     </NavLink>
+                    <NavLink to="/admin/links">
+                        <LinkIcon />
+                        <span>Links</span>
+                    </NavLink>
                     <Sidebar.Section>Management</Sidebar.Section>
                     {standard && (
                         <NavLink to="/admin/databases">
@@ -237,6 +245,7 @@ function AdminRouter() {
                         <Route path="tickets/*" element={<TicketRouter />} />
                         <Route path="ai/*" element={<AIRouter />} />
                         <Route path="theme" element={<ThemeContainer />} />
+                        <Route path="links/*" element={<LinksTable />} />
                         <Route path="alerts/*" element={<AlertRouter />} />
                         <Route path="databases" element={<DatabasesContainer />} />
                         <Route path="databases/new" element={<NewDatabaseContainer />} />

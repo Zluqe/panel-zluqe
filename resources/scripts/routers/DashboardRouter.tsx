@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import DashboardContainer from '@/components/dashboard/DashboardContainer';
 import { NotFound } from '@elements/ScreenBlock';
@@ -14,6 +14,7 @@ import {
     CodeIcon,
     CogIcon,
     DesktopComputerIcon,
+    ExternalLinkIcon,
     ShoppingCartIcon,
     TerminalIcon,
     TicketIcon,
@@ -21,13 +22,22 @@ import {
 import Avatar from '@/components/Avatar';
 import MobileSidebar from '@/components/elements/MobileSidebar';
 import { faCog, faKey, faShoppingBag, faTerminal, faTicket, faUser } from '@fortawesome/free-solid-svg-icons';
+import { CustomLink } from '@/api/admin/links';
+import { getLinks } from '@/api/getLinks';
 
 function DashboardRouter() {
     const user = useStoreState(s => s.user.data!);
     const { name } = useStoreState(s => s.settings.data!);
     const theme = useStoreState(state => state.theme.data!);
+    const [links, setLinks] = useState<CustomLink[] | null>();
     const { tickets, billing } = useStoreState(state => state.everest.data!);
     const [collapsed, setCollapsed] = usePersistedState<boolean>(`sidebar_user_${user.uuid}`, false);
+
+    useEffect(() => {
+        getLinks()
+            .then(data => setLinks(data))
+            .catch(error => console.error(error));
+    }, []);
 
     return (
         <div className={'h-screen flex'}>
@@ -86,6 +96,18 @@ function DashboardRouter() {
                     )}
                 </Sidebar.Wrapper>
                 <span className={'mt-auto mb-3 mr-auto'}>
+                    {links?.map(link => (
+                        <a
+                            key={link.id}
+                            href={link.url}
+                            target={'_blank'}
+                            rel={'noreferrer'}
+                            className={collapsed ? 'hidden' : ''}
+                        >
+                            <ExternalLinkIcon />
+                            <span>{link.name}</span>
+                        </a>
+                    ))}
                     {user.rootAdmin && (
                         <NavLink to={'/admin'}>
                             <CogIcon />
