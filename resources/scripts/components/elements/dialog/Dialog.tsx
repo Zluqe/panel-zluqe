@@ -2,9 +2,9 @@ import { useRef, useState } from 'react';
 import * as React from 'react';
 import { Dialog as HDialog } from '@headlessui/react';
 import { Button } from '@elements/button/index';
-import { XIcon } from '@heroicons/react/solid';
 import { AnimatePresence, motion } from 'framer-motion';
 import { DialogContext, IconPosition, RenderDialogProps, styles } from './';
+import { ReplyIcon, XIcon } from '@heroicons/react/outline';
 
 const variants = {
     open: {
@@ -40,6 +40,7 @@ export default ({
     hideCloseIcon,
     preventExternalClose,
     children,
+    subDialog,
 }: RenderDialogProps) => {
     const container = useRef<HTMLDivElement>(null);
     const [icon, setIcon] = useState<React.ReactNode>();
@@ -117,7 +118,11 @@ export default ({
                                                 onClick={onClose}
                                                 className={'group'}
                                             >
-                                                <XIcon className={styles.close_icon} />
+                                                {subDialog ? (
+                                                    <ReplyIcon className={styles.close_icon} />
+                                                ) : (
+                                                    <XIcon className={styles.close_icon} />
+                                                )}
                                             </Button.Text>
                                         </div>
                                     )}

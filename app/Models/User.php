@@ -261,6 +261,11 @@ class User extends Model implements
             ->where('key_type', ApiKey::TYPE_ACCOUNT);
     }
 
+    public function serverGroups(): HasMany
+    {
+        return $this->hasMany(ServerGroup::class);
+    }
+
     public function recoveryTokens(): HasMany
     {
         return $this->hasMany(RecoveryToken::class);

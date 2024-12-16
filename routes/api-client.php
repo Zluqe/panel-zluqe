@@ -21,6 +21,14 @@ Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.ind
 Route::get('/permissions', [Client\ClientController::class, 'permissions']);
 Route::get('links', [Client\LinkController::class, 'index']);
 
+Route::prefix('/groups')->group(function () {
+    Route::get('/', [Client\ServerGroupController::class, 'index']);
+    Route::post('/', [Client\ServerGroupController::class, 'store']);
+
+    Route::patch('/{id}', [Client\ServerGroupController::class, 'update']);
+    Route::delete('/{id}', [Client\ServerGroupController::class, 'delete']);
+});
+
 Route::prefix('/account')->middleware([AccountSubject::class, SuspendedAccount::class])->group(function () {
     Route::prefix('/')->withoutMiddleware(RequireTwoFactorAuthentication::class)->group(function () {
         Route::get('/', [Client\AccountController::class, 'index'])->name('api:client.account');

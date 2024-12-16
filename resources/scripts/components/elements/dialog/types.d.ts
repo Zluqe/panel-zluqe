@@ -20,6 +20,7 @@ export interface RenderDialogProps extends DialogProps {
     hideCloseIcon?: boolean;
     preventExternalClose?: boolean;
     title?: string;
+    subDialog?: boolean;
     description?: string | undefined;
     children?: React.ReactNode;
 }

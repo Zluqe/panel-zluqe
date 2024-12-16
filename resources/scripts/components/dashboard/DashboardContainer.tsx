@@ -19,13 +19,17 @@ import DashboardAlert from '@/components/dashboard/DashboardAlert';
 import ServerSvg from '@/assets/images/themed/ServerSvg';
 import { Button } from '../elements/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleArrowRight, faShield } from '@fortawesome/free-solid-svg-icons';
+import { faCircleArrowRight, faList, faShield } from '@fortawesome/free-solid-svg-icons';
+import { getServerGroups, ServerGroup } from '@/api/server/groups';
+import ServerGroupDialog, { VisibleDialog } from '@/components/dashboard/groups/ServerGroupDialog';
 
 export default () => {
     const { search } = useLocation();
     const defaultPage = Number(new URLSearchParams(search).get('page') || '1');
 
+    const [open, setOpen] = useState<VisibleDialog>('none');
     const colors = useStoreState(state => state.theme.data!.colors);
+    const [groups, setGroups] = useState<ServerGroup[]>([]);
     const [page, setPage] = useState(!isNaN(defaultPage) && defaultPage > 0 ? defaultPage : 1);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const name = useStoreState(state => state.settings.data!.name);
@@ -38,6 +42,12 @@ export default () => {
         ['/api/client/servers', showOnlyAdmin && user.rootAdmin, page],
         () => getServers({ page, type: showOnlyAdmin && user.rootAdmin ? 'admin' : undefined, per_page: 5 }),
     );
+
+    useEffect(() => {
+        getServerGroups()
+            .then(data => setGroups(data))
+            .catch(() => console.error());
+    }, []);
 
     useEffect(() => {
         if (!servers) return;
@@ -61,6 +71,7 @@ export default () => {
     return (
         <PageContentBlock title={'Dashboard'}>
             <DashboardAlert />
+            {open && <ServerGroupDialog open={open} setOpen={setOpen} groups={groups} setGroups={setGroups} />}
             <div className={'text-3xl lg:text-5xl font-bold mt-8 mb-12'}>
                 Welcome to {name}
                 <p className={'text-gray-400 font-normal text-sm mt-1'}>Signed in as {user.email}</p>
@@ -68,17 +79,22 @@ export default () => {
             <FlashMessageRender className={'my-4'} byKey={'dashboard'} />
             <div className={'grid lg:grid-cols-3 gap-4'}>
                 <div className="relative overflow-x-auto lg:col-span-2">
-                    <h2 css={tw`text-neutral-300 mb-4 px-4 text-2xl inline-flex`}>
-                        {user.rootAdmin && (
-                            <div className={'mr-3 mt-1.5'}>
-                                <Switch
-                                    name={'show_all_servers'}
-                                    defaultChecked={showOnlyAdmin}
-                                    onChange={() => setShowOnlyAdmin(s => !s)}
-                                />
-                            </div>
-                        )}
-                        {showOnlyAdmin ? 'Other' : 'Your'} Servers
+                    <h2 css={tw`text-neutral-300 mb-4 px-4 text-2xl flex justify-between`}>
+                        <div className={'inline-flex'}>
+                            {user.rootAdmin && (
+                                <div className={'mr-3 mt-1.5'}>
+                                    <Switch
+                                        name={'show_all_servers'}
+                                        defaultChecked={showOnlyAdmin}
+                                        onChange={() => setShowOnlyAdmin(s => !s)}
+                                    />
+                                </div>
+                            )}
+                            {showOnlyAdmin ? 'Other' : 'Your'} Servers
+                        </div>
+                        <Button.Text size={Button.Sizes.Small} className={'mt-1'}>
+                            <FontAwesomeIcon icon={faList} onClick={() => setOpen('index')} />
+                        </Button.Text>
                     </h2>
                     <ContentBox>
                         {!servers || servers.items.length < 1 ? (
@@ -117,7 +133,13 @@ export default () => {
                             <Pagination data={servers} onPageSelect={setPage}>
                                 {({ items }) =>
                                     items.length > 0 ? (
-                                        items.map((server, _index) => <ServerRow key={server.uuid} server={server} />)
+                                        items.map((server, _index) => (
+                                            <ServerRow
+                                                key={server.uuid}
+                                                server={server}
+                                                group={groups.find(x => x.id === server.groupId)}
+                                            />
+                                        ))
                                     ) : (
                                         <div className={'w-full'} style={{ backgroundColor: colors.secondary }}>
                                             <div className={'px-6 py-4 text-gray-300'}>

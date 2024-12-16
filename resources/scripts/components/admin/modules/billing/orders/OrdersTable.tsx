@@ -72,12 +72,12 @@ export default ({ data }: { data?: Order[] }) => {
                                 {formatDistanceToNowStrict(order.created_at, { addSuffix: true })}
                             </td>
                             <td className={'px-6 py-4 text-left'}>
-                                <Pill small type={type(order.status)}>
+                                <Pill size={'small'} type={type(order.status)}>
                                     {order.status}
                                 </Pill>
                             </td>
                             <td className={'pr-12 py-4 text-right'}>
-                                <Pill small type={order.is_renewal ? 'info' : 'success'}>
+                                <Pill size={'small'} type={order.is_renewal ? 'info' : 'success'}>
                                     {order.is_renewal ? 'Upgrade' : 'New Server'}
                                 </Pill>
                             </td>

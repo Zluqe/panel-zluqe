@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import classNames from 'classnames';
 
+export type PillSize = 'normal' | 'large' | 'small';
 export type PillStatus = 'success' | 'info' | 'warn' | 'danger' | 'unknown';
 
 function getColor(type?: PillStatus): string {
@@ -26,13 +27,26 @@ function getColor(type?: PillStatus): string {
     return value;
 }
 
-export default ({ type, small, children }: { type?: PillStatus; small?: boolean; children: ReactNode }) => (
+export default ({
+    type,
+    size,
+    children,
+    customColor,
+}: {
+    type?: PillStatus;
+    size?: PillSize;
+    children: ReactNode;
+    customColor?: string;
+}) => (
     <span
         className={classNames(
             getColor(type),
-            small ? 'text-xs px-2' : 'text-sm px-3 py-0.5',
-            'mx-1 inline-flex leading-5 font-medium rounded-full capitalize',
+            !size && 'text-xs px-2 rounded-full',
+            size === 'large' && 'px-6 py-4 rounded-lg w-full',
+            size === 'small' && 'text-sm px-3 py-0.5 rounded-full',
+            'relative mx-1 inline-flex leading-5 font-medium capitalize',
         )}
+        style={{ backgroundColor: customColor }}
     >
         {children}
     </span>

@@ -15,6 +15,7 @@ export interface Server {
     id: string;
     internalId: number | string;
     uuid: string;
+    groupId?: number | null;
     name: string;
     node: string;
     isNodeUnderMaintenance: boolean;

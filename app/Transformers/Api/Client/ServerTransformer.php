@@ -39,6 +39,7 @@ class ServerTransformer extends Transformer
             'server_owner' => $user->id === $server->owner_id,
             'identifier' => $server->uuidShort,
             'internal_id' => $server->id,
+            'group_id' => $server->group_id,
             'uuid' => $server->uuid,
             'name' => $server->name,
             'node' => $server->node->name,
