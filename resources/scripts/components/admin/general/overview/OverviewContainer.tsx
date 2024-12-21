@@ -24,6 +24,7 @@ import { useStoreState } from '@/state/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import getMetrics, { MetricData } from '@/api/admin/getMetrics';
+import { Alert } from '@/components/elements/alert';
 
 interface SuggestionProps {
     icon: IconDefinition;
@@ -118,6 +119,13 @@ export default () => {
                             </CopyOnClick>
                             .
                         </div>
+                        {versionData?.panel.current.startsWith('v4.0.0-') && (
+                            <Alert type={'danger'} className={'mt-4'}>
+                                You are running a beta release of Jexactyl v4, which may include several bugs or weird
+                                glitches. Do NOT use this software in production unless you don&apos;t care about losing
+                                data.
+                            </Alert>
+                        )}
                     </>
                 )}
             </AdminBox>
