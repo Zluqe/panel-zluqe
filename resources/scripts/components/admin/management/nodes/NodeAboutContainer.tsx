@@ -9,8 +9,8 @@ import { Context } from '@admin/management/nodes/NodeRouter';
 import { Alert } from '@elements/alert';
 import { faMicrochip, faServer } from '@fortawesome/free-solid-svg-icons';
 import useFlash from '@/plugins/useFlash';
-import Label from '@/components/elements/Label';
-import Input from '@/components/elements/Input';
+import Label from '@elements/Label';
+import Input from '@elements/Input';
 
 const Code = ({ className, children }: { className?: string; children: ReactNode }) => {
     return (

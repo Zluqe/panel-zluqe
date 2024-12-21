@@ -1,10 +1,10 @@
 import { Dialog } from '@elements/dialog';
 import { createLink, CustomLink, updateLink, Values } from '@/api/admin/links';
 import { VisibleDialog } from './LinksTable';
-import Label from '@/components/elements/Label';
-import InputField from '@/components/elements/inputs/InputField';
+import Label from '@elements/Label';
+import InputField from '@elements/inputs/InputField';
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
-import Switch from '@/components/elements/Switch';
+import Switch from '@elements/Switch';
 
 export default ({ link, setOpen }: { link?: CustomLink; setOpen: Dispatch<SetStateAction<VisibleDialog>> }) => {
     const [values, setValues] = useState<Values>({

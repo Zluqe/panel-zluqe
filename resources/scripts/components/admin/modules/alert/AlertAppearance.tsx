@@ -11,7 +11,7 @@ import { AlertPosition } from '@/state/everest';
 import useFlash from '@/plugins/useFlash';
 import MessageBox, { FlashMessageType } from '@/components/MessageBox';
 import useStatus from '@/plugins/useStatus';
-import { Dialog } from '@/components/elements/dialog';
+import { Dialog } from '@elements/dialog';
 import { capitalize } from '@/lib/strings';
 
 const DemoBox = ({ children, selected }: { children: ReactNode; selected: boolean }) => {

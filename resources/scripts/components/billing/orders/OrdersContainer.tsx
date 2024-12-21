@@ -4,7 +4,7 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import { Body, BodyItem, PaginatedFooter, Header, HeaderItem, Table } from '@elements/Table';
 import { useEffect, useState } from 'react';
 import { getOrders, Order } from '@/api/billing/orders';
-import Spinner from '@/components/elements/Spinner';
+import Spinner from '@elements/Spinner';
 import { formatDistanceToNowStrict } from 'date-fns';
 import usePagination from '@/plugins/usePagination';
 

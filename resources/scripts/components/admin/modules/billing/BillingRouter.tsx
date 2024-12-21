@@ -13,6 +13,7 @@ import OrdersContainer from '@admin/modules/billing/orders/OrdersContainer';
 import ProductContainer from '@admin/modules/billing/products/ProductContainer';
 import CategoryContainer from '@admin/modules/billing/products/CategoryContainer';
 import { DesktopComputerIcon, ShoppingCartIcon, ViewGridIcon } from '@heroicons/react/outline';
+import Unfinished from '@elements/Unfinished';
 
 export default () => {
     const theme = useStoreState(state => state.theme.data!);
@@ -30,6 +31,8 @@ export default () => {
                     </p>
                 </div>
             </div>
+
+            <Unfinished untested />
 
             <FlashMessageRender byKey={'admin:billing'} className={'mb-4'} />
 

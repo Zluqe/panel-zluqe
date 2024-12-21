@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import Spinner from '@/components/elements/Spinner';
+import Spinner from '@elements/Spinner';
 import usePagination from '@/plugins/usePagination';
 import { CustomLink, getLinks } from '@/api/admin/links';
-import { NoItems } from '@/components/elements/AdminTable';
-import { Table, Header, HeaderItem, Body, BodyItem, PaginatedFooter } from '@/components/elements/Table';
+import { NoItems } from '@elements/AdminTable';
+import { Table, Header, HeaderItem, Body, BodyItem, PaginatedFooter } from '@elements/Table';
 import { formatDistanceToNowStrict } from 'date-fns';
-import AdminContentBlock from '@/components/elements/AdminContentBlock';
+import AdminContentBlock from '@elements/AdminContentBlock';
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/elements/button';
+import { Button } from '@elements/button';
 import CreateLinkDialog from './CreateLinkDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
-import Pill from '@/components/elements/Pill';
+import Pill from '@elements/Pill';
 import DeleteLinkDialog from './DeleteLinkDialog';
 
 export type VisibleDialog = 'none' | 'create' | 'update' | 'delete';

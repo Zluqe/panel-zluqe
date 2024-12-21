@@ -1,6 +1,6 @@
 import { getIntent, PaymentIntent } from '@/api/billing/intent';
 import { getPublicKey } from '@/api/billing/key';
-import Spinner from '@/components/elements/Spinner';
+import Spinner from '@elements/Spinner';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';

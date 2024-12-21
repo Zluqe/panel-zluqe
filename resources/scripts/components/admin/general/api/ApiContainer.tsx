@@ -20,7 +20,7 @@ import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
 import DeleteApiKeyButton from './DeleteApiKeyButton';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { useStoreState } from '@/state/hooks';
-import Unfinished from '@/components/elements/Unfinished';
+import Unfinished from '@elements/Unfinished';
 
 function ApiContainer() {
     const { data: apiKeys } = useGetApiKeys();

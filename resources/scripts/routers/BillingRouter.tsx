@@ -12,7 +12,7 @@ import OverviewContainer from '@/components/billing/OverviewContainer';
 import OrderContainer from '@/components/billing/order/OrderContainer';
 import Processing from '@/components/billing/order/summary/Processing';
 import Avatar from '@/components/Avatar';
-import Sidebar from '@/components/elements/Sidebar';
+import Sidebar from '@elements/Sidebar';
 import { usePersistedState } from '@/plugins/usePersistedState';
 import {
     CogIcon,
@@ -21,7 +21,7 @@ import {
     ShoppingCartIcon,
     ViewListIcon,
 } from '@heroicons/react/outline';
-import MobileSidebar from '@/components/elements/MobileSidebar';
+import MobileSidebar from '@elements/MobileSidebar';
 import { faDesktop, faList, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 export default () => {

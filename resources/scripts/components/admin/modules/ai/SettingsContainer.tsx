@@ -6,7 +6,7 @@ import { useStoreState } from '@/state/hooks';
 import { faKey, faUser } from '@fortawesome/free-solid-svg-icons';
 import { AISettings, updateSettings } from '@/api/admin/ai/settings';
 import useFlash from '@/plugins/useFlash';
-import { Button } from '@/components/elements/button';
+import { Button } from '@elements/button';
 
 export default () => {
     const { clearFlashes, clearAndAddHttpError, addFlash } = useFlash();

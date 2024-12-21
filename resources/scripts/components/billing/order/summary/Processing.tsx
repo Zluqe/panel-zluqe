@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import processOrder from '@/api/billing/processOrder';
 import useFlash from '@/plugins/useFlash';
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Spinner from '@/components/elements/Spinner';
+import Spinner from '@elements/Spinner';
 
 export default () => {
     const location = useLocation();

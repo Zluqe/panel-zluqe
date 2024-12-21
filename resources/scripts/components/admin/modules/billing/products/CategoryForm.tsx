@@ -16,7 +16,7 @@ import { faShoppingBasket } from '@fortawesome/free-solid-svg-icons';
 import { useStoreState } from '@/state/hooks';
 import Label from '@elements/Label';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { ServerServiceContainer } from '@/components/admin/management/servers/ServerStartupContainer';
+import { ServerServiceContainer } from '@admin/management/servers/ServerStartupContainer';
 import { WithRelationships } from '@/api/admin';
 import type { Egg } from '@/api/admin/egg';
 import { ShoppingCartIcon } from '@heroicons/react/outline';

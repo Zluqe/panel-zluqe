@@ -10,7 +10,7 @@ import { faPaintBrush, faPlusCircle, faRecycle, faShapes } from '@fortawesome/fr
 import useFlash from '@/plugins/useFlash';
 import { useEffect } from 'react';
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Label from '@/components/elements/Label';
+import Label from '@elements/Label';
 
 export default () => {
     const { addFlash, clearFlashes, clearAndAddHttpError } = useFlash();

@@ -22,7 +22,7 @@ import NewMessageDialog from '@admin/modules/tickets/view/NewMessageDialog';
 import MessageTable from './MessageTable';
 import { useNavigate } from 'react-router-dom';
 import DeleteTicketDialog from './DeleteTicketDialog';
-import { Alert } from '@/components/elements/alert';
+import { Alert } from '@elements/alert';
 
 export default () => {
     const navigate = useNavigate();

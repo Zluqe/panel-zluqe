@@ -1,4 +1,5 @@
 import PageContentBlock from '@elements/PageContentBlock';
+import Unfinished from '@elements/Unfinished';
 
 export default () => (
     <PageContentBlock>
@@ -8,5 +9,6 @@ export default () => (
                 Get insight into what products are available, your active subscriptions and more.
             </p>
         </div>
+        <Unfinished untested />
     </PageContentBlock>
 );

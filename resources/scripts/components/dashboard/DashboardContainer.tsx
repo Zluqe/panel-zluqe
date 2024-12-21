@@ -17,7 +17,7 @@ import FlashMessageRender from '../FlashMessageRender';
 import NotFoundSvg from '@/assets/images/not_found.svg';
 import DashboardAlert from '@/components/dashboard/DashboardAlert';
 import ServerSvg from '@/assets/images/themed/ServerSvg';
-import { Button } from '../elements/button';
+import { Button } from '@elements/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleArrowRight, faList, faShield } from '@fortawesome/free-solid-svg-icons';
 import { getServerGroups, ServerGroup } from '@/api/server/groups';

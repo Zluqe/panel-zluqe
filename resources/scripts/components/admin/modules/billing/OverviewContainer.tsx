@@ -1,5 +1,5 @@
 import AdminBox from '@elements/AdminBox';
-import Stepper from '@/components/elements/Stepper';
+import Stepper from '@elements/Stepper';
 import CollapsedIcon from '@/assets/images/logo.png';
 import ToggleFeatureButton from '@admin/modules/billing/ToggleFeatureButton';
 import { faArrowRight, faCheck, faEllipsis } from '@fortawesome/free-solid-svg-icons';

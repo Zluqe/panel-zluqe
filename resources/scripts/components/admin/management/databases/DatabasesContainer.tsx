@@ -8,7 +8,7 @@ import { useTableHooks } from '@elements/AdminTable';
 import { Button } from '@elements/button';
 import { Size } from '@elements/button/types';
 import DatabasesTable from './DatabasesTable';
-import Unfinished from '@/components/elements/Unfinished';
+import Unfinished from '@elements/Unfinished';
 
 interface Props {
     filters?: Filters;

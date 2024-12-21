@@ -1,6 +1,6 @@
 import useFlash from '@/plugins/useFlash';
 import { PanelMode } from '@/state/settings';
-import { Button } from '@/components/elements/button';
+import { Button } from '@elements/button';
 import { updateModeSettings } from '@/api/admin/settings';
 import FeatureContainer from '@elements/FeatureContainer';
 import { useStoreActions, useStoreState } from '@/state/hooks';

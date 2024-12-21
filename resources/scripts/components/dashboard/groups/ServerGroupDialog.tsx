@@ -5,8 +5,8 @@ import { faPlus, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addServerToGroup, deleteServerGroup, getServerGroups, ServerGroup } from '@/api/server/groups';
 import ModifyServerGroup from '@/components/dashboard/groups/ModifyServerGroup';
-import Pill from '@/components/elements/Pill';
-import Spinner from '@/components/elements/Spinner';
+import Pill from '@elements/Pill';
+import Spinner from '@elements/Spinner';
 import useFlash from '@/plugins/useFlash';
 import FlashMessageRender from '@/components/FlashMessageRender';
 

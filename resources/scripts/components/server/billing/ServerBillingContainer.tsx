@@ -10,8 +10,8 @@ import { getOrder, Order } from '@/api/billing/orders';
 import useFlash from '@/plugins/useFlash';
 import { getProduct } from '@/api/billing/products';
 import { Product } from '@/api/billing/products';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Alert } from '@/components/elements/alert';
+import SpinnerOverlay from '@elements/SpinnerOverlay';
+import { Alert } from '@elements/alert';
 import PaymentContainer from './PaymentContainer';
 
 function futureDate(days: number): string {

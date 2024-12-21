@@ -24,7 +24,7 @@ import { useStoreState } from '@/state/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import getMetrics, { MetricData } from '@/api/admin/getMetrics';
-import { Alert } from '@/components/elements/alert';
+import { Alert } from '@elements/alert';
 
 interface SuggestionProps {
     icon: IconDefinition;

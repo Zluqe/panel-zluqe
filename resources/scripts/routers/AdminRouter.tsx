@@ -56,11 +56,11 @@ import AuthContainer from '@admin/modules/auth/AuthContainer';
 import TicketRouter from '@admin/modules/tickets/TicketRouter';
 import ThemeContainer from '@admin/modules/theme/ThemeContainer';
 import BillingRouter from '@admin/modules/billing/BillingRouter';
-import AdminIndicators from '@/components/admin/AdminIndicators';
-import AlertRouter from '@/components/admin/modules/alert/AlertRouter';
+import AdminIndicators from '@admin/AdminIndicators';
+import AlertRouter from '@admin/modules/alert/AlertRouter';
 import { usePersistedState } from '@/plugins/usePersistedState';
-import AIRouter from '@/components/admin/modules/ai/AIRouter';
-import MobileSidebar from '@/components/elements/MobileSidebar';
+import AIRouter from '@admin/modules/ai/AIRouter';
+import MobileSidebar from '@elements/MobileSidebar';
 import {
     faCog,
     faDatabase,
@@ -81,8 +81,8 @@ import {
     faUser,
     faWandSparkles,
 } from '@fortawesome/free-solid-svg-icons';
-import LinksTable from '@/components/admin/modules/links/LinksTable';
-import ActivityContainer from '@/components/admin/general/ActivityContainer';
+import LinksTable from '@admin/modules/links/LinksTable';
+import ActivityContainer from '@admin/general/ActivityContainer';
 
 function AdminRouter() {
     const theme = useStoreState(state => state.theme.data!);

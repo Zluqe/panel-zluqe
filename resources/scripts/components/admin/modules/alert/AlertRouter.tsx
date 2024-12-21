@@ -6,7 +6,7 @@ import { EyeIcon, ShieldExclamationIcon } from '@heroicons/react/outline';
 import { SubNavigation, SubNavigationLink } from '@admin/SubNavigation';
 import AlertSettings from './AlertSettings';
 import AlertAppearance from './AlertAppearance';
-import { NotFound } from '@/components/elements/ScreenBlock';
+import { NotFound } from '@elements/ScreenBlock';
 
 export default () => {
     const theme = useStoreState(state => state.theme.data!);

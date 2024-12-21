@@ -15,9 +15,9 @@ import useFlash from '@/plugins/useFlash';
 import useOauthLogin from '@/api/auth/useOauthLogin';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import Label from '../elements/Label';
+import Label from '@elements/Label';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import Tooltip from '../elements/tooltip/Tooltip';
+import Tooltip from '@elements/tooltip/Tooltip';
 
 interface Values {
     username: string;

@@ -8,8 +8,8 @@ import AdminTable, {
     TableRow,
     Loading,
     NoItems,
-} from '@/components/elements/AdminTable';
-import CopyOnClick from '@/components/elements/CopyOnClick';
+} from '@elements/AdminTable';
+import CopyOnClick from '@elements/CopyOnClick';
 import useFlash from '@/plugins/useFlash';
 import { useStoreState } from 'easy-peasy';
 import { useContext, useEffect } from 'react';

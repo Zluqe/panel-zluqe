@@ -9,8 +9,8 @@ import { faEye, faList, faPaintBrush } from '@fortawesome/free-solid-svg-icons';
 import useFlash from '@/plugins/useFlash';
 import { useEffect, useState } from 'react';
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Label from '@/components/elements/Label';
-import Select from '@/components/elements/Select';
+import Label from '@elements/Label';
+import Select from '@elements/Select';
 import { AlertType } from '@/state/everest';
 
 export default () => {

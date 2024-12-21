@@ -20,7 +20,7 @@ import { Size } from '@elements/button/types';
 import CopyOnClick from '@elements/CopyOnClick';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import useFlash from '@/plugins/useFlash';
-import Unfinished from '@/components/elements/Unfinished';
+import Unfinished from '@elements/Unfinished';
 
 const MountsContainer = () => {
     const { setPage, setFilters, sort, setSort, sortDirection } = useContext(MountsContext);

@@ -9,7 +9,7 @@ import CollapsedIcon from '@/assets/images/logo.png';
 import TicketContainer from '@/components/dashboard/tickets/TicketContainer';
 import ViewTicketContainer from '@/components/dashboard/tickets/view/ViewTicketContainer';
 import { usePersistedState } from '@/plugins/usePersistedState';
-import Sidebar from '@/components/elements/Sidebar';
+import Sidebar from '@elements/Sidebar';
 import {
     CodeIcon,
     CogIcon,
@@ -21,7 +21,7 @@ import {
     TicketIcon,
 } from '@heroicons/react/outline';
 import Avatar from '@/components/Avatar';
-import MobileSidebar from '@/components/elements/MobileSidebar';
+import MobileSidebar from '@elements/MobileSidebar';
 import { faCog, faEye, faKey, faShoppingBag, faTerminal, faTicket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { CustomLink } from '@/api/admin/links';
 import { getLinks } from '@/api/getLinks';

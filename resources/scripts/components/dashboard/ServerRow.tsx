@@ -18,7 +18,7 @@ import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/ser
 import { useStoreState } from '@/state/hooks';
 import classNames from 'classnames';
 import { removeServerFromGroup, ServerGroup } from '@/api/server/groups';
-import Pill from '../elements/Pill';
+import Pill from '@elements/Pill';
 import { VisibleDialog } from './groups/ServerGroupDialog';
 import useFlash from '@/plugins/useFlash';
 

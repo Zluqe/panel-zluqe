@@ -2,7 +2,7 @@ import { Dialog } from '@elements/dialog';
 import { VisibleDialog } from './LinksTable';
 import { deleteLink } from '@/api/admin/links';
 import { Dispatch, SetStateAction } from 'react';
-import Spinner from '@/components/elements/Spinner';
+import Spinner from '@elements/Spinner';
 
 export default ({ id, setOpen }: { id?: number; setOpen: Dispatch<SetStateAction<VisibleDialog>> }) => {
     if (!id) return <Spinner centered />;

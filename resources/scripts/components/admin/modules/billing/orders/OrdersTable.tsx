@@ -1,10 +1,10 @@
 import { Order } from '@/api/billing/orders';
-import Spinner from '@/components/elements/Spinner';
+import Spinner from '@elements/Spinner';
 import usePagination from '@/plugins/usePagination';
 import { formatDistanceToNowStrict } from 'date-fns';
-import { NoItems } from '@/components/elements/AdminTable';
-import Pill, { PillStatus } from '@/components/elements/Pill';
-import { Body, BodyItem, Header, HeaderItem, PaginatedFooter, Table } from '@/components/elements/Table';
+import { NoItems } from '@elements/AdminTable';
+import Pill, { PillStatus } from '@elements/Pill';
+import { Body, BodyItem, Header, HeaderItem, PaginatedFooter, Table } from '@elements/Table';
 
 export function format(date: number): string {
     let prefix = 'th';

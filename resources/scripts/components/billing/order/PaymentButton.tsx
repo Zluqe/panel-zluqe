@@ -1,7 +1,7 @@
 import { FormEvent } from 'react';
 import useFlash from '@/plugins/useFlash';
 import { Product } from '@/api/billing/products';
-import { Button } from '@/components/elements/button';
+import { Button } from '@elements/button';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { PaymentIntent, updateIntent } from '@/api/billing/intent';
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
