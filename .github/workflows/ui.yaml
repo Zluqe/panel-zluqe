@@ -39,7 +39,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [16, 18]
+        node: [18, 19, 20]
     steps:
       - name: Code checkout
         uses: actions/checkout@v3
