@@ -4,6 +4,7 @@ namespace Everest\Http\Controllers\Api\Client;
 
 use Everest\Models\Ticket;
 use Illuminate\Http\Request;
+use Everest\Facades\Activity;
 use Everest\Models\TicketMessage;
 use Illuminate\Http\JsonResponse;
 use Everest\Exceptions\DisplayException;
@@ -48,6 +49,11 @@ class TicketController extends ClientApiController
             'user_id' => $request->user()->id,
             'message' => $request->input('message'),
         ]);
+
+        Activity::event('user:ticket.create')
+            ->subject($ticket)
+            ->isAdmin()
+            ->log();
 
         return $this->fractal->item($ticket)
             ->transformWith(TicketTransformer::class)
@@ -102,6 +108,10 @@ class TicketController extends ClientApiController
 
             TicketMessage::where('ticket_id', $ticket->id)->delete();
         }
+
+        Activity::event('user:ticket.delete')
+            ->property('identifier', $ticket->id)
+            ->log();
 
         return new JsonResponse([], JsonResponse::HTTP_NO_CONTENT);
     }

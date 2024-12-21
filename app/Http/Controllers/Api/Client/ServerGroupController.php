@@ -23,7 +23,7 @@ class ServerGroupController extends ClientApiController
      * Create a new server group and store in the database.
      */
     public function store(ClientApiRequest $request): array
-    {    
+    {
         $group = ServerGroup::create([
             'user_id' => $request->user()->id,
             'name' => $request->input('name'),

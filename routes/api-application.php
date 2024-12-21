@@ -73,7 +73,6 @@ Route::group(['prefix' => '/billing'], function () {
 
     Route::group(['prefix' => '/orders'], function () {
         Route::get('/', [Application\Billing\OrderController::class, 'index']);
-
     });
 });
 

@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model as IlluminateModel;
  * @property string|null $actor_type
  * @property int|null $actor_id
  * @property int|null $api_key_id
+ * @property bool|null $is_admin
  * @property \Illuminate\Support\Collection|null $properties
  * @property \Carbon\Carbon $timestamp
  * @property IlluminateModel|\Eloquent $actor
@@ -78,6 +79,7 @@ class ActivityLog extends Model
         'event' => ['required', 'string'],
         'batch' => ['nullable', 'uuid'],
         'ip' => ['required', 'string'],
+        'is_admin' => ['nullable', 'bool'],
         'description' => ['nullable', 'string'],
         'properties' => ['array'],
     ];

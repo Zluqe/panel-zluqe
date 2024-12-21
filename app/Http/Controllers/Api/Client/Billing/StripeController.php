@@ -110,8 +110,8 @@ class StripeController extends ClientApiController
             && $intent->id === $order->payment_intent_id
         ) {
             throw new DisplayException('This order has already been processed.');
-        };
-        
+        }
+
         if ($intent->status !== 'succeeded') {
             $order->update(['status' => Order::STATUS_FAILED]);
             throw new DisplayException('The order has been canceled.');
@@ -129,9 +129,9 @@ class StripeController extends ClientApiController
 
             $this->serverCreation->process($request, $product, $intent->metadata, $order);
         }
-    
+
         $order->update([
-            'status' => Order::STATUS_PROCESSED
+            'status' => Order::STATUS_PROCESSED,
         ]);
 
         return $this->returnNoContent();

@@ -32,11 +32,11 @@ class ProcessBillableServersCommand extends Command
 
             if ($count <= -7) {
                 $server->delete();
-            };
+            }
 
             if ($count <= 0) {
                 $this->suspend->toggle($server, 'suspend');
-            };
+            }
         }
     }
 }

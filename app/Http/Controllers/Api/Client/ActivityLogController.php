@@ -15,7 +15,9 @@ class ActivityLogController extends ClientApiController
      */
     public function __invoke(ClientApiRequest $request): array
     {
-        $activity = QueryBuilder::for($request->user()->activity())
+        $activity = QueryBuilder::for(
+            $request->user()->activity()->where('is_admin', false)
+        )
             ->with('actor')
             ->allowedFilters([AllowedFilter::partial('event')])
             ->allowedSorts(['timestamp'])

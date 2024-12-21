@@ -15,13 +15,14 @@ import {
     CogIcon,
     DesktopComputerIcon,
     ExternalLinkIcon,
+    EyeIcon,
     ShoppingCartIcon,
     TerminalIcon,
     TicketIcon,
 } from '@heroicons/react/outline';
 import Avatar from '@/components/Avatar';
 import MobileSidebar from '@/components/elements/MobileSidebar';
-import { faCog, faKey, faShoppingBag, faTerminal, faTicket, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faEye, faKey, faShoppingBag, faTerminal, faTicket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { CustomLink } from '@/api/admin/links';
 import { getLinks } from '@/api/getLinks';
 
@@ -46,6 +47,7 @@ function DashboardRouter() {
                 <MobileSidebar.Link icon={faUser} text={'Account'} linkTo={'/account'} end />
                 <MobileSidebar.Link icon={faKey} text={'API'} linkTo={'/account/api'} />
                 <MobileSidebar.Link icon={faTerminal} text={'SSH'} linkTo={'/account/ssh'} />
+                <MobileSidebar.Link icon={faEye} text={'Activity'} linkTo={'/account/activity'} />
                 {tickets.enabled && <MobileSidebar.Link icon={faTicket} text={'Tickets'} linkTo={'/account/tickets'} />}
                 {billing.enabled && <MobileSidebar.Link icon={faShoppingBag} text={'Billing'} linkTo={'billing'} />}
                 <MobileSidebar.Link icon={faCog} text={'Admin'} linkTo={'/admin'} />
@@ -80,6 +82,10 @@ function DashboardRouter() {
                     <NavLink to={'/account/ssh'}>
                         <TerminalIcon />
                         <span>SSH Keys</span>
+                    </NavLink>
+                    <NavLink to={'/account/activity'}>
+                        <EyeIcon />
+                        <span>Activity</span>
                     </NavLink>
                     <Sidebar.Section>Modules</Sidebar.Section>
                     {tickets.enabled && (

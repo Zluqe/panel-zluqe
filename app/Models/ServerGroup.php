@@ -2,7 +2,6 @@
 
 namespace Everest\Models;
 
-use Everest\Models\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -44,7 +43,7 @@ class ServerGroup extends Model
     public static array $validationRules = [
         'name' => 'string|required|min:3',
         'user_id' => 'required|exists:users,id',
-        'color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/'
+        'color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
     ];
 
     /**

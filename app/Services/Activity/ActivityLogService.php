@@ -61,6 +61,17 @@ class ActivityLogService
     }
 
     /**
+     * Determines whether this Activity instance performed
+     * was of administrative privileges.
+     */
+    public function isAdmin(): self
+    {
+        $this->getActivity()->is_admin = true;
+
+        return $this;
+    }
+
+    /**
      * Sets the subject model instance.
      *
      * @template T extends \Illuminate\Database\Eloquent\Model|\Illuminate\Contracts\Auth\Authenticatable
