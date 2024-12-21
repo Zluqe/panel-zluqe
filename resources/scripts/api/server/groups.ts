@@ -33,6 +33,22 @@ export const createServerGroup = (values: Values): Promise<ServerGroup> => {
     });
 };
 
+export const addServerToGroup = (id: number, server: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        http.post(`/api/client/groups/${id}/add`, { server })
+            .then(() => resolve())
+            .catch(reject);
+    });
+};
+
+export const removeServerFromGroup = (id: number, server: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        http.post(`/api/client/groups/${id}/remove`, { server })
+            .then(() => resolve())
+            .catch(reject);
+    });
+};
+
 export const updateServerGroup = (id: number, values: Values): Promise<void> => {
     return new Promise((resolve, reject) => {
         http.patch(`/api/client/groups/${id}`, values)

@@ -8,6 +8,7 @@ import {
     faMicrochip,
     faPlus,
     faPowerOff,
+    faTrash,
     faXmarkCircle,
     IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
@@ -16,9 +17,10 @@ import { Server } from '@/api/server/getServer';
 import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/server/getServerResourceUsage';
 import { useStoreState } from '@/state/hooks';
 import classNames from 'classnames';
-import { ServerGroup } from '@/api/server/groups';
+import { removeServerFromGroup, ServerGroup } from '@/api/server/groups';
 import Pill from '../elements/Pill';
 import { VisibleDialog } from './groups/ServerGroupDialog';
+import useFlash from '@/plugins/useFlash';
 
 export function statusToColor(state?: ServerPowerState): string {
     switch (state) {
@@ -77,10 +79,22 @@ export default ({
     group?: ServerGroup;
     setOpen: React.Dispatch<React.SetStateAction<VisibleDialog>>;
 }) => {
+    const { clearFlashes, addFlash, clearAndAddHttpError } = useFlash();
     const [stats, setStats] = useState<ServerStats>();
     const colors = useStoreState(state => state.theme.data!.colors);
     const interval = useRef<Timer>(null) as React.MutableRefObject<Timer>;
     const [isSuspended, setIsSuspended] = useState(server.status === 'suspended');
+
+    const onDelete = () => {
+        clearFlashes();
+
+        removeServerFromGroup(group!.id, server.uuid)
+            .then(() => {
+                addFlash({ type: 'success', key: 'dashboard:groups', message: 'Server group removed successfully.' });
+                setOpen({ open: 'none', serverId: undefined });
+            })
+            .catch(error => clearAndAddHttpError({ key: 'dashboard:groups', error }));
+    };
 
     const getStats = () =>
         getServerResourceUsage(server.uuid)
@@ -133,16 +147,21 @@ export default ({
                 <div className={'col-span-1 lg:col-span-2 my-auto mr-2'}>
                     {group && group.id === server.groupId ? (
                         <Pill size={'small'} type={'unknown'}>
-                            <span style={{ color: group?.color }}>{group.name}</span>
+                            <span style={{ color: group?.color }} className={'cursor-default ml-3'}>
+                                {group.name}
+                                <div
+                                    onClick={onDelete}
+                                    className={'opacity-0 hover:opacity-100 transition duration-200 inline-flex'}
+                                >
+                                    <FontAwesomeIcon icon={faTrash} size={'xs'} color={'red'} className={'ml-1'} />
+                                </div>
+                            </span>
                         </Pill>
                     ) : (
                         <div
-                            onMouseEnter={() => {
-                                setOpen('index');
-                                console.log('hi');
-                            }}
+                            onClick={() => setOpen({ open: 'add', serverId: server.uuid })}
                             className={
-                                'hidden xl:inline-flex leading-5 font-medium text-2xs px-2 py-0.25 text-gray-500 rounded-full border border-gray-400 border-dashed'
+                                'hidden xl:inline-flex leading-5 font-medium text-2xs px-2 py-0.25 text-gray-500 rounded-full border border-gray-400 border-dashed cursor-pointer hover:bg-white/10 hover:text-white transition duration-300'
                             }
                         >
                             <FontAwesomeIcon icon={faPlus} className={'mr-1 my-auto'} />

@@ -52,6 +52,7 @@ export interface Server {
 export const rawDataToServerObject = ({ attributes: data }: FractalResponseData): Server => ({
     id: data.identifier,
     internalId: data.internal_id,
+    groupId: data.group_id,
     uuid: data.uuid,
     name: data.name,
     node: data.node,

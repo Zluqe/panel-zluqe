@@ -2,8 +2,10 @@
 
 namespace Everest\Http\Controllers\Api\Client;
 
+use Everest\Models\Server;
 use Everest\Models\ServerGroup;
 use Illuminate\Http\JsonResponse;
+use Everest\Exceptions\DisplayException;
 use Everest\Http\Requests\Api\Client\ClientApiRequest;
 use Everest\Transformers\Api\Client\ServerGroupTransformer;
 
@@ -33,6 +35,34 @@ class ServerGroupController extends ClientApiController
         return $this->fractal->item($group)
             ->transformWith(ServerGroupTransformer::class)
             ->toArray();
+    }
+
+    /**
+     * Add a server to the selected group.
+     */
+    public function add(ClientApiRequest $request, int $id): JsonResponse
+    {
+        $server = Server::where('uuid', $request->input('server'))->first();
+
+        try {
+            $server->update(['group_id' => $id]);
+        } catch (DisplayException $ex) {
+            throw new DisplayException('Unable to assign group to server.');
+        };
+
+        return new JsonResponse([], JsonResponse::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * Remove a server from the selected group.
+     */
+    public function remove(ClientApiRequest $request, int $id): JsonResponse
+    {
+        $server = Server::where('uuid', $request->input('server'))->first();
+
+        $server->update(['group_id' => null]);
+
+        return new JsonResponse([], JsonResponse::HTTP_NO_CONTENT);
     }
 
     /**

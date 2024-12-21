@@ -27,7 +27,7 @@ export default () => {
     const { search } = useLocation();
     const defaultPage = Number(new URLSearchParams(search).get('page') || '1');
 
-    const [open, setOpen] = useState<VisibleDialog>('none');
+    const [open, setOpen] = useState<VisibleDialog>({ open: 'none', serverId: undefined });
     const colors = useStoreState(state => state.theme.data!.colors);
     const [groups, setGroups] = useState<ServerGroup[]>([]);
     const [page, setPage] = useState(!isNaN(defaultPage) && defaultPage > 0 ? defaultPage : 1);
@@ -45,7 +45,10 @@ export default () => {
 
     useEffect(() => {
         getServerGroups()
-            .then(data => setGroups(data))
+            .then(data => {
+                console.log(data);
+                setGroups(data);
+            })
             .catch(() => console.error());
     }, []);
 
@@ -93,7 +96,7 @@ export default () => {
                             {showOnlyAdmin ? 'Other' : 'Your'} Servers
                         </div>
                         <Button.Text size={Button.Sizes.Small} className={'mt-1'}>
-                            <FontAwesomeIcon icon={faList} onClick={() => setOpen('index')} />
+                            <FontAwesomeIcon icon={faList} onClick={() => setOpen({ open: 'index' })} />
                         </Button.Text>
                     </h2>
                     <ContentBox>
@@ -134,12 +137,14 @@ export default () => {
                                 {({ items }) =>
                                     items.length > 0 ? (
                                         items.map((server, _index) => (
-                                            <ServerRow
-                                                key={server.uuid}
-                                                server={server}
-                                                setOpen={setOpen}
-                                                group={groups.find(x => x.id === server.groupId)}
-                                            />
+                                            <>
+                                                <ServerRow
+                                                    key={server.uuid}
+                                                    server={server}
+                                                    setOpen={setOpen}
+                                                    group={groups.find(x => x.id === server.groupId)}
+                                                />
+                                            </>
                                         ))
                                     ) : (
                                         <div className={'w-full'} style={{ backgroundColor: colors.secondary }}>

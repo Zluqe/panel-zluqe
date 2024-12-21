@@ -27,6 +27,10 @@ Route::prefix('/groups')->group(function () {
 
     Route::patch('/{id}', [Client\ServerGroupController::class, 'update']);
     Route::delete('/{id}', [Client\ServerGroupController::class, 'delete']);
+
+    Route::post('/{id}/add', [Client\ServerGroupController::class, 'add']);
+    Route::post('/{id}/remove', [Client\ServerGroupController::class, 'remove']);
+
 });
 
 Route::prefix('/account')->middleware([AccountSubject::class, SuspendedAccount::class])->group(function () {
