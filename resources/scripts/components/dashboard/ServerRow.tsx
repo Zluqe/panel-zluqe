@@ -18,7 +18,7 @@ import { useStoreState } from '@/state/hooks';
 import classNames from 'classnames';
 import { ServerGroup } from '@/api/server/groups';
 import Pill from '../elements/Pill';
-import { Button } from '../elements/button';
+import { VisibleDialog } from './groups/ServerGroupDialog';
 
 export function statusToColor(state?: ServerPowerState): string {
     switch (state) {
@@ -68,7 +68,15 @@ const UtilBox = ({
 
 type Timer = ReturnType<typeof setInterval>;
 
-export default ({ server, group }: { server: Server; group?: ServerGroup }) => {
+export default ({
+    server,
+    group,
+    setOpen,
+}: {
+    server: Server;
+    group?: ServerGroup;
+    setOpen: React.Dispatch<React.SetStateAction<VisibleDialog>>;
+}) => {
     const [stats, setStats] = useState<ServerStats>();
     const colors = useStoreState(state => state.theme.data!.colors);
     const interval = useRef<Timer>(null) as React.MutableRefObject<Timer>;
@@ -104,50 +112,54 @@ export default ({ server, group }: { server: Server; group?: ServerGroup }) => {
 
     return (
         <>
-            <Link to={`/server/${server.id}`}>
-                <div
-                    className={
-                        'w-full p-4 rounded-lg grid grid-cols-2 lg:grid-cols-12 mb-2 hover:brightness-125 transition duration-300'
-                    }
-                    style={{ backgroundColor: colors.background }}
+            <div
+                className={'w-full p-4 rounded-lg grid grid-cols-2 lg:grid-cols-12 mb-2'}
+                style={{ backgroundColor: colors.background }}
+            >
+                <FontAwesomeIcon
+                    className={classNames(statusToColor(stats?.status ?? 'offline'), 'my-auto ml-4 col-span-1')}
+                    icon={server.status === 'suspended' ? faXmarkCircle : faPowerOff}
+                    size={'lg'}
+                />
+                <Link
+                    to={`/server/${server.id}`}
+                    className="whitespace-nowrap text-white col-span-1 lg:col-span-6 mb-4 lg:mb-0 hover:brightness-150 transition duration-300"
                 >
-                    <FontAwesomeIcon
-                        className={classNames(statusToColor(stats?.status ?? 'offline'), 'my-auto ml-4 col-span-1')}
-                        icon={server.status === 'suspended' ? faXmarkCircle : faPowerOff}
-                        size={'lg'}
-                    />
-                    <div className="whitespace-nowrap text-white col-span-1 lg:col-span-6 mb-4 lg:mb-0">
-                        {server.name}
-                        <div className={'text-gray-500 text-xs my-auto'}>
-                            {server.allocations[0]?.ip.toString()}:{server.allocations[0]?.port.toString()}
-                        </div>
+                    {server.name}
+                    <div className={'text-gray-500 text-xs my-auto'}>
+                        {server.allocations[0]?.ip.toString()}:{server.allocations[0]?.port.toString()}
                     </div>
-                    <div className={'col-span-1 lg:col-span-2 my-auto mr-2'}>
-                        {group && group.id === server.groupId ? (
-                            <Pill size={'small'} type={'unknown'}>
-                                {group?.name ?? '...'}
-                            </Pill>
-                        ) : (
-                            <div
-                                className={
-                                    'hidden xl:inline-flex leading-5 font-medium text-2xs px-2 py-0.25 text-gray-500 rounded-full border border-gray-400 border-dashed'
-                                }
-                            >
-                                <FontAwesomeIcon icon={faPlus} className={'mr-1 my-auto'} />Assign Group
-                            </div>
-                        )}
-                    </div>
-                    {server.status || stats?.status === 'offline' ? (
-                        <UtilBox rounded={'full'} utilised={-1} icon={faInfoCircle} server={server} />
+                </Link>
+                <div className={'col-span-1 lg:col-span-2 my-auto mr-2'}>
+                    {group && group.id === server.groupId ? (
+                        <Pill size={'small'} type={'unknown'}>
+                            <span style={{ color: group?.color }}>{group.name}</span>
+                        </Pill>
                     ) : (
-                        <>
-                            <UtilBox rounded={'left'} utilised={Number(cpuUsed?.toFixed(0))} icon={faMicrochip} />
-                            <UtilBox utilised={Number(memoryUsed.toFixed(0))} icon={faMemory} />
-                            <UtilBox rounded={'right'} utilised={Number(diskUsed.toFixed(0))} icon={faFloppyDisk} />
-                        </>
+                        <div
+                            onMouseEnter={() => {
+                                setOpen('index');
+                                console.log('hi');
+                            }}
+                            className={
+                                'hidden xl:inline-flex leading-5 font-medium text-2xs px-2 py-0.25 text-gray-500 rounded-full border border-gray-400 border-dashed'
+                            }
+                        >
+                            <FontAwesomeIcon icon={faPlus} className={'mr-1 my-auto'} />
+                            Add Group
+                        </div>
                     )}
                 </div>
-            </Link>
+                {server.status || stats?.status === 'offline' ? (
+                    <UtilBox rounded={'full'} utilised={-1} icon={faInfoCircle} server={server} />
+                ) : (
+                    <>
+                        <UtilBox rounded={'left'} utilised={Number(cpuUsed?.toFixed(0))} icon={faMicrochip} />
+                        <UtilBox utilised={Number(memoryUsed.toFixed(0))} icon={faMemory} />
+                        <UtilBox rounded={'right'} utilised={Number(diskUsed.toFixed(0))} icon={faFloppyDisk} />
+                    </>
+                )}
+            </div>
         </>
     );
 };

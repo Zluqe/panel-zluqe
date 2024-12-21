@@ -7,6 +7,7 @@ import { deleteServerGroup, getServerGroups, ServerGroup } from '@/api/server/gr
 import ModifyServerGroup from '@/components/dashboard/groups/ModifyServerGroup';
 import Pill from '@/components/elements/Pill';
 import Spinner from '@/components/elements/Spinner';
+import { Dropdown } from '@/components/elements/dropdown';
 
 export type VisibleDialog = 'index' | 'modify' | 'delete' | 'none';
 
@@ -35,7 +36,13 @@ export default ({ open, setOpen, groups, setGroups }: Props) => {
     return (
         <>
             <ModifyServerGroup open={open === 'modify'} group={group} setOpen={setOpen} />
-            <Dialog open={open === 'index'} onClose={() => setOpen('none')} title={'Server Group Configuration'}>
+            {open === 'index' && (
+                <Dropdown>
+                    <Dropdown.Button>Item</Dropdown.Button>
+                    <Dropdown.Item>Item</Dropdown.Item>
+                </Dropdown>
+            )}
+            <Dialog open={false} onClose={() => setOpen('none')} title={'Server Group Configuration'}>
                 <div className={'absolute top-4 right-16'}>
                     <Button size={Button.Sizes.Small} onClick={() => setOpen('modify')}>
                         <FontAwesomeIcon icon={faPlus} className={'mr-1'} /> Create
@@ -44,7 +51,7 @@ export default ({ open, setOpen, groups, setGroups }: Props) => {
                 {groups ? (
                     <div className={'my-3 grid grid-cols-2 lg:grid-cols-3 gap-4 cursor-pointer'}>
                         {groups?.map(group => (
-                            <Pill size={'large'} customColor={group.color} key={group.id}>
+                            <Pill size={'large'} key={group.id} type={'unknown'}>
                                 <div
                                     key={group.id}
                                     onClick={() => {
@@ -52,7 +59,7 @@ export default ({ open, setOpen, groups, setGroups }: Props) => {
                                         setOpen('modify');
                                     }}
                                 >
-                                    {group.name}
+                                    <span style={{ color: group.color }}>{group.name}</span>
                                 </div>
                                 <div
                                     onClick={() => onDelete(group.id)}

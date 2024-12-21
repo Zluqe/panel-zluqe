@@ -137,6 +137,7 @@ export default () => {
                                             <ServerRow
                                                 key={server.uuid}
                                                 server={server}
+                                                setOpen={setOpen}
                                                 group={groups.find(x => x.id === server.groupId)}
                                             />
                                         ))

@@ -20,6 +20,9 @@ function getColor(type?: PillStatus): string {
         case 'danger':
             value = 'bg-red-100 text-red-800';
             break;
+        case 'unknown':
+            value = 'bg-black/50';
+            break;
         default:
             break;
     }
@@ -27,17 +30,7 @@ function getColor(type?: PillStatus): string {
     return value;
 }
 
-export default ({
-    type,
-    size,
-    children,
-    customColor,
-}: {
-    type?: PillStatus;
-    size?: PillSize;
-    children: ReactNode;
-    customColor?: string;
-}) => (
+export default ({ type, size, children }: { type?: PillStatus; size?: PillSize; children: ReactNode }) => (
     <span
         className={classNames(
             getColor(type),
@@ -46,7 +39,6 @@ export default ({
             size === 'small' && 'text-sm px-3 py-0.5 rounded-full',
             'relative mx-1 inline-flex leading-5 font-medium capitalize',
         )}
-        style={{ backgroundColor: customColor }}
     >
         {children}
     </span>
