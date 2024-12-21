@@ -5,6 +5,7 @@ namespace Everest\Http\Controllers\Api\Application\AI;
 use GeminiAPI\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Everest\Facades\Activity;
 use Illuminate\Http\JsonResponse;
 use GeminiAPI\Resources\Parts\TextPart;
 use Everest\Contracts\Repository\SettingsRepositoryInterface;
@@ -36,6 +37,11 @@ class SettingsController extends ApplicationApiController
 
             $this->settings->set('settings::modules:ai:' . $key, $value);
         }
+
+        Activity::event('admin:ai:update')
+            ->property('settings', $request->all())
+            ->description('Jexactyl AI settings were updated')
+            ->log();
 
         return $this->returnNoContent();
     }

@@ -59,14 +59,16 @@ export default ({ activity, children }: Props) => {
                 <div className={'flex-1 px-4 sm:px-0'}>
                     <div className={'flex items-center text-slate-50'}>
                         <Tooltip placement={'top'} content={actor?.email || 'System User'}>
-                            <span>{actor?.username || 'System'}</span>
+                            <span className={'font-bold'}>{actor?.username || 'System'}</span>
                         </Tooltip>
-                        <span className={'text-slate-400'}>&nbsp;&mdash;&nbsp;</span>
+                        <span className={'text-slate-400 mx-2'}>&bull;</span>
                         <Link
                             to={`#${pathTo({ event: activity.event })}`}
-                            className={'transition-colors duration-75 hover:text-cyan-400 active:text-cyan-400'}
+                            className={
+                                'text-gray-300 transition-colors duration-75 hover:text-cyan-400 active:text-cyan-400'
+                            }
                         >
-                            {activity.event}
+                            {activity.description ?? activity.event}
                         </Link>
                         <div className={classNames(style.icons, 'group-hover:text-slate-300')}>
                             {activity.isApi && (

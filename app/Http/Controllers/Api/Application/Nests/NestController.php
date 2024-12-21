@@ -4,6 +4,7 @@ namespace Everest\Http\Controllers\Api\Application\Nests;
 
 use Everest\Models\Nest;
 use Illuminate\Http\Response;
+use Everest\Facades\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Services\Nests\NestUpdateService;
 use Everest\Services\Nests\NestCreationService;
@@ -75,6 +76,11 @@ class NestController extends ApplicationApiController
     {
         $nest = $this->nestCreationService->handle($request->validated());
 
+        Activity::event('admin:nests:create')
+            ->property('nest', $nest)
+            ->description('A nest was created')
+            ->log();
+
         return $this->fractal->item($nest)
             ->transformWith(NestTransformer::class)
             ->toArray();
@@ -91,6 +97,12 @@ class NestController extends ApplicationApiController
             $request->headers->get('Content-Type'),
         );
 
+        Activity::event('admin:nests:import')
+            ->property('egg', $egg)
+            ->property('nest', $nest)
+            ->description('An egg was imported to a nest')
+            ->log();
+
         return $this->fractal->item($egg)
             ->transformWith(EggTransformer::class)
             ->toArray();
@@ -106,6 +118,12 @@ class NestController extends ApplicationApiController
     {
         $this->nestUpdateService->handle($nest->id, $request->validated());
 
+        Activity::event('admin:nests:update')
+            ->property('nest', $nest)
+            ->property('new_data', $request->all())
+            ->description('A nest was updated')
+            ->log();
+
         return $this->fractal->item($nest)
             ->transformWith(NestTransformer::class)
             ->toArray();
@@ -119,6 +137,11 @@ class NestController extends ApplicationApiController
     public function delete(DeleteNestRequest $request, Nest $nest): Response
     {
         $this->nestDeletionService->handle($nest->id);
+
+        Activity::event('admin:nests:delete')
+            ->property('nest', $nest)
+            ->description('A nest was deleted')
+            ->log();
 
         return $this->returnNoContent();
     }

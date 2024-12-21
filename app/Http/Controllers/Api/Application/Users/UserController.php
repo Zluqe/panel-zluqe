@@ -5,6 +5,7 @@ namespace Everest\Http\Controllers\Api\Application\Users;
 use Everest\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Response;
+use Everest\Facades\Activity;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -101,6 +102,12 @@ class UserController extends ApplicationApiController
         $this->updateService->setUserLevel(User::USER_LEVEL_ADMIN);
         $user = $this->updateService->handle($user, $request->validated());
 
+        Activity::event('admin:users:update')
+            ->property('user', $user)
+            ->property('new_data', $request->all())
+            ->description('A user was updated')
+            ->log();
+
         return $this->fractal->item($user)
             ->transformWith(UserTransformer::class)
             ->toArray();
@@ -116,6 +123,11 @@ class UserController extends ApplicationApiController
     public function store(StoreUserRequest $request): JsonResponse
     {
         $user = $this->creationService->handle($request->validated());
+
+        Activity::event('admin:users:create')
+            ->property('user', $user)
+            ->description('A user was created')
+            ->log();
 
         return $this->fractal->item($user)
             ->transformWith(UserTransformer::class)
@@ -135,6 +147,11 @@ class UserController extends ApplicationApiController
 
         $user->update(['state' => $user->isSuspended() ? '' : 'suspended']);
 
+        Activity::event('admin:users:suspend')
+            ->property('user', $user)
+            ->description('A user was suspended')
+            ->log();
+
         return $this->returnNoContent();
     }
 
@@ -147,6 +164,11 @@ class UserController extends ApplicationApiController
     public function delete(DeleteUserRequest $request, User $user): Response
     {
         $this->deletionService->handle($user);
+
+        Activity::event('admin:users:delete')
+            ->property('user', $user)
+            ->description('A user was deleted')
+            ->log();
 
         return $this->returnNoContent();
     }

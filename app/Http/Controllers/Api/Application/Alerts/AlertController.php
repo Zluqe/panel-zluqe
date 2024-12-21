@@ -3,6 +3,7 @@
 namespace Everest\Http\Controllers\Api\Application\Alerts;
 
 use Ramsey\Uuid\Uuid;
+use Everest\Facades\Activity;
 use Illuminate\Http\JsonResponse;
 use Everest\Contracts\Repository\SettingsRepositoryInterface;
 use Everest\Http\Controllers\Api\Application\ApplicationApiController;
@@ -33,6 +34,11 @@ class AlertController extends ApplicationApiController
         foreach ($request->normalize() as $key => $value) {
             $this->settings->set('settings::modules:alert:' . $key, $value);
         }
+
+        Activity::event('admin:alert:update')
+            ->property('settings', $request->all())
+            ->description('Alert system was updated with new data')
+            ->log();
 
         return new JsonResponse($uuid);
     }

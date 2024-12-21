@@ -5,6 +5,7 @@ namespace Everest\Http\Controllers\Api\Application\Mounts;
 use Everest\Models\Mount;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Everest\Facades\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Transformers\Api\Application\MountTransformer;
 use Everest\Exceptions\Http\QueryValueOutOfRangeHttpException;
@@ -64,6 +65,11 @@ class MountController extends ApplicationApiController
     {
         $mount = Mount::query()->create($request->validated());
 
+        Activity::event('admin:mounts:create')
+            ->property('mount', $mount)
+            ->description('A mount was created')
+            ->log();
+
         return $this->fractal->item($mount)
             ->transformWith(MountTransformer::class)
             ->respond(JsonResponse::HTTP_CREATED);
@@ -75,6 +81,12 @@ class MountController extends ApplicationApiController
     public function update(UpdateMountRequest $request, Mount $mount): array
     {
         $mount->update($request->validated());
+
+        Activity::event('admin:mounts:update')
+            ->property('mount', $mount)
+            ->property('new_data', $request->all())
+            ->description('A server mount was updated')
+            ->log();
 
         return $this->fractal->item($mount)
             ->transformWith(MountTransformer::class)
@@ -89,6 +101,11 @@ class MountController extends ApplicationApiController
     public function delete(DeleteMountRequest $request, Mount $mount): Response
     {
         $mount->delete();
+
+        Activity::event('admin:mounts:delete')
+            ->property('mount', $mount)
+            ->description('A server mount was deleted')
+            ->log();
 
         return $this->returnNoContent();
     }

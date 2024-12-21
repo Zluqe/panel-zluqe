@@ -5,6 +5,7 @@ namespace Everest\Http\Controllers\Api\Application\Billing;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Everest\Facades\Activity;
 use Illuminate\Http\JsonResponse;
 use Everest\Models\Billing\Product;
 use Everest\Models\Billing\Category;
@@ -69,6 +70,11 @@ class ProductController extends ApplicationApiController
             throw new \Exception('Failed to create a new product: ' . $ex->getMessage());
         }
 
+        Activity::event('admin:billing:products:create')
+            ->property('product', $product)
+            ->description('A new billing product was created')
+            ->log();
+
         return $this->fractal->item($product)
             ->transformWith(ProductTransformer::class)
             ->respond(Response::HTTP_CREATED);
@@ -96,6 +102,12 @@ class ProductController extends ApplicationApiController
             throw new \Exception('Failed to update a product: ' . $ex->getMessage());
         }
 
+        Activity::event('admin:billing:products:update')
+            ->property('product', $product)
+            ->property('new_data', $request->all())
+            ->description('A billing product has been updated')
+            ->log();
+
         return $this->returnNoContent();
     }
 
@@ -115,6 +127,11 @@ class ProductController extends ApplicationApiController
     public function delete(Request $request, Category $category, Product $product): Response
     {
         $product->delete();
+
+        Activity::event('admin:billing:products:delete')
+            ->property('product', $product)
+            ->description('A billing product has been deleted')
+            ->log();
 
         return $this->returnNoContent();
     }

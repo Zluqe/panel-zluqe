@@ -4,6 +4,7 @@ namespace Everest\Http\Controllers\Api\Application\Nodes;
 
 use Everest\Models\Node;
 use Illuminate\Http\Response;
+use Everest\Facades\Activity;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Services\Nodes\NodeUpdateService;
@@ -71,6 +72,11 @@ class NodeController extends ApplicationApiController
     {
         $node = $this->creationService->handle($request->validated());
 
+        Activity::event('admin:nodes:create')
+            ->property('node', $node)
+            ->description('A node was created')
+            ->log();
+
         return $this->fractal->item($node)
             ->transformWith(NodeTransformer::class)
             ->respond(201);
@@ -88,6 +94,12 @@ class NodeController extends ApplicationApiController
             $request->validated(),
         );
 
+        Activity::event('admin:nodes:update')
+            ->property('node', $node)
+            ->property('new_data', $request->all())
+            ->description('A node was updated')
+            ->log();
+
         return $this->fractal->item($node)
             ->transformWith(NodeTransformer::class)
             ->toArray();
@@ -102,6 +114,11 @@ class NodeController extends ApplicationApiController
     public function delete(DeleteNodeRequest $request, Node $node): Response
     {
         $this->deletionService->handle($node);
+
+        Activity::event('admin:nodes:delete')
+            ->property('node', $node)
+            ->description('A node was deleted')
+            ->log();
 
         return $this->returnNoContent();
     }

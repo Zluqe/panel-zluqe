@@ -5,6 +5,7 @@ namespace Everest\Http\Controllers\Api\Application\Eggs;
 use Ramsey\Uuid\Uuid;
 use Everest\Models\Egg;
 use Everest\Models\Nest;
+use Everest\Facades\Activity;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -77,6 +78,11 @@ class EggController extends ApplicationApiController
 
         $egg = Egg::query()->create($merged);
 
+        Activity::event('admin:eggs:create')
+            ->property('egg', $egg)
+            ->description('An egg was created')
+            ->log();
+
         return $this->fractal->item($egg)
             ->transformWith(EggTransformer::class)
             ->respond(Response::HTTP_CREATED);
@@ -88,6 +94,12 @@ class EggController extends ApplicationApiController
     public function update(UpdateEggRequest $request, Egg $egg): array
     {
         $egg->update($request->validated());
+
+        Activity::event('admin:eggs:update')
+            ->property('egg', $egg)
+            ->property('new_data', $request->all())
+            ->description('An egg was updated')
+            ->log();
 
         return $this->fractal->item($egg)
             ->transformWith(EggTransformer::class)
@@ -103,6 +115,11 @@ class EggController extends ApplicationApiController
     {
         $egg->delete();
 
+        Activity::event('admin:eggs:delete')
+            ->property('egg', $egg)
+            ->description('An egg was deleted')
+            ->log();
+
         return $this->returnNoContent();
     }
 
@@ -113,6 +130,11 @@ class EggController extends ApplicationApiController
      */
     public function export(ExportEggRequest $request, int $eggId): JsonResponse
     {
+        Activity::event('admin:eggs:export')
+            ->property('egg', $egg)
+            ->description('An egg was exported')
+            ->log();
+    
         return new JsonResponse($this->eggExporterService->handle($eggId));
     }
 }

@@ -216,6 +216,10 @@ class ActivityLogService
             'api_key_id' => $this->targetable->apiKeyId(),
         ]);
 
+        if ($isAdmin = $this->targetable->isAdmin()) {
+            $this->isAdmin();
+        }
+
         if ($subject = $this->targetable->subject()) {
             $this->subject($subject);
         }

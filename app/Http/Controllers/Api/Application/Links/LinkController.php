@@ -3,6 +3,7 @@
 namespace Everest\Http\Controllers\Api\Application\Links;
 
 use Illuminate\Http\Request;
+use Everest\Facades\Activity;
 use Illuminate\Http\Response;
 use Everest\Models\CustomLink;
 use Everest\Transformers\Api\Application\LinkTransformer;
@@ -39,6 +40,12 @@ class LinkController extends ApplicationApiController
             'visible' => (bool) $request['visible'],
         ]);
 
+        Activity::event('admin:link:create')
+            ->property('name', $link->name)
+            ->property('url', $link->url)
+            ->description('New custom link for client UI was made')
+            ->log();
+
         return $this->fractal->item($link)
             ->transformWith(LinkTransformer::class)
             ->toArray();
@@ -50,6 +57,12 @@ class LinkController extends ApplicationApiController
     public function update(Request $request, int $id): Response
     {
         $link = CustomLink::findOrFail($id);
+
+        Activity::event('admin:link:update')
+            ->property('name', $link->name . ' => ' . $request['name'])
+            ->property('url', $link->url . ' => ' . $request['url'])
+            ->description('An existing custom link was updated')
+            ->log();
 
         $link->update([
             'url' => $request['url'],
@@ -68,6 +81,12 @@ class LinkController extends ApplicationApiController
         $link = CustomLink::findOrFail($id);
 
         $link->delete();
+
+        Activity::event('admin:link:delete')
+            ->property('name', $link->name)
+            ->property('url', $link->url)
+            ->description('An existing custom link was deleted')
+            ->log();
 
         return $this->returnNoContent();
     }

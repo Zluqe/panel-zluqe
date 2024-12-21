@@ -5,6 +5,7 @@ namespace Everest\Http\Controllers\Api\Application\Api;
 use Everest\Models\ApiKey;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Everest\Facades\Activity;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Services\Api\KeyCreationService;
@@ -55,6 +56,11 @@ class ApiController extends ApplicationApiController
             'user_id' => $request->user()->id,
         ], $request->getKeyPermissions());
 
+        Activity::event('admin:api-keys:create')
+            ->property('api-key', $apiKey)
+            ->description('A new Application API key was created')
+            ->log();
+
         return $this->fractal->item($apiKey)
             ->transformWith(ApiKeyTransformer::class)
             ->respond(201);
@@ -65,7 +71,12 @@ class ApiController extends ApplicationApiController
      */
     public function delete(ApiKey $key): Response
     {
-        ApiKey::where('id', $key->id)->delete();
+        $key = ApiKey::where('id', $key->id)->delete();
+
+        Activity::event('admin:api-keys:delete')
+            ->property('api-key', $key)
+            ->description('An Application API key was deleted')
+            ->log();
 
         return $this->returnNoContent();
     }

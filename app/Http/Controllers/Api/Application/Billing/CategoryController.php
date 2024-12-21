@@ -6,6 +6,7 @@ use Ramsey\Uuid\Uuid;
 use Everest\Models\Egg;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Everest\Facades\Activity;
 use Illuminate\Http\JsonResponse;
 use Everest\Models\Billing\Category;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -64,6 +65,11 @@ class CategoryController extends ApplicationApiController
             throw new \Exception('Failed to create a new product category: ' . $ex->getMessage());
         }
 
+        Activity::event('admin:billing:categories:create')
+            ->property('category', $category)
+            ->description('A billing category was created')
+            ->log();
+
         return $this->fractal->item($category)
             ->transformWith(CategoryTransformer::class)
             ->respond(Response::HTTP_CREATED);
@@ -89,6 +95,12 @@ class CategoryController extends ApplicationApiController
             throw new \Exception('Failed to update a product category: ' . $ex->getMessage());
         }
 
+        Activity::event('admin:billing:categories:update')
+            ->property('category', $category)
+            ->property('new_data', $request->all())
+            ->description('A billing category was updated')
+            ->log();
+
         return $this->returnNoContent();
     }
 
@@ -112,6 +124,11 @@ class CategoryController extends ApplicationApiController
         }
 
         $category->delete();
+
+        Activity::event('admin:billing:categories:delete')
+            ->property('category', $category)
+            ->description('A billing category was deleted')
+            ->log();
 
         return $this->returnNoContent();
     }

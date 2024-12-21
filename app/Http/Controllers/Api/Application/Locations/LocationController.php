@@ -4,6 +4,7 @@ namespace Everest\Http\Controllers\Api\Application\Locations;
 
 use Everest\Models\Location;
 use Illuminate\Http\Response;
+use Everest\Facades\Activity;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Services\Locations\LocationUpdateService;
@@ -71,6 +72,11 @@ class LocationController extends ApplicationApiController
     {
         $location = $this->creationService->handle($request->validated());
 
+        Activity::event('admin:locations:create')
+            ->property('location', $location)
+            ->description('A location was created')
+            ->log();
+
         return $this->fractal->item($location)
             ->transformWith(LocationTransformer::class)
             ->respond(201);
@@ -86,6 +92,12 @@ class LocationController extends ApplicationApiController
     {
         $location = $this->updateService->handle($location, $request->validated());
 
+        Activity::event('admin:locations:update')
+            ->property('location', $location)
+            ->property('new_data', $request->all())
+            ->description('A location was updated')
+            ->log();
+
         return $this->fractal->item($location)
             ->transformWith(LocationTransformer::class)
             ->toArray();
@@ -99,6 +111,11 @@ class LocationController extends ApplicationApiController
     public function delete(DeleteLocationRequest $request, Location $location): Response
     {
         $this->deletionService->handle($location);
+
+        Activity::event('admin:locations:delete')
+            ->property('location', $location)
+            ->description('A location was deleted')
+            ->log();
 
         return $this->returnNoContent();
     }

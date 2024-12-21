@@ -5,6 +5,7 @@ namespace Everest\Http\Controllers\Api\Application\Databases;
 use Illuminate\Http\Response;
 use Everest\Models\DatabaseHost;
 use Illuminate\Http\JsonResponse;
+use Everest\Facades\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Services\Databases\Hosts\HostUpdateService;
 use Everest\Services\Databases\Hosts\HostCreationService;
@@ -66,6 +67,11 @@ class DatabaseController extends ApplicationApiController
     {
         $databaseHost = $this->creationService->handle($request->validated());
 
+        Activity::event('admin:database-hosts:create')
+            ->property('database-host', $databaseHost)
+            ->description('A new database host was created')
+            ->log();
+
         return $this->fractal->item($databaseHost)
             ->transformWith(DatabaseHostTransformer::class)
             ->respond(JsonResponse::HTTP_CREATED);
@@ -80,6 +86,12 @@ class DatabaseController extends ApplicationApiController
     {
         $databaseHost = $this->updateService->handle($databaseHost->id, $request->validated());
 
+        Activity::event('admin:database-hosts:update')
+            ->property('database-host', $databaseHost)
+            ->property('new_data', $request->all())
+            ->description('A database host was updated')
+            ->log();
+
         return $this->fractal->item($databaseHost)
             ->transformWith(DatabaseHostTransformer::class)
             ->toArray();
@@ -93,6 +105,11 @@ class DatabaseController extends ApplicationApiController
     public function delete(DeleteDatabaseRequest $request, DatabaseHost $databaseHost): Response
     {
         $databaseHost->delete();
+
+        Activity::event('admin:database-hosts:delete')
+            ->property('database-host', $databaseHost)
+            ->description('A database host was deleted')
+            ->log();
 
         return $this->returnNoContent();
     }

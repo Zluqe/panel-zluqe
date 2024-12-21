@@ -4,6 +4,7 @@ namespace Everest\Http\Controllers\Api\Application\Servers;
 
 use Everest\Models\Server;
 use Illuminate\Http\Response;
+use Everest\Facades\Activity;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Services\Servers\ServerCreationService;
@@ -67,6 +68,11 @@ class ServerController extends ApplicationApiController
     {
         $server = $this->creationService->handle($request->validated());
 
+        Activity::event('admin:servers:create')
+            ->property('server', $server)
+            ->description('A server was created')
+            ->log();
+
         return $this->fractal->item($server)
             ->transformWith(ServerTransformer::class)
             ->respond(Response::HTTP_CREATED);
@@ -92,6 +98,11 @@ class ServerController extends ApplicationApiController
     {
         $this->deletionService->withForce($force === 'force')->handle($server);
 
+        Activity::event('admin:servers:delete')
+            ->property('server', $server)
+            ->description('A server was deleted')
+            ->log();
+
         return $this->returnNoContent();
     }
 
@@ -110,6 +121,12 @@ class ServerController extends ApplicationApiController
         $server = $this->buildModificationService->handle($server, $request->validated());
         $server = $this->detailsModificationService->returnUpdatedModel()->handle($server, $request->validated());
 
+        Activity::event('admin:servers:update')
+            ->property('server', $server)
+            ->property('new_data', $request->all())
+            ->description('A server was updated')
+            ->log();
+    
         return $this->fractal->item($server)
             ->transformWith(ServerTransformer::class)
             ->toArray();

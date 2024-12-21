@@ -52,7 +52,6 @@ class TicketController extends ClientApiController
 
         Activity::event('user:ticket.create')
             ->subject($ticket)
-            ->isAdmin()
             ->log();
 
         return $this->fractal->item($ticket)

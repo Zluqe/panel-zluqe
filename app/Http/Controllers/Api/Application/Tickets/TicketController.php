@@ -5,6 +5,7 @@ namespace Everest\Http\Controllers\Api\Application\Tickets;
 use Everest\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Everest\Facades\Activity;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Transformers\Api\Application\TicketTransformer;
@@ -54,6 +55,11 @@ class TicketController extends ApplicationApiController
             'user_id' => $request->input('user_id'),
         ]);
 
+        Activity::event('admin:tickets:create')
+            ->property('ticket', $ticket)
+            ->description('A ticket was created')
+            ->log();
+
         return $this->fractal->item($ticket)
             ->transformWith(TicketTransformer::class)
             ->respond(Response::HTTP_CREATED);
@@ -76,6 +82,12 @@ class TicketController extends ApplicationApiController
     {
         $ticket->update($request->all());
 
+        Activity::event('admin:tickets:update')
+            ->property('ticket', $ticket)
+            ->property('new_data', $request->all())
+            ->description('A ticket was updated')
+            ->log();
+
         return $this->fractal->item($ticket)
             ->transformWith(TicketTransformer::class)
             ->toArray();
@@ -90,6 +102,11 @@ class TicketController extends ApplicationApiController
     {
         $this->settings->set('settings::modules:tickets:' . $request->input('key'), $request->input('value'));
 
+        Activity::event('admin:tickets:settings')
+            ->property('settings', $request->all())
+            ->description('Settings for the ticket module were updated')
+            ->log();
+
         return $this->returnNoContent();
     }
 
@@ -101,6 +118,11 @@ class TicketController extends ApplicationApiController
         $ticket->messages()->delete();
 
         $ticket->delete();
+        
+        Activity::event('admin:tickets:delete')
+            ->property('ticket', $ticket)
+            ->description('A ticket was deleted')
+            ->log();
 
         return $this->returnNoContent();
     }

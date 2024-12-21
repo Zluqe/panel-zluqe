@@ -3,6 +3,7 @@ import {
     CodeIcon,
     CogIcon,
     DatabaseIcon,
+    EyeIcon,
     FolderIcon,
     GlobeIcon,
     KeyIcon,
@@ -67,6 +68,7 @@ import {
     faDollar,
     faEgg,
     faExclamationTriangle,
+    faEye,
     faFolder,
     faIdBadge,
     faKey,
@@ -80,6 +82,7 @@ import {
     faWandSparkles,
 } from '@fortawesome/free-solid-svg-icons';
 import LinksTable from '@/components/admin/modules/links/LinksTable';
+import ActivityContainer from '@/components/admin/general/ActivityContainer';
 
 function AdminRouter() {
     const theme = useStoreState(state => state.theme.data!);
@@ -96,6 +99,7 @@ function AdminRouter() {
                 <MobileSidebar.Home />
                 <MobileSidebar.Link icon={faDesktop} text={'Overview'} linkTo={'/admin'} end />
                 <MobileSidebar.Link icon={faCog} text={'Settings'} linkTo={'/admin/settings'} />
+                <MobileSidebar.Link icon={faEye} text={'Activity'} linkTo={'/admin/activity'} />
                 {standard && (
                     <>
                         <MobileSidebar.Link icon={faIdBadge} text={'API'} linkTo={'/admin/api'} />
@@ -140,6 +144,10 @@ function AdminRouter() {
                     <NavLink to="/admin/settings">
                         <CogIcon />
                         <span>Settings</span>
+                    </NavLink>
+                    <NavLink to="/admin/activity">
+                        <EyeIcon />
+                        <span>Activity</span>
                     </NavLink>
                     {standard && (
                         <NavLink to="/admin/api">
@@ -237,6 +245,7 @@ function AdminRouter() {
                 <div css={tw`w-full flex flex-col mx-auto`} style={{ maxWidth: '86rem' }}>
                     <Routes>
                         <Route path="" element={<OverviewContainer />} />
+                        <Route path="activity" element={<ActivityContainer />} />
                         <Route path="settings/*" element={<SettingsContainer />} />
                         <Route path="api" element={<ApiContainer />} />
                         <Route path="api/new" element={<NewApiKeyContainer />} />
