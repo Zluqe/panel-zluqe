@@ -14,12 +14,14 @@ use Everest\Services\Billing\CreateOrderService;
 use Everest\Services\Billing\CreateServerService;
 use Everest\Http\Controllers\Api\Client\ClientApiController;
 use Everest\Repositories\Wings\DaemonConfigurationRepository;
+use Everest\Contracts\Repository\SettingsRepositoryInterface;
 
 class StripeController extends ClientApiController
 {
     public function __construct(
         private CreateOrderService $orderService,
         private CreateServerService $serverCreation,
+        private SettingsRepositoryInterface $settings,
         private DaemonConfigurationRepository $repository,
     ) {
         parent::__construct();
@@ -42,16 +44,21 @@ class StripeController extends ClientApiController
      */
     public function intent(Request $request, int $id): JsonResponse
     {
+        $paymentMethodTypes = ['card'];
         $product = Product::findOrFail($id);
-
+        
+        if ($this->settings->get('settings::modules:billing:paypal')) {
+            $paymentMethodTypes[] = 'paypal';
+        }
+        
+        if ($this->settings->get('settings::modules:billing:link')) {
+            $paymentMethodTypes[] = 'link';
+        }
+        
         $paymentIntent = $this->stripe->paymentIntents->create([
             'amount' => $product->price * 100,
             'currency' => 'usd',
-            'payment_method_types' => [
-                'card',
-                'paypal',
-                'link',
-            ],
+            'payment_method_types' => array_values($paymentMethodTypes), // Reindex the array after filtering
         ]);
 
         $this->orderService->create(

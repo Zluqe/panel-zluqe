@@ -47,6 +47,7 @@ class EverestComposer
             'billing' => [
                 'enabled' => boolval(config('modules.billing.enabled', false)),
                 'paypal' => config('modules.billing.paypal'),
+                'link' => config('modules.billing.link'),
             ],
             'alert' => [
                 'enabled' => boolval(config('modules.alert.enabled', false)),

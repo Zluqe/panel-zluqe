@@ -57,6 +57,7 @@ class SettingsServiceProvider extends ServiceProvider
         // Billing module settings
         'modules:billing:enabled',
         'modules:billing:paypal',
+        'modules:billing:link',
 
         // Ticket module settings
         'modules:tickets:enabled',
