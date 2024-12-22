@@ -57,8 +57,8 @@ class StripeController extends ClientApiController
 
         $paymentIntent = $this->stripe->paymentIntents->create([
             'amount' => $product->price * 100,
-            'currency' => 'usd',
-            'payment_method_types' => array_values($paymentMethodTypes), // Reindex the array after filtering
+            'currency' => strtolower(config('modules.billing.currency.code')),
+            'payment_method_types' => array_values($paymentMethodTypes),
         ]);
 
         $this->orderService->create(

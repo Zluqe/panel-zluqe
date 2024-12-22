@@ -38,6 +38,7 @@ export default () => {
     const [products, setProducts] = useState<Product[] | undefined>();
     const [categories, setCategories] = useState<Category[] | undefined>();
 
+    const settings = useStoreState(s => s.everest.data!.billing);
     const { colors } = useStoreState(state => state.theme.data!);
 
     useEffect(() => {
@@ -127,7 +128,10 @@ export default () => {
                                             <p className={'text-3xl font-bold text-center mt-3'}>{product.name}</p>
                                             <p className={'text-lg font-semibold text-center mt-1 mb-4 text-gray-400'}>
                                                 <span style={{ color: colors.primary }} className={'mr-1'}>
-                                                    ${product.price.toFixed(2)}
+                                                    {settings.currency.symbol}
+                                                    {product.price.toFixed(2)}
+                                                    &nbsp;
+                                                    {settings.currency.code.toUpperCase()}
                                                 </span>
                                                 <span className={'text-base'}>/ monthly</span>
                                             </p>

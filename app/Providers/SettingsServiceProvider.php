@@ -58,6 +58,8 @@ class SettingsServiceProvider extends ServiceProvider
         'modules:billing:enabled',
         'modules:billing:paypal',
         'modules:billing:link',
+        'modules:billing:currency:code',
+        'modules:billing:currency:symbol',
 
         // Ticket module settings
         'modules:tickets:enabled',

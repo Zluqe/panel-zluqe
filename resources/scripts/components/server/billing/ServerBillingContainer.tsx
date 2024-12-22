@@ -13,6 +13,7 @@ import { Product } from '@/api/billing/products';
 import SpinnerOverlay from '@elements/SpinnerOverlay';
 import { Alert } from '@elements/alert';
 import PaymentContainer from './PaymentContainer';
+import { useStoreState } from '@/state/hooks';
 
 function futureDate(days: number): string {
     const today = new Date();
@@ -29,6 +30,7 @@ export default () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     const { clearFlashes } = useFlash();
+    const settings = useStoreState(s => s.everest.data!.billing);
     const orderId = ServerContext.useStoreState(s => s.server.data!.orderId);
     const daysUntilRenewal = ServerContext.useStoreState(s => s.server.data!.daysUntilRenewal);
 
@@ -80,7 +82,10 @@ export default () => {
                     <div>
                         <Label>Plan cost</Label>
                         <div className={'flex justify-between'}>
-                            <p className={'text-gray-400 text-sm'}>${product ? product.price : '...'} every 30 days</p>
+                            <p className={'text-gray-400 text-sm'}>
+                                {settings.currency.symbol}
+                                {product ? product.price : '...'} {settings.currency.code.toUpperCase()} every 30 days
+                            </p>
                             <Link to={'/billing/orders'} className={'text-green-400 text-xs'}>
                                 View order <FontAwesomeIcon icon={faArrowRight} />
                             </Link>

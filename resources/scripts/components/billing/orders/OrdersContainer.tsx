@@ -7,6 +7,7 @@ import { getOrders, Order } from '@/api/billing/orders';
 import Spinner from '@elements/Spinner';
 import { formatDistanceToNowStrict } from 'date-fns';
 import usePagination from '@/plugins/usePagination';
+import { useStoreState } from '@/state/hooks';
 
 export function format(date: number): string {
     let prefix = 'th';
@@ -47,6 +48,7 @@ export function type(state: string): PillStatus {
 
 export default () => {
     const [orders, setOrders] = useState<Order[]>([]);
+    const settings = useStoreState(s => s.everest.data!.billing);
 
     useEffect(() => {
         getOrders()
@@ -84,7 +86,10 @@ export default () => {
                                 key={1}
                                 to={`/billing/order/${order.product_id}`}
                             >
-                                <td className={'px-6 py-4 text-white font-bold'}>${order.total}/mo</td>
+                                <td className={'px-6 py-4 text-white font-bold'}>
+                                    {settings.currency.symbol}
+                                    {order.total}/mo
+                                </td>
                                 <td className={'px-6 py-4'}>{order.description}</td>
                                 <td className={'px-6 py-4'}>
                                     {formatDistanceToNowStrict(order.created_at, { addSuffix: true })}

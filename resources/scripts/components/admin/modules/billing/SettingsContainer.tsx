@@ -3,11 +3,14 @@ import AdminBox from '@elements/AdminBox';
 import { Button } from '@/components/elements/button';
 import ToggleFeatureButton from './ToggleFeatureButton';
 import { updateSettings } from '@/api/admin/billing/settings';
-import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { faDollar, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { useStoreActions, useStoreState } from '@/state/hooks';
 import { faPaypal, faStripe } from '@fortawesome/free-brands-svg-icons';
 import SetupPayPal from './guides/SetupPayPal';
 import SetupLink from './guides/SetupLink';
+import Label from '@/components/elements/Label';
+import Select from '@/components/elements/Select';
+import currencyDictionary from '@/assets/currency';
 
 export type BillingSetupDialog = 'paypal' | 'link' | 'none';
 
@@ -16,9 +19,18 @@ export default () => {
     const updateEverest = useStoreActions(s => s.everest.updateEverest);
     const [open, setOpen] = useState<BillingSetupDialog>('none');
 
-    const submit = (key: string, value: boolean) => {
-        updateSettings(key, value).then(() => {
+    const submit = async (key: string, value: boolean | string) => {
+        await updateSettings(key, value).then(() => {
             updateEverest({ billing: { ...settings, [key]: value } });
+        });
+    };
+
+    const handleCurrencyChange = async (event: any) => {
+        const code: string = event.target.value.toUpperCase();
+        const symbol: string = currencyDictionary[code]!.symbol;
+
+        submit('currency:code', code).then(() => {
+            submit('currency:symbol', symbol);
         });
     };
 
@@ -74,6 +86,24 @@ export default () => {
                     <Button.Text onClick={() => submit('link', !settings.link)}>
                         {settings.link ? 'Disable' : 'Enable'}
                     </Button.Text>
+                </div>
+            </AdminBox>
+            <AdminBox title={'Primary Currency'} icon={faDollar}>
+                Choose a primary currency to charge users.
+                <div className={'mt-4'}>
+                    <Label>Currency Code / Name</Label>
+                    <Select onChange={handleCurrencyChange}>
+                        {Object.keys(currencyDictionary).map(code => (
+                            <option
+                                key={code}
+                                value={code}
+                                onChange={() => console.log('hello')}
+                                selected={code === settings.currency.code.toUpperCase()}
+                            >
+                                {code} - {currencyDictionary[code]!.name}
+                            </option>
+                        ))}
+                    </Select>
                 </div>
             </AdminBox>
             <AdminBox title={'Disable Billing Module'} icon={faPowerOff}>

@@ -15,4 +15,12 @@ return [
      * Choose whether to add Link integration to the Panel.
      */
     'link' => env('BILLING_LINK', false),
+
+    /*
+     * Set a currency code and symbol to use for billing.
+     */
+    'currency' => [
+        'symbol' => '$',
+        'code' => 'usd',
+    ],
 ];

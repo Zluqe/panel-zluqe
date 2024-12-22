@@ -40,6 +40,10 @@ export interface EverestSettings {
         enabled: boolean;
         paypal: boolean;
         link: boolean;
+        currency: {
+            symbol: string;
+            code: string;
+        };
     };
     alert: {
         enabled: boolean;
