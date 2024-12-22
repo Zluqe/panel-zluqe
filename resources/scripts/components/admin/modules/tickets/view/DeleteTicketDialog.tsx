@@ -21,7 +21,6 @@ export default () => {
     if (!ticket) return <></>;
 
     const submit = () => {
-        console.log('submitting');
         clearFlashes('tickets:view');
 
         deleteTicket(ticket.id)

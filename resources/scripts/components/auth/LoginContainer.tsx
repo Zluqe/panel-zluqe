@@ -44,7 +44,6 @@ function LoginContainer() {
     const useOauth = (name: string) => {
         useOauthLogin(name)
             .then(url => {
-                console.log(url);
                 // @ts-expect-error this is fine
                 window.location = url;
             })

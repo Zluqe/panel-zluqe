@@ -28,7 +28,6 @@ export default () => {
     if (!ticket) return <></>;
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-        console.log('submitting');
         clearFlashes('ticket:message:create');
 
         createMessage(ticket.id, values)

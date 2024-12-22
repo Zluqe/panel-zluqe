@@ -45,10 +45,7 @@ export default () => {
 
     useEffect(() => {
         getServerGroups()
-            .then(data => {
-                console.log(data);
-                setGroups(data);
-            })
+            .then(data => setGroups(data))
             .catch(() => console.error());
     }, []);
 

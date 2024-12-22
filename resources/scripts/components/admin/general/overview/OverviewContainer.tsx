@@ -86,8 +86,6 @@ export default () => {
             });
     }, []);
 
-    console.log(metricData);
-
     return (
         <AdminContentBlock title={'Overview'}>
             <div css={tw`w-full flex flex-row items-center mb-8`}>
