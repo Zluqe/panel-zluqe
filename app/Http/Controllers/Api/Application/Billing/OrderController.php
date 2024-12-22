@@ -22,7 +22,7 @@ class OrderController extends ApplicationApiController
      */
     public function index(Request $request): array
     {
-        return $this->fractal->collection(Order::all())
+        return $this->fractal->collection(Order::orderBy('created_at', 'desc')->get())
             ->transformWith(OrderTransformer::class)
             ->toArray();
     }
