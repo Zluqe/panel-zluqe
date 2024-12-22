@@ -11,6 +11,7 @@ import {
 } from 'chart.js';
 import { format, startOfDay, endOfDay, isWithinInterval, eachDayOfInterval } from 'date-fns';
 import { BillingAnalytics } from '@/api/admin/billing/analytics';
+import { useStoreState } from '@/state/hooks';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -18,6 +19,7 @@ export default ({ data, history }: { data: BillingAnalytics; history: number }) 
     const now = new Date();
     const startDate = new Date(now);
     startDate.setDate(now.getDate() - history);
+    const symbol = useStoreState(s => s.everest.data!.billing.currency.symbol);
 
     const daysRange = eachDayOfInterval({
         start: startOfDay(startDate),
@@ -62,7 +64,7 @@ export default ({ data, history }: { data: BillingAnalytics; history: number }) 
             tooltip: {
                 callbacks: {
                     label: function (context: any) {
-                        return `$${context.raw}`;
+                        return `${symbol}${context.raw}`;
                     },
                 },
             },
@@ -77,7 +79,7 @@ export default ({ data, history }: { data: BillingAnalytics; history: number }) 
             y: {
                 title: {
                     display: true,
-                    text: 'Revenue ($)',
+                    text: `Revenue in ${symbol}`,
                 },
                 beginAtZero: true,
             },

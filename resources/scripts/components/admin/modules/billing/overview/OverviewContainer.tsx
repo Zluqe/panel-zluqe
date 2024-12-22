@@ -86,11 +86,12 @@ export default () => {
                     </ContentBox>
                     <ContentBox className={'col-span-2'}>
                         <h1 className={'text-2xl font-bold'}>
-                            $<span className={'text-4xl'}>{revenue}</span> total revenue
+                            {settings.currency.symbol}
+                            <span className={'text-4xl'}>{revenue}</span> total revenue
                         </h1>
                         <p className={'text-gray-400 text-sm mt-2'}>
-                            Your {successfulOrders.length} successful orders have generated ${revenue} over the last{' '}
-                            {history} days.
+                            Your {successfulOrders.length} successful orders have generated {settings.currency.symbol}
+                            {revenue} {settings.currency.code} over the last {history} days.
                         </p>
                         <RevenueChart data={analytics} history={history} />
                     </ContentBox>
