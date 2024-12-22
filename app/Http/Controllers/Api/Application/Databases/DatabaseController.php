@@ -2,10 +2,10 @@
 
 namespace Everest\Http\Controllers\Api\Application\Databases;
 
+use Everest\Facades\Activity;
 use Illuminate\Http\Response;
 use Everest\Models\DatabaseHost;
 use Illuminate\Http\JsonResponse;
-use Everest\Facades\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Services\Databases\Hosts\HostUpdateService;
 use Everest\Services\Databases\Hosts\HostCreationService;

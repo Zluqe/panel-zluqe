@@ -13,8 +13,8 @@ use Everest\Exceptions\DisplayException;
 use Everest\Services\Billing\CreateOrderService;
 use Everest\Services\Billing\CreateServerService;
 use Everest\Http\Controllers\Api\Client\ClientApiController;
-use Everest\Repositories\Wings\DaemonConfigurationRepository;
 use Everest\Contracts\Repository\SettingsRepositoryInterface;
+use Everest\Repositories\Wings\DaemonConfigurationRepository;
 
 class StripeController extends ClientApiController
 {
@@ -46,15 +46,15 @@ class StripeController extends ClientApiController
     {
         $paymentMethodTypes = ['card'];
         $product = Product::findOrFail($id);
-        
+
         if ($this->settings->get('settings::modules:billing:paypal')) {
             $paymentMethodTypes[] = 'paypal';
         }
-        
+
         if ($this->settings->get('settings::modules:billing:link')) {
             $paymentMethodTypes[] = 'link';
         }
-        
+
         $paymentIntent = $this->stripe->paymentIntents->create([
             'amount' => $product->price * 100,
             'currency' => 'usd',

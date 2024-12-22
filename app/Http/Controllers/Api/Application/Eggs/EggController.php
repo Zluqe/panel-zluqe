@@ -134,7 +134,7 @@ class EggController extends ApplicationApiController
             ->property('egg', $egg)
             ->description('An egg was exported')
             ->log();
-    
+
         return new JsonResponse($this->eggExporterService->handle($eggId));
     }
 }

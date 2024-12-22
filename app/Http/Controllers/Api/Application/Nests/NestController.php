@@ -3,8 +3,8 @@
 namespace Everest\Http\Controllers\Api\Application\Nests;
 
 use Everest\Models\Nest;
-use Illuminate\Http\Response;
 use Everest\Facades\Activity;
+use Illuminate\Http\Response;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Services\Nests\NestUpdateService;
 use Everest\Services\Nests\NestCreationService;

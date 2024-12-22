@@ -4,8 +4,8 @@ namespace Everest\Http\Controllers\Api\Application\Tickets;
 
 use Everest\Models\Ticket;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Everest\Facades\Activity;
+use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Transformers\Api\Application\TicketTransformer;
@@ -118,7 +118,7 @@ class TicketController extends ApplicationApiController
         $ticket->messages()->delete();
 
         $ticket->delete();
-        
+
         Activity::event('admin:tickets:delete')
             ->property('ticket', $ticket)
             ->description('A ticket was deleted')

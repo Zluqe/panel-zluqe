@@ -3,8 +3,8 @@
 namespace Everest\Http\Controllers\Api\Application\Nodes;
 
 use Everest\Models\Node;
-use Illuminate\Http\Response;
 use Everest\Facades\Activity;
+use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Services\Nodes\NodeUpdateService;

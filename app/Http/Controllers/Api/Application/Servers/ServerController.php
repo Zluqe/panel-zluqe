@@ -3,8 +3,8 @@
 namespace Everest\Http\Controllers\Api\Application\Servers;
 
 use Everest\Models\Server;
-use Illuminate\Http\Response;
 use Everest\Facades\Activity;
+use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Services\Servers\ServerCreationService;
@@ -126,7 +126,7 @@ class ServerController extends ApplicationApiController
             ->property('new_data', $request->all())
             ->description('A server was updated')
             ->log();
-    
+
         return $this->fractal->item($server)
             ->transformWith(ServerTransformer::class)
             ->toArray();

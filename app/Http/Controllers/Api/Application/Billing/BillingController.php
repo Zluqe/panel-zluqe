@@ -3,8 +3,8 @@
 namespace Everest\Http\Controllers\Api\Application\Billing;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Everest\Facades\Activity;
+use Illuminate\Http\Response;
 use Everest\Models\Billing\Order;
 use Everest\Models\Billing\Product;
 use Everest\Models\Billing\Category;

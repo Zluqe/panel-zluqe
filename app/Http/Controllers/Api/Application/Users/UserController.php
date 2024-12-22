@@ -4,8 +4,8 @@ namespace Everest\Http\Controllers\Api\Application\Users;
 
 use Everest\Models\User;
 use Illuminate\Support\Arr;
-use Illuminate\Http\Response;
 use Everest\Facades\Activity;
+use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;

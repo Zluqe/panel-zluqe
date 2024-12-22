@@ -3,9 +3,9 @@
 namespace Everest\Http\Controllers\Api\Application\Mounts;
 
 use Everest\Models\Mount;
+use Everest\Facades\Activity;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Everest\Facades\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 use Everest\Transformers\Api\Application\MountTransformer;
 use Everest\Exceptions\Http\QueryValueOutOfRangeHttpException;

@@ -48,7 +48,7 @@ class ServerGroupController extends ClientApiController
             $server->update(['group_id' => $id]);
         } catch (DisplayException $ex) {
             throw new DisplayException('Unable to assign group to server.');
-        };
+        }
 
         return new JsonResponse([], JsonResponse::HTTP_NO_CONTENT);
     }
