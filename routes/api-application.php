@@ -55,7 +55,8 @@ Route::middleware([AdminSubject::class])->group(function () {
     |
     */
     Route::group(['prefix' => '/billing'], function () {
-        Route::put('/settings', [Application\Billing\BillingSettingsController::class, 'update']);
+        Route::get('/analytics', [Application\Billing\BillingController::class, 'analytics']);
+        Route::put('/settings', [Application\Billing\BillingController::class, 'settings']);
 
         Route::group(['prefix' => '/categories'], function () {
             Route::get('/', [Application\Billing\CategoryController::class, 'index']);

@@ -38,6 +38,8 @@ export interface EverestSettings {
     };
     billing: {
         enabled: boolean;
+        paypal: boolean;
+        link: boolean;
     };
     alert: {
         enabled: boolean;

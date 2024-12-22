@@ -5,13 +5,16 @@ namespace Everest\Http\Controllers\Api\Application\Billing;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Everest\Facades\Activity;
+use Everest\Models\Billing\Order;
+use Everest\Models\Billing\Product;
+use Everest\Models\Billing\Category;
 use Everest\Contracts\Repository\SettingsRepositoryInterface;
 use Everest\Http\Controllers\Api\Application\ApplicationApiController;
 
-class BillingSettingsController extends ApplicationApiController
+class BillingController extends ApplicationApiController
 {
     /**
-     * BillingSettingsController constructor.
+     * BillingController constructor.
      */
     public function __construct(
         private SettingsRepositoryInterface $settings
@@ -24,7 +27,7 @@ class BillingSettingsController extends ApplicationApiController
      *
      * @throws \Throwable
      */
-    public function update(Request $request): Response
+    public function settings(Request $request): Response
     {
         $this->settings->set('settings::modules:billing:' . $request->input('key'), $request->input('value'));
 
@@ -34,5 +37,17 @@ class BillingSettingsController extends ApplicationApiController
             ->log();
 
         return $this->returnNoContent();
+    }
+
+    /**
+     * Gather and return billing analytics.
+     */
+    public function analytics(Request $request): array
+    {
+        return [
+            'orders' => Order::all(),
+            'categories' => Category::all(),
+            'products' => Product::all(),
+        ];
     }
 }

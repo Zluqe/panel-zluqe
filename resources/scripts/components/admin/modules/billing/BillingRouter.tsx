@@ -7,13 +7,14 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import ProductForm from '@admin/modules/billing/products/ProductForm';
 import CategoryForm from '@admin/modules/billing/products/CategoryForm';
 import { SubNavigation, SubNavigationLink } from '@admin/SubNavigation';
-import OverviewContainer from '@admin/modules/billing/OverviewContainer';
+import OverviewContainer from '@/components/admin/modules/billing/overview/OverviewContainer';
 import CategoryTable from '@admin/modules/billing/products/CategoryTable';
 import OrdersContainer from '@admin/modules/billing/orders/OrdersContainer';
 import ProductContainer from '@admin/modules/billing/products/ProductContainer';
 import CategoryContainer from '@admin/modules/billing/products/CategoryContainer';
-import { DesktopComputerIcon, ShoppingCartIcon, ViewGridIcon } from '@heroicons/react/outline';
+import { CogIcon, DesktopComputerIcon, ShoppingCartIcon, ViewGridIcon } from '@heroicons/react/outline';
 import Unfinished from '@elements/Unfinished';
+import SettingsContainer from '@admin/modules/billing/SettingsContainer';
 
 export default () => {
     const theme = useStoreState(state => state.theme.data!);
@@ -46,6 +47,9 @@ export default () => {
                 <SubNavigationLink to={'/admin/billing/orders'} name={'Orders'}>
                     <ShoppingCartIcon />
                 </SubNavigationLink>
+                <SubNavigationLink to={'/admin/billing/settings'} name={'Settings'}>
+                    <CogIcon />
+                </SubNavigationLink>
             </SubNavigation>
             <Routes>
                 <Route path={'/'} element={<OverviewContainer />} />
@@ -58,6 +62,8 @@ export default () => {
                 <Route path={'/categories/:id/products/:productId'} element={<ProductContainer />} />
 
                 <Route path={'/orders'} element={<OrdersContainer />} />
+
+                <Route path={'/settings'} element={<SettingsContainer />} />
 
                 <Route path={'/*'} element={<NotFound />} />
             </Routes>
