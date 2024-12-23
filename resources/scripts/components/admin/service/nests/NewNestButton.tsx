@@ -16,11 +16,13 @@ import useFlash from '@/plugins/useFlash';
 interface Values {
     name: string;
     description: string;
+    author: string;
 }
 
 const schema = object().shape({
     name: string().required('A nest name must be provided.').max(32, 'Nest name must not exceed 32 characters.'),
     description: string().max(255, 'Nest description must not exceed 255 characters.'),
+    author: string().email().required('You must enter an author email to continue.'),
 });
 
 export default () => {
@@ -28,11 +30,11 @@ export default () => {
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const { mutate } = getNests();
 
-    const submit = ({ name, description }: Values, { setSubmitting }: FormikHelpers<Values>) => {
+    const submit = ({ name, description, author }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes('nest:create');
         setSubmitting(true);
 
-        createNest(name, description)
+        createNest(name, description, author)
             .then(async nest => {
                 await mutate(data => ({ ...data!, items: data!.items.concat(nest) }), false);
                 setVisible(false);
@@ -45,7 +47,11 @@ export default () => {
 
     return (
         <>
-            <Formik onSubmit={submit} initialValues={{ name: '', description: '' }} validationSchema={schema}>
+            <Formik
+                onSubmit={submit}
+                initialValues={{ name: '', description: '', author: '' }}
+                validationSchema={schema}
+            >
                 {({ isSubmitting, resetForm }) => (
                     <Modal
                         visible={visible}
@@ -77,6 +83,16 @@ export default () => {
                                     name={'description'}
                                     label={'Description'}
                                     description={'A description for this nest.'}
+                                />
+                            </div>
+
+                            <div css={tw`mt-6`}>
+                                <Field
+                                    type={'text'}
+                                    id={'author'}
+                                    name={'author'}
+                                    label={'Author email'}
+                                    description={'An email to identify who made this nest.'}
                                 />
                             </div>
 

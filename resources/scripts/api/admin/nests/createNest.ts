@@ -1,13 +1,14 @@
 import http from '@/api/http';
 import { Nest, rawDataToNest } from '@/api/admin/nests/getNests';
 
-export default (name: string, description: string | null, include: string[] = []): Promise<Nest> => {
+export default (name: string, description: string | null, author: string, include: string[] = []): Promise<Nest> => {
     return new Promise((resolve, reject) => {
         http.post(
             '/api/application/nests',
             {
                 name,
                 description,
+                author,
             },
             { params: { include: include.join(',') } },
         )
