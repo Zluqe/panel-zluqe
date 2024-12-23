@@ -48,6 +48,10 @@ class EverestComposer
                 'enabled' => boolval(config('modules.billing.enabled', false)),
                 'paypal' => config('modules.billing.paypal'),
                 'link' => config('modules.billing.link'),
+                'keys' => [
+                    'publishable' => boolval(config('modules.billing.keys.publishable')),
+                    'secret' => boolval(config('modules.billing.keys.secret')),
+                ],
                 'currency' => [
                     'symbol' => config('modules.billing.currency.symbol'),
                     'code' => config('modules.billing.currency.code'),

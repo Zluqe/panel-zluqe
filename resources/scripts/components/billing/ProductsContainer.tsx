@@ -20,6 +20,7 @@ import {
     faShoppingBag,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { Alert } from '@elements/alert';
 
 interface LimitProps {
     icon: IconDefinition;
@@ -51,13 +52,21 @@ export default () => {
     }, []);
 
     useEffect(() => {
-        // todo(jex): this could be cleaner I think
         if (products || !category) return;
 
         getProducts(category).then(data => {
             setProducts(data);
         });
     }, [category]);
+
+    if (!settings.keys.publishable) {
+        return (
+            <Alert type={'danger'}>
+                Due to a configuration error, the store is currently unavailable. Please try again later, or refresh the
+                page.
+            </Alert>
+        );
+    }
 
     return (
         <PageContentBlock title={'Available Products'}>

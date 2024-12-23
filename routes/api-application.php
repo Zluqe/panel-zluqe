@@ -58,6 +58,8 @@ Route::middleware([AdminSubject::class])->group(function () {
         Route::get('/analytics', [Application\Billing\BillingController::class, 'analytics']);
         Route::put('/settings', [Application\Billing\BillingController::class, 'settings']);
 
+        Route::delete('/keys', [Application\Billing\BillingController::class, 'resetKeys']);
+
         Route::group(['prefix' => '/categories'], function () {
             Route::get('/', [Application\Billing\CategoryController::class, 'index']);
             Route::post('/', [Application\Billing\CategoryController::class, 'store']);

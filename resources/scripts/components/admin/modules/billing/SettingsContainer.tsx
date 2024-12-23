@@ -3,7 +3,7 @@ import AdminBox from '@elements/AdminBox';
 import { Button } from '@/components/elements/button';
 import ToggleFeatureButton from './ToggleFeatureButton';
 import { updateSettings } from '@/api/admin/billing/settings';
-import { faDollar, faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { faDollar, faKey, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { useStoreActions, useStoreState } from '@/state/hooks';
 import { faPaypal, faStripe } from '@fortawesome/free-brands-svg-icons';
 import SetupPayPal from './guides/SetupPayPal';
@@ -11,6 +11,7 @@ import SetupLink from './guides/SetupLink';
 import Label from '@/components/elements/Label';
 import Select from '@/components/elements/Select';
 import currencyDictionary from '@/assets/currency';
+import { deleteStripeKeys } from '@/api/admin/billing/keys';
 
 export type BillingSetupDialog = 'paypal' | 'link' | 'none';
 
@@ -32,6 +33,12 @@ export default () => {
         submit('currency:code', code).then(() => {
             submit('currency:symbol', symbol);
         });
+    };
+
+    const onDeleteKeys = () => {
+        deleteStripeKeys()
+            .then(() => window.location.reload())
+            .catch(error => console.log(error));
     };
 
     return (
@@ -104,6 +111,13 @@ export default () => {
                             </option>
                         ))}
                     </Select>
+                </div>
+            </AdminBox>
+            <AdminBox title={'Reset Stripe API keys'} icon={faKey}>
+                By resetting the Stripe API keys saved to the panel, all billing services (such as purchasing or
+                renewing a product) will stop working until new API keys are entered. Are you sure you wish to continue?
+                <div className={'text-right mt-3'}>
+                    <Button.Danger onClick={onDeleteKeys}>Yes, delete API keys</Button.Danger>
                 </div>
             </AdminBox>
             <AdminBox title={'Disable Billing Module'} icon={faPowerOff}>

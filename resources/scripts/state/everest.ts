@@ -40,6 +40,10 @@ export interface EverestSettings {
         enabled: boolean;
         paypal: boolean;
         link: boolean;
+        keys: {
+            publishable: boolean;
+            secret: boolean;
+        };
         currency: {
             symbol: string;
             code: string;

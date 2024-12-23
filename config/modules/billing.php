@@ -6,6 +6,14 @@ return [
      */
     'enabled' => env('BILLING_ENABLED', false),
 
+    /**
+     * Configure the publishable & secret API key for Stripe.
+     */
+    'keys' => [
+        'publishable' => env('BILLING_PUBLISHABLE_KEY', ''),
+        'secret' => env('BILLING_SECRET_KEY', ''),
+    ],
+
     /*
      * Choose whether to add PayPal integration to the Panel.
      */

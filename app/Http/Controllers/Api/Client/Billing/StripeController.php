@@ -26,7 +26,9 @@ class StripeController extends ClientApiController
     ) {
         parent::__construct();
 
-        $this->stripe = new StripeClient(env('STRIPE_SECRET'));
+        $this->stripe = new StripeClient(
+            $this->settings->get('settings::modules:billing:keys:secret')
+        );
     }
 
     /**
@@ -35,7 +37,7 @@ class StripeController extends ClientApiController
     public function publicKey(Request $request, int $id): JsonResponse
     {
         return response()->json([
-            'key' => env('STRIPE_KEY'),
+            'key' => $this->settings->get('settings::modules:billing:keys:publishable'),
         ]);
     }
 

@@ -50,4 +50,20 @@ class BillingController extends ApplicationApiController
             'products' => Product::all(),
         ];
     }
+
+    /**
+     * Delete all Stripe API keys saved to the Panel.
+     */
+    public function resetKeys(Request $request): Response
+    {
+        $this->settings->forget('settings::modules:billing:keys:publishable');
+        $this->settings->forget('settings:modules:billing:keys:secret');
+
+        Activity::event('admin:billing:reset-keys')
+            ->description('Stripe API keys for billing were reset')
+            ->log();
+
+        return $this->returnNoContent();
+
+    }
 }
