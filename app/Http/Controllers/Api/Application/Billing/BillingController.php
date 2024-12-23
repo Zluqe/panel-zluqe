@@ -31,10 +31,12 @@ class BillingController extends ApplicationApiController
     {
         $this->settings->set('settings::modules:billing:' . $request->input('key'), $request->input('value'));
 
-        Activity::event('admin:billing:update')
-            ->property('settings', $request->all())
-            ->description('Jexactyl Billing settings were updated')
-            ->log();
+        if (strpos($request['key'], 'keys:') !== 0) {
+            Activity::event('admin:billing:update')
+                ->property('settings', $request->all())
+                ->description('Jexactyl billing settings were updated')
+                ->log();
+        }
 
         return $this->returnNoContent();
     }
