@@ -24,7 +24,7 @@ class LoginController extends AbstractLoginController
         private UserCreationService $creationService,
         private SettingsRepositoryInterface $settings,
     ) {
-        parent::__construct();
+        parent::__construct($settings);
     }
 
     /**
