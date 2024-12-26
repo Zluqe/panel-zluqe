@@ -66,6 +66,5 @@ class BillingController extends ApplicationApiController
             ->log();
 
         return $this->returnNoContent();
-
     }
 }

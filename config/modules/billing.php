@@ -6,7 +6,7 @@ return [
      */
     'enabled' => env('BILLING_ENABLED', false),
 
-    /**
+    /*
      * Configure the publishable & secret API key for Stripe.
      */
     'keys' => [
