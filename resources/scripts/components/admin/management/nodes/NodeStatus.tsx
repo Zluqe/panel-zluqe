@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import getNodeInformation, { NodeInformation } from '@/api/admin/nodes/getNodeInformation';
 import Spinner from '@elements/Spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faBoltLightning, faExclamationTriangle, faHeart } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
 import Tooltip from '@elements/tooltip/Tooltip';
 
@@ -29,9 +29,12 @@ export default ({ node, className }: { node: number; className?: string }) => {
     if (loading) return <Spinner size={'small'} />;
 
     return (
-        <Tooltip placement={'top'} content={info ? `v${info.version}` : 'Node Unavailable'}>
+        <Tooltip
+            placement={'top'}
+            content={info ? `${info.system.supercharged && 'Supercharged'} ver: ${info.version}` : 'Node Unavailable'}
+        >
             <FontAwesomeIcon
-                icon={error ? faExclamationTriangle : faHeart}
+                icon={error ? faExclamationTriangle : info?.system.supercharged ? faBoltLightning : faHeart}
                 className={classNames(className, info ? 'text-green-400' : 'text-red-400', 'animate-pulse text-lg')}
             />
         </Tooltip>
