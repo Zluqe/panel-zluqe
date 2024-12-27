@@ -69,7 +69,10 @@ class AllocationController extends ApplicationApiController
      */
     public function store(StoreAllocationRequest $request, Node $node): Response
     {
-        $this->assignmentService->handle($node, $request->validated());
+        $request->merge(['allocation_ports' => $request['end_port'] ? range($request['start_port'], $request['end_port']) : [$request['start_port']],
+        ]);
+
+        $this->assignmentService->handle($node, $request->all());
 
         return $this->returnNoContent();
     }

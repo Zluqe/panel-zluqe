@@ -9,12 +9,12 @@ import getAllocations from '@/api/admin/nodes/getAllocations';
 import getAllocations2 from '@/api/admin/nodes/allocations/getAllocations';
 import { Button } from '@elements/button';
 import Field from '@elements/Field';
-import type { Option } from '@elements/SelectField';
-import SelectField from '@elements/SelectField';
+import SelectField, { type Option } from '@elements/SelectField';
 
 interface Values {
     ips: string[];
-    ports: number[];
+    startPort?: number | undefined;
+    endPort?: number | undefined;
     alias: string;
 }
 
@@ -24,7 +24,6 @@ const distinct = (value: any, index: any, self: any) => {
 
 function CreateAllocationForm({ nodeId }: { nodeId: number }) {
     const [ips, setIPs] = useState<Option[]>([]);
-    const [ports] = useState<Option[]>([]);
 
     const { mutate } = getAllocations2(nodeId, ['server']);
 
@@ -46,16 +45,11 @@ function CreateAllocationForm({ nodeId }: { nodeId: number }) {
         return inputValue.match(/^([0-9a-f.:/]+)$/) !== null;
     };
 
-    const isValidPort = (inputValue: string): boolean => {
-        // TODO: Better way of checking for a valid port (and port range)
-        return inputValue.match(/^([0-9-]+)$/) !== null;
-    };
-
-    const submit = ({ ips, ports, alias }: Values, { setSubmitting }: FormikHelpers<Values>) => {
+    const submit = ({ ips, startPort, endPort, alias }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         setSubmitting(false);
 
         ips.forEach(async ip => {
-            const allocations = await createAllocation(nodeId, { ip, ports, alias }, ['server']);
+            const allocations = await createAllocation(nodeId, { ip, startPort, endPort, alias }, ['server']);
             await mutate(data => ({ ...data!, items: { ...data!.items!, ...allocations } }));
         });
     };
@@ -65,12 +59,20 @@ function CreateAllocationForm({ nodeId }: { nodeId: number }) {
             onSubmit={submit}
             initialValues={{
                 ips: [] as string[],
-                ports: [] as number[],
+                startPort: undefined,
+                endPort: undefined,
                 alias: '',
             }}
             validationSchema={object().shape({
-                ips: array(string()).min(1, 'You must select at least one ip address.'),
-                ports: array(number()).min(1, 'You must select at least one port.'),
+                ips: array(string()).required().min(1, 'You must select at least one ip address.'),
+                startPort: number()
+                    .required()
+                    .min(1024, 'This port cannot be lower than 1024.')
+                    .max(65535, 'This port cannot exceed 65535.'),
+                endPort: number()
+                    .nullable()
+                    .min(1024, 'This port cannot be lower than 1024.')
+                    .max(65535, 'This port cannot exceed 65535.'),
             })}
         >
             {({ isSubmitting, isValid }) => (
@@ -84,23 +86,14 @@ function CreateAllocationForm({ nodeId }: { nodeId: number }) {
                         isMulti
                         isSearchable
                         isCreatable
-                        css={tw`mb-6`}
                     />
 
-                    <SelectField
-                        id={'ports'}
-                        name={'ports'}
-                        label={'Ports'}
-                        options={ports}
-                        isValidNewOption={isValidPort}
-                        isMulti
-                        isSearchable
-                        isCreatable
-                    />
-
-                    <div css={tw`mt-6`}>
-                        <Field id={'alias'} name={'alias'} label={'Alias'} type={'text'} />
+                    <div css={tw`my-6 grid grid-cols-2 gap-2`}>
+                        <Field id={'startPort'} name={'startPort'} label={'Start Port'} type={'text'} />
+                        <Field id={'endPort'} name={'endPort'} label={'End Port'} type={'text'} />
                     </div>
+
+                    <Field id={'alias'} name={'alias'} label={'Alias'} type={'text'} />
 
                     <div css={tw`w-full flex flex-row items-center mt-6`}>
                         <div css={tw`flex ml-auto`}>

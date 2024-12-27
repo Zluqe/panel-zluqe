@@ -39,7 +39,7 @@ class AssignmentService
      */
     public function handle(Node $node, array $data): void
     {
-        $allocationIp = $data['allocation_ip'];
+        $allocationIp = $data['ip'];
         $explode = explode('/', $allocationIp);
         if (count($explode) !== 1) {
             if (!ctype_digit($explode[1]) || ($explode[1] > self::CIDR_MIN_BITS || $explode[1] < self::CIDR_MAX_BITS)) {
