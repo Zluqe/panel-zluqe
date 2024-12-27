@@ -291,7 +291,8 @@ Route::middleware([AdminSubject::class])->group(function () {
         Route::get('/deployable', [Application\Nodes\NodeDeploymentController::class, '__invoke']);
         Route::get('/{node:id}', [Application\Nodes\NodeController::class, 'view']);
         Route::get('/{node:id}/configuration', [Application\Nodes\NodeConfigurationController::class, '__invoke']);
-        Route::get('/{node:id}/information', [Application\Nodes\NodeInformationController::class, '__invoke']);
+        Route::get('/{node:id}/information', [Application\Nodes\NodeInformationController::class, 'information']);
+        Route::get('/{node:id}/utilization', [Application\Nodes\NodeInformationController::class, 'utilization']);
 
         Route::post('/', [Application\Nodes\NodeController::class, 'store']);
 

@@ -7,6 +7,7 @@ export interface NodeInformation {
         arch: string;
         release: string;
         cpus: number;
+        supercharged: boolean;
     };
 }
 
