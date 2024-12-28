@@ -16,6 +16,7 @@ import {
     DesktopComputerIcon,
     ExternalLinkIcon,
     EyeIcon,
+    LogoutIcon,
     ShoppingCartIcon,
     TerminalIcon,
     TicketIcon,
@@ -25,6 +26,7 @@ import MobileSidebar from '@elements/MobileSidebar';
 import { faCog, faEye, faKey, faShoppingBag, faTerminal, faTicket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { CustomLink } from '@/api/admin/links';
 import { getLinks } from '@/api/getLinks';
+import http from '@/api/http';
 
 function DashboardRouter() {
     const user = useStoreState(s => s.user.data!);
@@ -39,6 +41,13 @@ function DashboardRouter() {
             .then(data => setLinks(data))
             .catch(error => console.error(error));
     }, []);
+
+    const onTriggerLogout = () => {
+        http.post('/auth/logout').finally(() => {
+            // @ts-expect-error this is valid
+            window.location = '/';
+        });
+    };
 
     return (
         <div className={'h-screen flex'}>
@@ -118,6 +127,10 @@ function DashboardRouter() {
                             <span className={collapsed ? 'hidden' : ''}>Settings</span>
                         </NavLink>
                     )}
+                    <NavLink to={'/'} onClick={onTriggerLogout}>
+                        <LogoutIcon />
+                        <span className={collapsed ? 'hidden' : ''}>Logout</span>
+                    </NavLink>
                 </span>
                 <Sidebar.User>
                     <span className="flex items-center">
