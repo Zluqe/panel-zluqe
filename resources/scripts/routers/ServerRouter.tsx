@@ -9,7 +9,7 @@ import { httpErrorToHuman } from '@/api/http';
 import { useStoreState } from 'easy-peasy';
 import InstallListener from '@/components/server/InstallListener';
 import ErrorBoundary from '@elements/ErrorBoundary';
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import MobileSidebar from '@elements/MobileSidebar';
 import PermissionRoute from '@elements/PermissionRoute';
