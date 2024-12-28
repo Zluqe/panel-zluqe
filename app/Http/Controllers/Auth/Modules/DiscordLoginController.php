@@ -69,7 +69,7 @@ class DiscordLoginController extends AbstractLoginController
 
             return redirect('/');
         } else {
-            $user = $this->createAccount(['email' => $account->email, 'username' => 'null_user_' . $this->randStr(16)]);
+            $user = $this->createAccount($this->settings, ['email' => $account->email, 'username' => 'null_user_' . $this->randStr(16)]);
 
             $this->sendLoginResponse($user, $request);
 

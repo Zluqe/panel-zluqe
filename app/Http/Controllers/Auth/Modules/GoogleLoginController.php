@@ -60,7 +60,7 @@ class GoogleLoginController extends AbstractLoginController
 
             return redirect('/');
         } else {
-            $user = $this->createAccount(['email' => $response->email, 'username' => 'null_user_' . $this->randStr(16)]);
+            $user = $this->createAccount($this->settings, ['email' => $response->email, 'username' => 'null_user_' . $this->randStr(16)]);
 
             $this->sendLoginResponse($user, $request);
 
