@@ -19,6 +19,15 @@ interface SSHKey extends Model {
     createdAt: Date;
 }
 
+interface ApiKey extends Model {
+    id?: number;
+    identifier: string;
+    description: string;
+    allowedIps: string[];
+    createdAt: Date | null;
+    lastUsedAt: Date | null;
+}
+
 interface Ticket extends Model {
     id: number;
     title: string;

@@ -7,11 +7,9 @@ import { Location } from '@/api/admin/location';
 import { Egg, EggVariable } from '@/api/admin/egg';
 import { Nest } from '@/api/admin/nest';
 import { Category } from '@/api/admin/billing/categories';
-import { ApiKey } from '@/api/account/getApiKeys';
 import { Ticket, TicketMessage } from '@/api/admin/tickets/getTickets';
 import { Product } from '@/api/admin/billing/products';
 import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
-
 const isList = (data: FractalResponseList | FractalResponseData): data is FractalResponseList => data.object === 'list';
 
 function transform<T, M = undefined>(
@@ -122,7 +120,7 @@ export default class Transformers {
         relationships: {},
     });
 
-    static toApiKey = ({ attributes }: FractalResponseData): ApiKey => ({
+    static toApiKey = ({ attributes }: FractalResponseData): Models.ApiKey => ({
         id: attributes.id,
         identifier: attributes.identifier,
         description: attributes.description,

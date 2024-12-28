@@ -1,7 +1,6 @@
 import type { AxiosError } from 'axios';
 import type { SWRConfiguration } from 'swr';
 import useSWR from 'swr';
-
 import http, { PaginatedResult, QueryBuilderParams, withQueryBuilderParams } from '@/api/http';
 import { toPaginatedSet } from '@definitions/helpers';
 import { ActivityLog, Transformers } from '@definitions/user';

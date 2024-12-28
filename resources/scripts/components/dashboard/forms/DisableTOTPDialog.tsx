@@ -5,7 +5,7 @@ import { Dialog, DialogWrapperContext } from '@elements/dialog';
 import { Button } from '@elements/button/index';
 import { Input } from '@elements/inputs';
 import Tooltip from '@elements/tooltip/Tooltip';
-import disableAccountTwoFactor from '@/api/account/disableAccountTwoFactor';
+import { disableTwoFactor } from '@/api/account/two-factor';
 import { useFlashKey } from '@/plugins/useFlash';
 import { useStoreActions } from '@/state/hooks';
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -29,7 +29,7 @@ const DisableTOTPDialog = () => {
 
         setSubmitting(true);
         clearAndAddHttpError();
-        disableAccountTwoFactor(password)
+        disableTwoFactor(password)
             .then(() => {
                 updateUserData({ useTotp: false });
                 close();

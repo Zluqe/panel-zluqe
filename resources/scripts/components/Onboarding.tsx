@@ -5,7 +5,7 @@ import Field from '@elements/Field';
 import { Dialog } from '@elements/dialog';
 import useFlash from '@/plugins/useFlash';
 import FlashMessageRender from './FlashMessageRender';
-import setup, { Values } from '@/api/account/setup';
+import { setupAccount } from '@/api/account';
 import { Alert } from './elements/alert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
@@ -16,10 +16,10 @@ export default () => {
     const force2fa = useStoreState(state => state.everest.data!.auth.security.force2fa);
     const content = useStoreState(state => state.everest.data!.auth.modules.onboarding.content);
 
-    const submit = (values: Values) => {
+    const submit = (values: { username: string; password: string }) => {
         clearFlashes();
 
-        setup(values)
+        setupAccount(values)
             .then(() => {
                 // @ts-expect-error this is fine
                 window.location = '/auth/login';

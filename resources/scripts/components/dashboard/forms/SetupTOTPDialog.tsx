@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import * as React from 'react';
 import { Dialog, DialogWrapperContext } from '@elements/dialog';
-import getTwoFactorTokenData, { TwoFactorTokenData } from '@/api/account/getTwoFactorTokenData';
+import { getTwoFactorTokenData } from '@/api/account/two-factor';
 import { useFlashKey } from '@/plugins/useFlash';
 import tw from 'twin.macro';
 import QRCode from 'qrcode.react';
@@ -10,7 +10,7 @@ import Spinner from '@elements/Spinner';
 import { Input } from '@elements/inputs';
 import CopyOnClick from '@elements/CopyOnClick';
 import Tooltip from '@elements/tooltip/Tooltip';
-import enableAccountTwoFactor from '@/api/account/enableAccountTwoFactor';
+import { enableTwoFactor } from '@/api/account/two-factor';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { ApplicationStore } from '@/state';
@@ -24,7 +24,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
     const [submitting, setSubmitting] = useState(false);
     const [value, setValue] = useState('');
     const [password, setPassword] = useState('');
-    const [token, setToken] = useState<TwoFactorTokenData | null>(null);
+    const [token, setToken] = useState<{ image_url_data: string; secret: string } | null>(null);
     const { clearAndAddHttpError } = useFlashKey('account:two-step');
     const updateUserData = useStoreActions((actions: Actions<ApplicationStore>) => actions.user.updateUserData);
 
@@ -48,7 +48,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
 
         setSubmitting(true);
         clearAndAddHttpError();
-        enableAccountTwoFactor(value, password)
+        enableTwoFactor(value, password)
             .then(tokens => {
                 updateUserData({ useTotp: true });
                 onTokens(tokens);

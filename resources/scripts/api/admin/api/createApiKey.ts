@@ -1,27 +1,11 @@
 import http from '@/api/http';
-import { ApiKey, rawDataToApiKey } from '@/api/account/getApiKeys';
+import { Transformers, type ApiKey } from '@/api/definitions/admin';
+import { ApiKeyPermission } from '@/api/definitions/admin';
 
-export interface Values {
-    memo: string;
-    permissions: Permission;
-}
-
-export interface Permission {
-    r_allocations: string;
-    r_database_hosts: string;
-    r_eggs: string;
-    r_locations: string;
-    r_nests: string;
-    r_nodes: string;
-    r_server_databases: string;
-    r_servers: string;
-    r_users: string;
-}
-
-export default (values: Values): Promise<ApiKey> => {
+export default (values: { memo: string; permissions: ApiKeyPermission }): Promise<ApiKey> => {
     return new Promise((resolve, reject) => {
         http.post('/api/application/api', values)
-            .then(({ data }) => resolve(rawDataToApiKey(data)))
+            .then(({ data }) => resolve(Transformers.toApiKey(data)))
             .catch(reject);
     });
 };

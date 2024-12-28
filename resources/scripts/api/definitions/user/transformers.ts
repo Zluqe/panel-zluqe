@@ -12,6 +12,15 @@ export default class Transformers {
         };
     };
 
+    static toApiKey = ({ attributes }: FractalResponseData): Models.ApiKey => ({
+        id: attributes.id,
+        identifier: attributes.identifier,
+        description: attributes.description,
+        allowedIps: attributes.allowed_ips,
+        createdAt: attributes.created_at ? new Date(attributes.created_at) : null,
+        lastUsedAt: attributes.last_used_at ? new Date(attributes.last_used_at) : null,
+    });
+
     static toTicket = ({ attributes }: FractalResponseData): Models.Ticket => {
         const { messages } = attributes.relationships || {};
 

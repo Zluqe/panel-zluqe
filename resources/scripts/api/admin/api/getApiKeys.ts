@@ -5,7 +5,7 @@ import http, {
     getPaginationSet,
     withQueryBuilderParams,
 } from '@/api/http';
-import { ApiKey, rawDataToApiKey } from '@/api/account/getApiKeys';
+import { type ApiKey } from '@/api/definitions/admin';
 import { Transformers } from '@/api/definitions/admin';
 import { AxiosError } from 'axios';
 import { SWRConfiguration, SWRResponse } from 'swr';
@@ -27,7 +27,7 @@ export const Context = createContext<ContextFilters>();
 const getApiKeys = (): Promise<ApiKey> => {
     return new Promise((resolve, reject) => {
         http.get(`/api/application/api`)
-            .then(({ data }) => resolve(rawDataToApiKey(data)))
+            .then(({ data }) => resolve(Transformers.toApiKey(data)))
             .catch(reject);
     });
 };
