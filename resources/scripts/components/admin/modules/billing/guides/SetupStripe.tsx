@@ -16,6 +16,7 @@ interface StripeKeys {
 export default () => {
     const [data, setData] = useState<StripeKeys>();
     const existingKeys = useStoreState(s => s.everest.data!.billing.keys);
+    const [open, setOpen] = useState<boolean>(existingKeys.publishable || !existingKeys.secret);
 
     const submit = async () => {
         if (!data || !data.secret || !data.publishable) return;
@@ -28,13 +29,7 @@ export default () => {
     };
 
     return (
-        <Dialog
-            open={!existingKeys.publishable || !existingKeys.secret}
-            onClose={() => undefined}
-            hideCloseIcon
-            preventExternalClose
-            title={'Configure Stripe API'}
-        >
+        <Dialog open={open} onClose={() => setOpen(false)} title={'Configure Stripe API'}>
             Before you can use the Stripe API, you must provide Jexactyl with API keys to authenticate with Stripe.
             Visit the Stripe dashboard
             <a
