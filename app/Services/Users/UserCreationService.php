@@ -54,7 +54,9 @@ class UserCreationService
 
         $this->connection->commit();
 
-        $user->createAsStripeCustomer();
+        if (config('modules.billing.stripe.keys.secret')) {
+            $user->createAsStripeCustomer();
+        }
 
         return $user;
     }
