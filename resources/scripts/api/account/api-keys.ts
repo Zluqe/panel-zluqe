@@ -4,7 +4,7 @@ import { ApiKey, Transformers } from '@definitions/user';
 const getApiKeys = (): Promise<ApiKey[]> => {
     return new Promise((resolve, reject) => {
         http.get('/api/client/account/api-keys')
-            .then(({ data }) => resolve((data.data || []).map((d: any) => Transformers.toApiKey(d.attributes))))
+            .then(({ data }) => resolve((data.data || []).map(Transformers.toApiKey)))
             .catch(reject);
     });
 };
@@ -17,7 +17,7 @@ const createApiKey = (description: string, allowedIps: string): Promise<ApiKey &
         })
             .then(({ data }) =>
                 resolve({
-                    ...Transformers.toApiKey(data.attributes),
+                    ...Transformers.toApiKey(data),
                     // eslint-disable-next-line camelcase
                     secretToken: data.meta?.secret_token ?? '',
                 }),
