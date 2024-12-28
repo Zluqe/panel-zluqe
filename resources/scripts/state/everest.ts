@@ -35,6 +35,7 @@ export interface EverestSettings {
     };
     tickets: {
         enabled: boolean;
+        maxCount: number;
     };
     billing: {
         enabled: boolean;

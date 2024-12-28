@@ -36,8 +36,15 @@ class TicketController extends ClientApiController
      */
     public function store(Request $request): array
     {
-        if (!boolval($this->settings->get('settings::modules:tickets:enabled'))) {
+        $enabled = $this->settings->get('settings::modules:tickets:enabled');
+        $max_count = $this->settings->get('settings::modules:tickets:max_count');
+        
+        if (!boolval($enabled)) {
             throw new DisplayException('You cannot create a ticket as the module is disabled.');
+        }
+
+        if ($request->user()->tickets()->count() >= $max_count) {
+            throw new DisplayException("You have reached the ticket count per user of {$max_count}.");
         }
 
         $ticket = $request->user()->tickets()->create([
