@@ -57,7 +57,7 @@ class StripeController extends ClientApiController
             $paymentMethodTypes[] = 'link';
         }
 
-        if (!$request->user()->stripe_customer_id) {
+        if (!$request->user()->hasStripeId()) {
             $request->user()->createAsStripeCustomer();
         }
 

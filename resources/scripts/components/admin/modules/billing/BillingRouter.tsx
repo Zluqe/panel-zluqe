@@ -15,7 +15,6 @@ import CategoryContainer from '@admin/modules/billing/products/CategoryContainer
 import { CogIcon, DesktopComputerIcon, ShoppingCartIcon, ViewGridIcon } from '@heroicons/react/outline';
 import Unfinished from '@elements/Unfinished';
 import SettingsContainer from '@admin/modules/billing/SettingsContainer';
-import SetupStripe from './guides/SetupStripe';
 
 export default () => {
     const theme = useStoreState(state => state.theme.data!);
@@ -35,8 +34,6 @@ export default () => {
             </div>
 
             <Unfinished untested />
-
-            <SetupStripe />
 
             <FlashMessageRender byKey={'admin:billing'} className={'mb-4'} />
 

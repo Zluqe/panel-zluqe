@@ -12,8 +12,9 @@ import Label from '@/components/elements/Label';
 import Select from '@/components/elements/Select';
 import currencyDictionary from '@/assets/currency';
 import { deleteStripeKeys } from '@/api/admin/billing/keys';
+import SetupStripe from './guides/SetupStripe';
 
-export type BillingSetupDialog = 'paypal' | 'link' | 'none';
+export type BillingSetupDialog = 'paypal' | 'link' | 'setup' | 'none';
 
 export default () => {
     const settings = useStoreState(s => s.everest.data!.billing);
@@ -45,6 +46,7 @@ export default () => {
         <div className={'grid lg:grid-cols-3 gap-4'}>
             {open === 'paypal' && <SetupPayPal setOpen={setOpen} />}
             {open === 'link' && <SetupLink setOpen={setOpen} />}
+            {open === 'setup' && <SetupStripe extOpen />}
             <AdminBox title={'Add PayPal integration'} icon={faPaypal}>
                 Adding PayPal to Jexactyl allows users to purchase products via another channel, improving order success
                 rate and global payment availability.
@@ -113,13 +115,25 @@ export default () => {
                     </Select>
                 </div>
             </AdminBox>
-            <AdminBox title={'Reset Stripe API keys'} icon={faKey}>
-                By resetting the Stripe API keys saved to the panel, all billing services (such as purchasing or
-                renewing a product) will stop working until new API keys are entered. Are you sure you wish to continue?
-                <div className={'text-right mt-3'}>
-                    <Button.Danger onClick={onDeleteKeys}>Yes, delete API keys</Button.Danger>
-                </div>
-            </AdminBox>
+            {!settings.keys.publishable || !settings.keys.secret ? (
+                <AdminBox title={'Input Stripe API Keys'} icon={faKey}>
+                    Without Stripe API authentication, your billing system will not work. Customers may proceed to the
+                    checkout area but will be met with errors unless you add valid API keys which can be obtained
+                    through the Stripe dashboard.
+                    <div className={'text-right mt-3'}>
+                        <Button onClick={() => setOpen('setup')}>Add API keys</Button>
+                    </div>
+                </AdminBox>
+            ) : (
+                <AdminBox title={'Reset Stripe API keys'} icon={faKey}>
+                    By resetting the Stripe API keys saved to the panel, all billing services (such as purchasing or
+                    renewing a product) will stop working until new API keys are entered. Are you sure you wish to
+                    continue?
+                    <div className={'text-right mt-3'}>
+                        <Button.Danger onClick={onDeleteKeys}>Yes, delete API keys</Button.Danger>
+                    </div>
+                </AdminBox>
+            )}
             <AdminBox title={'Disable Billing Module'} icon={faPowerOff}>
                 Clicking the button below will disable all modules of the billing system - such as subscriptions, server
                 purchasing and more. Make sure that this will not impact your users before disabling.

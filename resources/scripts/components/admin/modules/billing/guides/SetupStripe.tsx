@@ -1,10 +1,10 @@
 import Input from '@/components/elements/Input';
 import { useStoreState } from '@/state/hooks';
 import { Dialog } from '@elements/dialog';
-import { faExclamationTriangle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle, faCheckCircle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Tooltip from '@elements/tooltip/Tooltip';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/elements/button';
 import { updateSettings } from '@/api/admin/billing/settings';
 
@@ -13,10 +13,10 @@ interface StripeKeys {
     secret?: string;
 }
 
-export default () => {
+export default ({ extOpen }: { extOpen?: boolean }) => {
     const [data, setData] = useState<StripeKeys>();
+    const [open, setOpen] = useState<boolean>(extOpen ?? false);
     const existingKeys = useStoreState(s => s.everest.data!.billing.keys);
-    const [open, setOpen] = useState<boolean>(existingKeys.publishable || !existingKeys.secret);
 
     const submit = async () => {
         if (!data || !data.secret || !data.publishable) return;
@@ -28,8 +28,24 @@ export default () => {
         });
     };
 
+    useEffect(() => {
+        if (existingKeys && !existingKeys.publishable) {
+            setOpen(true);
+        }
+    }, [existingKeys]);
+
     return (
         <Dialog open={open} onClose={() => setOpen(false)} title={'Configure Stripe API'}>
+            <div className={'p-3 bg-black/50 rounded-lg mb-4'}>
+                <p className={'text-gray-200 font-semibold'}>
+                    <FontAwesomeIcon icon={faInfoCircle} className={'text-blue-400 mr-2'} />
+                    Still setting up?
+                </p>
+                <p className={'text-gray-400 text-sm'}>
+                    Feel free to skip this message by closing the dialog and proceed to set up your products and
+                    categories. Once you&apos;re ready, head to the Settings tab to input your API key and secret.
+                </p>
+            </div>
             Before you can use the Stripe API, you must provide Jexactyl with API keys to authenticate with Stripe.
             Visit the Stripe dashboard
             <a

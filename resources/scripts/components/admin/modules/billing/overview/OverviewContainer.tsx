@@ -10,6 +10,7 @@ import { differenceInDays, parseISO } from 'date-fns';
 import SuccessChart from './SuccessChart';
 import RevenueChart from './RevenueChart';
 import Select from '@/components/elements/Select';
+import SetupStripe from '../guides/SetupStripe';
 
 export default () => {
     const now = new Date();
@@ -40,6 +41,7 @@ export default () => {
 
     return (
         <div className={'grid lg:grid-cols-5 gap-4'}>
+            <SetupStripe />
             <ol className="space-y-4 w-full">
                 <Select onChange={e => setHistory(Number(e.currentTarget.value))}>
                     <option value={7}>Last 7 days</option>
