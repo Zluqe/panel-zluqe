@@ -57,6 +57,10 @@ class StripeController extends ClientApiController
             $paymentMethodTypes[] = 'link';
         }
 
+        if (!$request->user()->stripe_customer_id) {
+            $request->user()->createAsStripeCustomer();
+        }
+
         $paymentIntent = $this->stripe->paymentIntents->create([
             'amount' => $product->price * 100,
             'currency' => strtolower(config('modules.billing.currency.code')),
