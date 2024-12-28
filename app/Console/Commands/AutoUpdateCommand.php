@@ -11,7 +11,7 @@ class AutoUpdateCommand extends Command
 {
     protected const DEFAULT_URL = 'https://github.com/jexactyl/jexactyl/releases/%s/panel.tar.gz';
 
-    protected $signature = 'p:auto_update
+    protected $signature = 'p:auto-update
         {--user= : The user that PHP runs under. All files will be owned by this user.}
         {--group= : The group that PHP runs under. All files will be owned by this group.}
         {--url= : The specific archive to download.}
@@ -40,8 +40,8 @@ class AutoUpdateCommand extends Command
         $bar->start();
 
         $this->withProgress($bar, function () {
-            $this->line("\$upgrader> curl -L \"{$this->getUrl()}\" | tar -xzv");
-            $process = Process::fromShellCommandline("curl -L \"{$this->getUrl()}\" | tar -xzv");
+            $this->line("\$upgrader> curl -Lo \"{$this->getUrl()}\" | tar -xzv");
+            $process = Process::fromShellCommandline("curl -Lo ./panel.tar.gz {$this->getUrl()} | tar -xzf");
             $process->run(function ($type, $buffer) {
                 $this->{$type === Process::ERR ? 'error' : 'line'}($buffer);
             });
