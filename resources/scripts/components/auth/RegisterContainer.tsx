@@ -12,7 +12,7 @@ import Field from '@elements/Field';
 import { Button } from '@elements/button';
 import useFlash from '@/plugins/useFlash';
 import register from '@/api/auth/register';
-import login from '@/api/auth/login';
+import { login } from '@/api/auth/login';
 
 interface Values {
     username: string;

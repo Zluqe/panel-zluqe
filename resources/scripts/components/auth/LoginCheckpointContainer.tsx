@@ -5,7 +5,7 @@ import type { Location, RouteProps } from 'react-router-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 
-import loginCheckpoint from '@/api/auth/loginCheckpoint';
+import { checkpoint } from '@/api/auth/login';
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import { Button } from '@elements/button';
 import Field from '@elements/Field';
@@ -70,7 +70,7 @@ function LoginCheckpointContainer() {
 
 const EnhancedForm = withFormik<Props & { location: Location }, Values>({
     handleSubmit: ({ code, recoveryCode }, { setSubmitting, props: { clearAndAddHttpError, location } }) => {
-        loginCheckpoint(location.state?.token || '', code, recoveryCode)
+        checkpoint(location.state?.token || '', code, recoveryCode)
             .then(response => {
                 if (response.complete) {
                     // @ts-expect-error this is valid

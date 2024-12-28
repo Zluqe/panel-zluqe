@@ -1,18 +1,7 @@
 import http from '@/api/http';
+import { type AuthResponse, type LoginData } from '@definitions/auth';
 
-export interface LoginResponse {
-    complete: boolean;
-    intended?: string;
-    confirmationToken?: string;
-}
-
-export interface LoginData {
-    username: string;
-    password: string;
-    recaptchaData?: string | null;
-}
-
-export default ({ username, password, recaptchaData }: LoginData): Promise<LoginResponse> => {
+const login = ({ username, password, recaptchaData }: LoginData): Promise<AuthResponse> => {
     return new Promise((resolve, reject) => {
         http.get('/sanctum/csrf-cookie')
             .then(() =>
@@ -36,3 +25,31 @@ export default ({ username, password, recaptchaData }: LoginData): Promise<Login
             .catch(reject);
     });
 };
+
+const externalLogin = (name: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        http.get('/sanctum/csrf-cookie')
+            .then(() => http.post(`/auth/modules/${name}`))
+            .then(({ data }) => resolve(data || []))
+            .catch(reject);
+    });
+};
+
+const checkpoint = (token: string, code: string, recoveryToken?: string): Promise<AuthResponse> => {
+    return new Promise((resolve, reject) => {
+        http.post('/auth/login/checkpoint', {
+            confirmation_token: token,
+            authentication_code: code,
+            recovery_token: recoveryToken && recoveryToken.length > 0 ? recoveryToken : undefined,
+        })
+            .then(response =>
+                resolve({
+                    complete: response.data.data.complete,
+                    intended: response.data.data.intended || undefined,
+                }),
+            )
+            .catch(reject);
+    });
+};
+
+export { login, externalLogin, checkpoint };

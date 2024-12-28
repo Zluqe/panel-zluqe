@@ -7,12 +7,11 @@ import Reaptcha from 'reaptcha';
 import tw from 'twin.macro';
 import { object, string } from 'yup';
 
-import login from '@/api/auth/login';
+import { login, externalLogin } from '@/api/auth/login';
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Field from '@elements/Field';
 import { Button } from '@elements/button';
 import useFlash from '@/plugins/useFlash';
-import useOauthLogin from '@/api/auth/useOauthLogin';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import Label from '@elements/Label';
@@ -42,7 +41,7 @@ function LoginContainer() {
     }, []);
 
     const useOauth = (name: string) => {
-        useOauthLogin(name)
+        externalLogin(name)
             .then(url => {
                 // @ts-expect-error this is fine
                 window.location = url;
