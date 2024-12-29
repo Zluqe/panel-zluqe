@@ -1,5 +1,6 @@
 import useSWR from 'swr';
-import loadDirectory, { FileObject } from '@/api/server/files/loadDirectory';
+import { loadDirectory } from '@/api/server/directories';
+import { type FileObject } from '@/api/definitions/server';
 import { cleanDirectoryPath } from '@/helpers';
 import { ServerContext } from '@/state/server';
 
