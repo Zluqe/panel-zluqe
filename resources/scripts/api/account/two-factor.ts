@@ -10,7 +10,7 @@ const getTwoFactorTokenData = (): Promise<{ image_url_data: string; secret: stri
 
 const disableTwoFactor = (password: string): Promise<void> => {
     return new Promise((resolve, reject) => {
-        http.delete('/api/client/account/two-factor', { params: { password } })
+        http.post('/api/client/account/two-factor/disable', { password })
             .then(() => resolve())
             .catch(reject);
     });
