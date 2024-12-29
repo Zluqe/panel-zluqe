@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
 import SpinnerOverlay from '@elements/SpinnerOverlay';
 import { Button } from '@elements/button/index';
-import triggerScheduleExecution from '@/api/server/schedules/triggerScheduleExecution';
+import { triggerSchedule } from '@/api/server/schedules';
 import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
-import { Schedule } from '@/api/server/schedules/getServerSchedules';
+import { type Schedule } from '@/api/definitions/server';
 
 const RunScheduleButton = ({ schedule }: { schedule: Schedule }) => {
     const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ const RunScheduleButton = ({ schedule }: { schedule: Schedule }) => {
     const onTriggerExecute = useCallback(() => {
         clearFlashes('schedule');
         setLoading(true);
-        triggerScheduleExecution(id, schedule.id)
+        triggerSchedule(id, schedule.id)
             .then(() => {
                 setLoading(false);
                 appendSchedule({ ...schedule, isProcessing: true });

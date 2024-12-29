@@ -1,6 +1,6 @@
 import type { AxiosError } from 'axios';
 import type { NavigateFunction } from 'react-router-dom';
-
+import { store } from '@/state';
 import http from '@/api/http';
 
 export const setupInterceptors = (navigate: NavigateFunction) => {
@@ -16,6 +16,29 @@ export const setupInterceptors = (navigate: NavigateFunction) => {
                     }
                 }
             }
+            throw error;
+        },
+    );
+
+    http.interceptors.request.use(req => {
+        if (!req.url?.endsWith('/resources')) {
+            store.getActions().progress.startContinuous();
+        }
+
+        return req;
+    });
+
+    http.interceptors.response.use(
+        resp => {
+            if (!resp.request?.url?.endsWith('/resources')) {
+                store.getActions().progress.setComplete();
+            }
+
+            return resp;
+        },
+        error => {
+            store.getActions().progress.setComplete();
+
             throw error;
         },
     );

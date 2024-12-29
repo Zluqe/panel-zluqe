@@ -7,11 +7,11 @@ import Field from '@elements/Field';
 import { object, string } from 'yup';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { ServerContext } from '@/state/server';
-import deleteServerDatabase from '@/api/server/databases/deleteServerDatabase';
+import { deleteDatabase } from '@/api/server/databases';
 import { httpErrorToHuman } from '@/api/http';
 import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
 import Can from '@elements/Can';
-import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
+import { type Database } from '@/api/definitions/server';
 import useFlash from '@/plugins/useFlash';
 import tw from 'twin.macro';
 import { Button } from '@elements/button';
@@ -21,7 +21,7 @@ import GreyRowBox from '@elements/GreyRowBox';
 import CopyOnClick from '@elements/CopyOnClick';
 
 interface Props {
-    database: ServerDatabase;
+    database: Database;
     className?: string;
 }
 
@@ -41,12 +41,12 @@ export default ({ database, className }: Props) => {
     const schema = object().shape({
         confirm: string()
             .required('The database name must be provided.')
-            .oneOf([database.name.split('_', 2)[1], database.name], 'The database name must be provided.'),
+            .oneOf([database.name!.split('_', 2)[1], database.name], 'The database name must be provided.'),
     });
 
     const submit = (_: { confirm: string }, { setSubmitting }: FormikHelpers<{ confirm: string }>) => {
         clearFlashes();
-        deleteServerDatabase(uuid, database.id)
+        deleteDatabase(uuid, database.id)
             .then(() => {
                 setVisible(false);
                 setTimeout(() => removeDatabase(database.id), 150);
@@ -86,7 +86,7 @@ export default ({ database, className }: Props) => {
                                 description={'Enter the database name to confirm deletion.'}
                             />
                             <div css={tw`mt-6 text-right`}>
-                                <Button type={'button'} isSecondary css={tw`mr-2`} onClick={() => setVisible(false)}>
+                                <Button type={'button'} css={tw`mr-2`} onClick={() => setVisible(false)}>
                                     Cancel
                                 </Button>
                                 <Button type={'submit'} color={'red'} disabled={!isValid}>
@@ -134,9 +134,7 @@ export default ({ database, className }: Props) => {
                     <Can action={'database.update'}>
                         <RotatePasswordButton databaseId={database.id} onUpdate={appendDatabase} />
                     </Can>
-                    <Button isSecondary onClick={() => setConnectionVisible(false)}>
-                        Close
-                    </Button>
+                    <Button onClick={() => setConnectionVisible(false)}>Close</Button>
                 </div>
             </Modal>
             <GreyRowBox $hoverable={false} className={className} css={tw`mb-2`}>
@@ -165,11 +163,11 @@ export default ({ database, className }: Props) => {
                     <p css={tw`mt-1 text-2xs text-neutral-500 uppercase select-none`}>Username</p>
                 </div>
                 <div css={tw`ml-8`}>
-                    <Button isSecondary css={tw`mr-2`} onClick={() => setConnectionVisible(true)}>
+                    <Button css={tw`mr-2`} onClick={() => setConnectionVisible(true)}>
                         <FontAwesomeIcon icon={faEye} fixedWidth />
                     </Button>
                     <Can action={'database.delete'}>
-                        <Button color={'red'} isSecondary onClick={() => setVisible(true)}>
+                        <Button color={'red'} onClick={() => setVisible(true)}>
                             <FontAwesomeIcon icon={faTrashAlt} fixedWidth />
                         </Button>
                     </Can>

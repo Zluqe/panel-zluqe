@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import tw from 'twin.macro';
 import { join } from 'pathe';
 
-import type { FileObject } from '@/api/server/files/loadDirectory';
+import { type FileObject } from '@/api/definitions/server';
 import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
 import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
 import { encodePathSegments } from '@/helpers';

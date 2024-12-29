@@ -9,7 +9,7 @@ import { Nest } from '@/api/admin/nest';
 import { Category } from '@/api/admin/billing/categories';
 import { Ticket, TicketMessage } from '@/api/admin/tickets/getTickets';
 import { Product } from '@/api/admin/billing/products';
-import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
+import { type Database } from '@definitions/server';
 const isList = (data: FractalResponseList | FractalResponseData): data is FractalResponseList => data.object === 'list';
 
 function transform<T, M = undefined>(
@@ -261,7 +261,7 @@ export default class Transformers {
         },
     });
 
-    static toServerDatabase = ({ attributes }: FractalResponseData): ServerDatabase => ({
+    static toServerDatabase = ({ attributes }: FractalResponseData): Database => ({
         id: attributes.id,
         name: attributes.name,
         databaseHostId: attributes.database_host_id,

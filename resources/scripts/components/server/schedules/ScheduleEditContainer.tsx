@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import getServerSchedule from '@/api/server/schedules/getServerSchedule';
+import { getSchedule } from '@/api/server/schedules';
 import Spinner from '@elements/Spinner';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
@@ -63,7 +63,7 @@ export default () => {
         }
 
         clearFlashes('schedules');
-        getServerSchedule(uuid, Number(scheduleId))
+        getSchedule(uuid, Number(scheduleId))
             .then(schedule => appendSchedule(schedule))
             .catch(error => {
                 console.error(error);

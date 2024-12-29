@@ -1,21 +1,20 @@
 import { memo, useState } from 'react';
-import { ServerEggVariable } from '@/api/server/types';
+import { EggVariable } from '@/api/definitions/server';
 import TitledGreyBox from '@elements/TitledGreyBox';
 import { usePermissions } from '@/plugins/usePermissions';
 import InputSpinner from '@elements/InputSpinner';
 import Input from '@elements/Input';
 import Switch from '@elements/Switch';
 import { debounce } from 'debounce';
-import updateStartupVariable from '@/api/server/updateStartupVariable';
+import { updateStartupVariable, getServerStartup } from '@/api/server/startup';
 import useFlash from '@/plugins/useFlash';
 import FlashMessageRender from '@/components/FlashMessageRender';
-import getServerStartup from '@/api/swr/getServerStartup';
 import Select from '@elements/Select';
 import isEqual from 'react-fast-compare';
 import { ServerContext } from '@/state/server';
 
 interface Props {
-    variable: ServerEggVariable;
+    variable: EggVariable;
 }
 
 const VariableBox = ({ variable }: Props) => {

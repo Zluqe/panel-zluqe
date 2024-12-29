@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import getServerDatabases from '@/api/server/databases/getServerDatabases';
+import { getDatabases } from '@/api/server/databases';
 import { ServerContext } from '@/state/server';
 import { httpErrorToHuman } from '@/api/http';
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -27,7 +27,7 @@ export default () => {
         setLoading(!databases.length);
         clearFlashes('databases');
 
-        getServerDatabases(uuid)
+        getDatabases(uuid)
             .then(databases => setDatabases(databases))
             .catch(error => {
                 console.error(error);

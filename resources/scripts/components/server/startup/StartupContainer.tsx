@@ -4,7 +4,6 @@ import TitledGreyBox from '@elements/TitledGreyBox';
 import tw from 'twin.macro';
 import VariableBox from '@/components/server/startup/VariableBox';
 import ServerContentBlock from '@elements/ServerContentBlock';
-import getServerStartup from '@/api/swr/getServerStartup';
 import Spinner from '@elements/Spinner';
 import { ServerError } from '@elements/ScreenBlock';
 import { httpErrorToHuman } from '@/api/http';
@@ -13,7 +12,7 @@ import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 import Select from '@elements/Select';
 import isEqual from 'react-fast-compare';
 import Input from '@elements/Input';
-import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
+import { setImage, getServerStartup } from '@/api/server/startup';
 import InputSpinner from '@elements/InputSpinner';
 import useFlash from '@/plugins/useFlash';
 
@@ -66,7 +65,7 @@ const StartupContainer = () => {
             clearFlashes('startup:image');
 
             const image = v.currentTarget.value;
-            setSelectedDockerImage(uuid, image)
+            setImage(uuid, image)
                 .then(() => setServerFromState(s => ({ ...s, dockerImage: image })))
                 .catch(error => {
                     console.error(error);

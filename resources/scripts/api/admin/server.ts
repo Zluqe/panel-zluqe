@@ -7,7 +7,7 @@ import { Allocation, Node } from '@/api/admin/node';
 import { Transformers, User } from '@definitions/admin';
 import { Egg, EggVariable } from '@/api/admin/egg';
 import { Nest } from '@/api/admin/nest';
-import { ServerDatabase } from '../server/databases/getServerDatabases';
+import { type Database } from '@definitions/server';
 
 /**
  * Defines the limits for a server that exists on the Panel.
@@ -64,7 +64,7 @@ export interface Server extends Model {
         node?: Node;
         user?: User;
         variables?: ServerVariable[];
-        databases?: ServerDatabase[];
+        databases?: Database[];
     };
 }
 

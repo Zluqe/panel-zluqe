@@ -8,18 +8,18 @@ import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 import BackupContextMenu from '@/components/server/backups/BackupContextMenu';
 import tw from 'twin.macro';
 import GreyRowBox from '@elements/GreyRowBox';
-import getServerBackups from '@/api/swr/getServerBackups';
-import { ServerBackup } from '@/api/server/types';
+import { getBackups } from '@/api/server/backups';
+import { type Backup } from '@/api/definitions/server';
 import { SocketEvent } from '@/components/server/events';
 import { useState } from 'react';
 
 interface Props {
-    backup: ServerBackup;
+    backup: Backup;
     className?: string;
 }
 
 export default ({ backup }: Props) => {
-    const { mutate } = getServerBackups();
+    const { mutate } = getBackups();
     const [visible, setVisible] = useState<boolean>(false);
 
     useWebsocketEvent(`${SocketEvent.BACKUP_COMPLETED}:${backup.uuid}` as SocketEvent, async data => {

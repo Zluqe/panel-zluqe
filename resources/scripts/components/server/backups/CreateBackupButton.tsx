@@ -5,12 +5,11 @@ import { boolean, object, string } from 'yup';
 import Field from '@elements/Field';
 import FormikFieldWrapper from '@elements/FormikFieldWrapper';
 import useFlash from '@/plugins/useFlash';
-import createServerBackup from '@/api/server/backups/createServerBackup';
+import { createBackup, getBackups } from '@/api/server/backups';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { Button } from '@elements/button';
 import tw from 'twin.macro';
 import { Textarea } from '@elements/Input';
-import getServerBackups from '@/api/swr/getServerBackups';
 import { ServerContext } from '@/state/server';
 import FormikSwitch from '@elements/FormikSwitch';
 import Can from '@elements/Can';
@@ -71,7 +70,7 @@ export default () => {
     const uuid = ServerContext.useStoreState(state => state.server.data!.uuid);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const [visible, setVisible] = useState(false);
-    const { mutate } = getServerBackups();
+    const { mutate } = getBackups();
 
     useEffect(() => {
         clearFlashes('backups:create');
@@ -79,7 +78,7 @@ export default () => {
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes('backups:create');
-        createServerBackup(uuid, values)
+        createBackup(uuid, values)
             .then(async backup => {
                 await mutate(
                     data => ({ ...data!, items: data!.items.concat(backup), backupCount: data!.backupCount + 1 }),

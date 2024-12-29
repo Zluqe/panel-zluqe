@@ -1,4 +1,4 @@
-import { rawDataToServerObject, Server } from '@/api/server/getServer';
+import { Transformers, type Server } from '@definitions/server';
 import http, { getPaginationSet, PaginatedResult } from '@/api/http';
 
 interface QueryParams {
@@ -18,7 +18,7 @@ export default ({ query, ...params }: QueryParams): Promise<PaginatedResult<Serv
         })
             .then(({ data }) =>
                 resolve({
-                    items: (data.data || []).map((datum: any) => rawDataToServerObject(datum)),
+                    items: (data.data || []).map(Transformers.toServer),
                     pagination: getPaginationSet(data.meta.pagination),
                 }),
             )

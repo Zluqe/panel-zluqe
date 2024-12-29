@@ -1,15 +1,5 @@
 import http, { FractalResponseData } from '@/api/http';
-
-export interface ServerGroup {
-    id: number;
-    name: string;
-    color?: string;
-}
-
-export interface Values {
-    name: string;
-    color?: string;
-}
+import { ServerGroup } from '@definitions/server';
 
 export const rawDataToServerGroup = ({ attributes: data }: FractalResponseData): ServerGroup => ({
     id: data.id,
@@ -25,7 +15,7 @@ export const getServerGroups = (): Promise<ServerGroup[]> => {
     });
 };
 
-export const createServerGroup = (values: Values): Promise<ServerGroup> => {
+export const createServerGroup = (values: { name: string; color?: string }): Promise<ServerGroup> => {
     return new Promise((resolve, reject) => {
         http.post('/api/client/groups', values)
             .then(({ data }) => resolve(rawDataToServerGroup(data)))
@@ -49,7 +39,7 @@ export const removeServerFromGroup = (id: number, server: string): Promise<void>
     });
 };
 
-export const updateServerGroup = (id: number, values: Values): Promise<void> => {
+export const updateServerGroup = (id: number, values: { name: string; color?: string }): Promise<void> => {
     return new Promise((resolve, reject) => {
         http.patch(`/api/client/groups/${id}`, values)
             .then(() => resolve())

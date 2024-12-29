@@ -1,3 +1,4 @@
+import { Subuser } from '@/api/definitions/server';
 import { action, Action } from 'easy-peasy';
 
 export type SubuserPermission =
@@ -29,18 +30,6 @@ export type SubuserPermission =
     | 'schedule.read'
     | 'schedule.update'
     | 'schedule.delete';
-
-export interface Subuser {
-    uuid: string;
-    username: string;
-    email: string;
-    image: string;
-    twoFactorEnabled: boolean;
-    createdAt: Date;
-    permissions: SubuserPermission[];
-
-    can(permission: SubuserPermission): boolean;
-}
 
 export interface ServerSubuserStore {
     data: Subuser[];

@@ -1,8 +1,8 @@
 import { useContext, useEffect } from 'react';
-import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
+import { type Schedule, type Task } from '@/api/definitions/server';
 import { Field as FormikField, Form, Formik, FormikHelpers, useField } from 'formik';
 import { ServerContext } from '@/state/server';
-import createOrUpdateScheduleTask from '@/api/server/schedules/createOrUpdateScheduleTask';
+import { modifyTask } from '@/api/server/tasks';
 import { httpErrorToHuman } from '@/api/http';
 import Field from '@elements/Field';
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -87,7 +87,7 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                 key: 'schedule:task',
             });
         } else {
-            createOrUpdateScheduleTask(uuid, schedule.id, task?.id, values)
+            modifyTask(uuid, schedule.id, task?.id, values)
                 .then(task => {
                     let tasks = schedule.tasks.map(t => (t.id === task.id ? task : t));
                     if (!schedule.tasks.find(t => t.id === task.id)) {

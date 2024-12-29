@@ -2,7 +2,7 @@ import { ServerContext } from '@/state/server';
 import TitledGreyBox from '@elements/TitledGreyBox';
 import { Field as FormikField, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { Actions, useStoreActions } from 'easy-peasy';
-import renameServer from '@/api/server/renameServer';
+import { renameServer } from '@/api/server';
 import Field from '@elements/Field';
 import { object, string } from 'yup';
 import SpinnerOverlay from '@elements/SpinnerOverlay';

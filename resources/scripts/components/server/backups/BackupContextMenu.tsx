@@ -8,23 +8,21 @@ import {
     faUnlock,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import getBackupDownloadUrl from '@/api/server/backups/getBackupDownloadUrl';
+import { getBackupUrl } from '@/api/server/backups';
 import useFlash from '@/plugins/useFlash';
-import deleteBackup from '@/api/server/backups/deleteBackup';
+import { deleteBackup, restoreBackup, getBackups } from '@/api/server/backups';
 import Can from '@elements/Can';
 import tw from 'twin.macro';
-import getServerBackups from '@/api/swr/getServerBackups';
-import { ServerBackup } from '@/api/server/types';
+import { type Backup } from '@/api/definitions/server';
 import { ServerContext } from '@/state/server';
 import Input from '@elements/Input';
-import { restoreServerBackup } from '@/api/server/backups';
 import http, { httpErrorToHuman } from '@/api/http';
 import { Dialog } from '@elements/dialog';
 import { Button } from '@elements/button';
 import SpinnerOverlay from '@elements/SpinnerOverlay';
 
 interface Props {
-    backup: ServerBackup;
+    backup: Backup;
     visible: boolean;
     setVisible: Dispatch<SetStateAction<boolean>>;
 }
@@ -36,12 +34,12 @@ export default ({ backup, visible, setVisible }: Props) => {
     const [loading, setLoading] = useState(false);
     const [truncate, setTruncate] = useState(false);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { mutate } = getServerBackups();
+    const { mutate } = getBackups();
 
     const doDownload = () => {
         setLoading(true);
         clearFlashes('backups');
-        getBackupDownloadUrl(uuid, backup.uuid)
+        getBackupUrl(uuid, backup.uuid)
             .then(url => {
                 // @ts-expect-error this is valid
                 window.location = url;
@@ -79,7 +77,7 @@ export default ({ backup, visible, setVisible }: Props) => {
     const doRestorationAction = () => {
         setLoading(true);
         clearFlashes('backups');
-        restoreServerBackup(uuid, backup.uuid, truncate)
+        restoreBackup(uuid, backup.uuid, truncate)
             .then(() =>
                 setServerFromState(s => ({
                     ...s,

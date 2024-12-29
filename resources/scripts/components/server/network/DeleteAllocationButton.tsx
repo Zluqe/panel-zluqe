@@ -3,8 +3,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import tw from 'twin.macro';
 import Icon from '@elements/Icon';
 import { ServerContext } from '@/state/server';
-import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
-import getServerAllocations from '@/api/swr/getServerAllocations';
+import { deleteAllocation, getAllocations } from '@/api/server/allocations';
 import { useFlashKey } from '@/plugins/useFlash';
 import { Dialog } from '@elements/dialog';
 import { Button } from '@elements/button/index';
@@ -19,16 +18,16 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
     const uuid = ServerContext.useStoreState(state => state.server.data!.uuid);
     const setServerFromState = ServerContext.useStoreActions(actions => actions.server.setServerFromState);
 
-    const { mutate } = getServerAllocations();
+    const { mutate } = getAllocations();
     const { clearFlashes, clearAndAddHttpError } = useFlashKey('server:network');
 
-    const deleteAllocation = () => {
+    const doDeletion = () => {
         clearFlashes();
 
         mutate(data => data?.filter(a => a.id !== allocation), false);
         setServerFromState(s => ({ ...s, allocations: s.allocations.filter(a => a.id !== allocation) }));
 
-        deleteServerAllocation(uuid, allocation).catch(error => {
+        deleteAllocation(uuid, allocation).catch(error => {
             clearAndAddHttpError(error);
             mutate();
         });
@@ -41,7 +40,7 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
                 onClose={() => setConfirm(false)}
                 title={'Remove Allocation'}
                 confirm={'Delete'}
-                onConfirmed={deleteAllocation}
+                onConfirmed={doDeletion}
             >
                 This allocation will be immediately removed from your server.
             </Dialog.Confirm>

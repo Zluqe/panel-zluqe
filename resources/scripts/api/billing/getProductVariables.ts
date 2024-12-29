@@ -1,11 +1,10 @@
 import http from '@/api/http';
-import type { ServerEggVariable } from '@/api/server/types';
-import { rawDataToServerEggVariable } from '@/api/transformers';
+import { type EggVariable, Transformers } from '@definitions/server';
 
-export default (id: number): Promise<ServerEggVariable[]> => {
+export default (id: number): Promise<EggVariable[]> => {
     return new Promise((resolve, reject) => {
         http.get(`/api/client/billing/products/${id}/variables`)
-            .then(({ data }) => resolve((data.data || []).map((datum: any) => rawDataToServerEggVariable(datum))))
+            .then(({ data }) => resolve((data.data || []).map(Transformers.toEggVariable)))
             .catch(reject);
     });
 };

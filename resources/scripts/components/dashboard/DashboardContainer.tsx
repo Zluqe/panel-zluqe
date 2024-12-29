@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Server } from '@/api/server/getServer';
+import { type Server } from '@definitions/server';
 import getServers from '@/api/getServers';
 import ServerRow from '@/components/dashboard/ServerRow';
 import PageContentBlock from '@elements/PageContentBlock';
@@ -20,7 +20,8 @@ import ServerSvg from '@/assets/images/themed/ServerSvg';
 import { Button } from '@elements/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleArrowRight, faList, faShield } from '@fortawesome/free-solid-svg-icons';
-import { getServerGroups, ServerGroup } from '@/api/server/groups';
+import { getServerGroups } from '@/api/server/groups';
+import { type ServerGroup } from '@/api/definitions/server';
 import ServerGroupDialog, { VisibleDialog } from '@/components/dashboard/groups/ServerGroupDialog';
 
 export default () => {

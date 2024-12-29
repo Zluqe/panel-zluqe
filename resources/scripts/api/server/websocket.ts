@@ -1,11 +1,6 @@
 import http from '@/api/http';
 
-interface Response {
-    token: string;
-    socket: string;
-}
-
-export default (server: string): Promise<Response> => {
+export default (server: string): Promise<{ token: string; socket: string }> => {
     return new Promise((resolve, reject) => {
         http.get(`/api/client/servers/${server}/websocket`)
             .then(({ data }) =>

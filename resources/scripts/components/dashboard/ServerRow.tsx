@@ -13,11 +13,12 @@ import {
     IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { Server } from '@/api/server/getServer';
-import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/server/getServerResourceUsage';
+import { ServerPowerState, ServerStats, type Server } from '@definitions/server';
+import { getServerResourceUsage } from '@/api/server';
 import { useStoreState } from '@/state/hooks';
 import classNames from 'classnames';
-import { removeServerFromGroup, ServerGroup } from '@/api/server/groups';
+import { removeServerFromGroup } from '@/api/server/groups';
+import { type ServerGroup } from '@definitions/server';
 import Pill from '@elements/Pill';
 import { VisibleDialog } from './groups/ServerGroupDialog';
 import useFlash from '@/plugins/useFlash';

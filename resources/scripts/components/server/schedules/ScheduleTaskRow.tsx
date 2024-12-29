@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
+import { type Schedule, type Task } from '@/api/definitions/server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faArrowCircleDown,
@@ -10,7 +10,7 @@ import {
     faToggleOn,
     faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
+import { deleteTask } from '@/api/server/tasks';
 import { httpErrorToHuman } from '@/api/http';
 import SpinnerOverlay from '@elements/SpinnerOverlay';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
@@ -52,7 +52,7 @@ export default ({ schedule, task }: Props) => {
     const onConfirmDeletion = () => {
         setIsLoading(true);
         clearFlashes('schedules');
-        deleteScheduleTask(uuid, schedule.id, task.id)
+        deleteTask(uuid, schedule.id, task.id)
             .then(() =>
                 appendSchedule({
                     ...schedule,

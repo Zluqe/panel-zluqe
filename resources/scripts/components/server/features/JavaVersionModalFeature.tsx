@@ -3,14 +3,13 @@ import { ServerContext } from '@/state/server';
 import Modal from '@elements/Modal';
 import tw from 'twin.macro';
 import { Button } from '@elements/button';
-import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
+import { setImage, getServerStartup } from '@/api/server/startup';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import useFlash from '@/plugins/useFlash';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 import Select from '@elements/Select';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 import Can from '@elements/Can';
-import getServerStartup from '@/api/swr/getServerStartup';
 import InputSpinner from '@elements/InputSpinner';
 
 const MATCH_ERRORS = [
@@ -53,7 +52,7 @@ const JavaVersionModalFeature = () => {
         setLoading(true);
         clearFlashes('feature:javaVersion');
 
-        setSelectedDockerImage(uuid, selectedVersion)
+        setImage(uuid, selectedVersion)
             .then(() => {
                 if (status === 'offline' && instance) {
                     instance.send(SocketRequest.SET_STATE, 'restart');
@@ -101,7 +100,7 @@ const JavaVersionModalFeature = () => {
                 </div>
             </Can>
             <div css={tw`mt-8 flex flex-col sm:flex-row justify-end sm:space-x-4 space-y-4 sm:space-y-0`}>
-                <Button isSecondary onClick={() => setVisible(false)} css={tw`w-full sm:w-auto`}>
+                <Button onClick={() => setVisible(false)} css={tw`w-full sm:w-auto`}>
                     Cancel
                 </Button>
                 <Can action={'startup.docker-image'}>

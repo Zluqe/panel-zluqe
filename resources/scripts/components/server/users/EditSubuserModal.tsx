@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef } from 'react';
-import { Subuser } from '@/state/server/subusers';
+import { type Subuser } from '@/api/definitions/server';
 import { Form, Formik } from 'formik';
 import { array, object, string } from 'yup';
 import Field from '@elements/Field';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { ApplicationStore } from '@/state';
-import createOrUpdateSubuser from '@/api/server/users/createOrUpdateSubuser';
+import { modifySubuser } from '@/api/server/subusers';
 import { ServerContext } from '@/state/server';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@elements/Can';
@@ -62,7 +62,7 @@ const EditSubuserModal = ({ subuser }: Props) => {
         setPropOverrides({ showSpinnerOverlay: true });
         clearFlashes('user:edit');
 
-        createOrUpdateSubuser(uuid, values, subuser)
+        modifySubuser(uuid, values, subuser)
             .then(subuser => {
                 appendSubuser(subuser);
                 dismiss();

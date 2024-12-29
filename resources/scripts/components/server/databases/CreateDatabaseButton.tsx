@@ -3,7 +3,7 @@ import Modal from '@elements/Modal';
 import { Form, Formik, FormikHelpers } from 'formik';
 import Field from '@elements/Field';
 import { object, string } from 'yup';
-import createServerDatabase from '@/api/server/databases/createServerDatabase';
+import { createDatabase } from '@/api/server/databases';
 import { ServerContext } from '@/state/server';
 import { httpErrorToHuman } from '@/api/http';
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -37,7 +37,7 @@ export default () => {
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes('database:create');
-        createServerDatabase(uuid, {
+        createDatabase(uuid, {
             databaseName: values.databaseName,
             connectionsFrom: values.connectionsFrom || '%',
         })
@@ -92,7 +92,6 @@ export default () => {
                             <div css={tw`flex flex-wrap justify-end mt-6`}>
                                 <Button
                                     type={'button'}
-                                    isSecondary
                                     css={tw`w-full sm:w-auto sm:mr-2`}
                                     onClick={() => setVisible(false)}
                                 >

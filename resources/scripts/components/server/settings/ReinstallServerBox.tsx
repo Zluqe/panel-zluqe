@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ServerContext } from '@/state/server';
 import TitledGreyBox from '@elements/TitledGreyBox';
-import reinstallServer from '@/api/server/reinstallServer';
+import { reinstallServer } from '@/api/server';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { ApplicationStore } from '@/state';
 import { httpErrorToHuman } from '@/api/http';

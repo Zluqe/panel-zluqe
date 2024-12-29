@@ -8,16 +8,14 @@ import { Textarea } from '@elements/Input';
 import Can from '@elements/Can';
 import { Button } from '@elements/button/index';
 import GreyRowBox from '@elements/GreyRowBox';
-import { Allocation } from '@/api/server/getServer';
+import { type Allocation } from '@/api/definitions/server';
 import styled from 'styled-components';
 import { debounce } from 'debounce';
-import setServerAllocationNotes from '@/api/server/network/setServerAllocationNotes';
+import { setAllocationNotes, setPrimaryAllocation, getAllocations } from '@/api/server/allocations';
 import { useFlashKey } from '@/plugins/useFlash';
 import { ServerContext } from '@/state/server';
 import CopyOnClick from '@elements/CopyOnClick';
 import DeleteAllocationButton from '@/components/server/network/DeleteAllocationButton';
-import setPrimaryServerAllocation from '@/api/server/network/setPrimaryServerAllocation';
-import getServerAllocations from '@/api/swr/getServerAllocations';
 import { ip } from '@/lib/formatters';
 import Code from '@elements/Code';
 
@@ -33,27 +31,27 @@ const AllocationRow = ({ allocation }: Props) => {
     const [loading, setLoading] = useState(false);
     const { clearFlashes, clearAndAddHttpError } = useFlashKey('server:network');
     const uuid = ServerContext.useStoreState(state => state.server.data!.uuid);
-    const { mutate } = getServerAllocations();
+    const { mutate } = getAllocations();
 
     const onNotesChanged = useCallback((id: number, notes: string) => {
         mutate(data => data?.map(a => (a.id === id ? { ...a, notes } : a)), false);
     }, []);
 
-    const setAllocationNotes = debounce((notes: string) => {
+    const doSetNotes = debounce((notes: string) => {
         setLoading(true);
         clearFlashes();
 
-        setServerAllocationNotes(uuid, allocation.id, notes)
+        setAllocationNotes(uuid, allocation.id, notes)
             .then(() => onNotesChanged(allocation.id, notes))
             .catch(error => clearAndAddHttpError(error))
             .then(() => setLoading(false));
     }, 750);
 
-    const setPrimaryAllocation = () => {
+    const doSetPrimary = () => {
         clearFlashes();
         mutate(data => data?.map(a => ({ ...a, isDefault: a.id === allocation.id })), false);
 
-        setPrimaryServerAllocation(uuid, allocation.id).catch(error => {
+        setPrimaryAllocation(uuid, allocation.id).catch(error => {
             clearAndAddHttpError(error);
             mutate();
         });
@@ -90,7 +88,7 @@ const AllocationRow = ({ allocation }: Props) => {
                         className={'border-transparent bg-neutral-800 hover:border-neutral-600'}
                         placeholder={'Notes'}
                         defaultValue={allocation.notes || undefined}
-                        onChange={e => setAllocationNotes(e.currentTarget.value)}
+                        onChange={e => doSetNotes(e.currentTarget.value)}
                     />
                 </InputSpinner>
             </div>
@@ -105,7 +103,7 @@ const AllocationRow = ({ allocation }: Props) => {
                             <DeleteAllocationButton allocation={allocation.id} />
                         </Can>
                         <Can action={'allocation.update'}>
-                            <Button.Text size={Button.Sizes.Small} onClick={setPrimaryAllocation}>
+                            <Button.Text size={Button.Sizes.Small} onClick={doSetPrimary}>
                                 Make Primary
                             </Button.Text>
                         </Can>

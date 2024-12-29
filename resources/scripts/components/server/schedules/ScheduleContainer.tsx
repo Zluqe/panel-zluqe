@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import getServerSchedules from '@/api/server/schedules/getServerSchedules';
+import { getSchedules } from '@/api/server/schedules';
 import { ServerContext } from '@/state/server';
 import Spinner from '@elements/Spinner';
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -24,7 +24,7 @@ function ScheduleContainer() {
     useEffect(() => {
         clearFlashes('schedules');
 
-        getServerSchedules(server.uuid)
+        getSchedules(server.uuid)
             .then(schedules => setSchedules(schedules))
             .catch(error => {
                 addError({ message: httpErrorToHuman(error), key: 'schedules' });

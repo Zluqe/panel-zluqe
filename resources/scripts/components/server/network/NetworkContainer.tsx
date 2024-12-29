@@ -5,11 +5,10 @@ import ServerContentBlock from '@elements/ServerContentBlock';
 import { ServerContext } from '@/state/server';
 import AllocationRow from '@/components/server/network/AllocationRow';
 import { Button } from '@elements/button';
-import createServerAllocation from '@/api/server/network/createServerAllocation';
+import { createAllocation, getAllocations } from '@/api/server/allocations';
 import tw from 'twin.macro';
 import Can from '@elements/Can';
 import SpinnerOverlay from '@elements/SpinnerOverlay';
-import getServerAllocations from '@/api/swr/getServerAllocations';
 import isEqual from 'react-fast-compare';
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 
@@ -21,7 +20,7 @@ const NetworkContainer = () => {
     const setServerFromState = ServerContext.useStoreActions(actions => actions.server.setServerFromState);
 
     const { clearFlashes, clearAndAddHttpError } = useFlashKey('server:network');
-    const { data, error, mutate } = getServerAllocations();
+    const { data, error, mutate } = getAllocations();
 
     useEffect(() => {
         mutate(allocations);
@@ -41,7 +40,7 @@ const NetworkContainer = () => {
         clearFlashes();
 
         setLoading(true);
-        createServerAllocation(uuid)
+        createAllocation(uuid)
             .then(allocation => {
                 setServerFromState(s => ({ ...s, allocations: s.allocations.concat(allocation) }));
                 return mutate(data?.concat(allocation), false);

@@ -6,7 +6,7 @@ import Spinner from '@elements/Spinner';
 import AddSubuserButton from '@/components/server/users/AddSubuserButton';
 import UserRow from '@/components/server/users/UserRow';
 import FlashMessageRender from '@/components/FlashMessageRender';
-import getServerSubusers from '@/api/server/users/getServerSubusers';
+import { getSubusers } from '@/api/server/subusers';
 import { httpErrorToHuman } from '@/api/http';
 import Can from '@elements/Can';
 import ServerContentBlock from '@elements/ServerContentBlock';
@@ -27,7 +27,7 @@ export default () => {
 
     useEffect(() => {
         clearFlashes('users');
-        getServerSubusers(uuid)
+        getSubusers(uuid)
             .then(subusers => {
                 setSubusers(subusers);
                 setLoading(false);

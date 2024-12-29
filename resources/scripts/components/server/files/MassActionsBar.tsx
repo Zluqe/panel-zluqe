@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import compressFiles from '@/api/server/files/compressFiles';
-import deleteFiles from '@/api/server/files/deleteFiles';
+import { compressFiles, deleteFiles } from '@/api/server/files';
 import { Button } from '@elements/button';
 import { Dialog } from '@elements/dialog';
 import Portal from '@elements/Portal';

@@ -6,7 +6,7 @@ import { httpErrorToHuman } from '@/api/http';
 import Spinner from '@elements/Spinner';
 import FileObjectRow from '@/components/server/files/FileObjectRow';
 import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
-import { FileObject } from '@/api/server/files/loadDirectory';
+import { type FileObject } from '@definitions/server';
 import NewDirectoryButton from '@/components/server/files/NewDirectoryButton';
 import { NavLink, useLocation } from 'react-router-dom';
 import Can from '@elements/Can';

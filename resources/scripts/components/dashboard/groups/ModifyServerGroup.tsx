@@ -1,7 +1,8 @@
 import { Dialog } from '@elements/dialog';
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { VisibleDialog } from './ServerGroupDialog';
-import { createServerGroup, ServerGroup, updateServerGroup, Values } from '@/api/server/groups';
+import { createServerGroup, updateServerGroup } from '@/api/server/groups';
+import { type ServerGroup } from '@/api/definitions/server';
 import InputField from '@elements/inputs/InputField';
 import Label from '@elements/Label';
 
@@ -14,7 +15,7 @@ export default ({
     open?: boolean;
     setOpen: Dispatch<SetStateAction<VisibleDialog>>;
 }) => {
-    const [values, setValues] = useState<Values>({
+    const [values, setValues] = useState<{ name: string; color?: string }>({
         name: group?.name ?? '',
         color: group?.color ?? '',
     });
@@ -22,25 +23,27 @@ export default ({
     const onSubmit = () => {
         if (group?.id) {
             updateServerGroup(group.id, values).then(() => {
-                setOpen('index');
+                setOpen({ open: 'index' });
                 return;
             });
         } else {
             createServerGroup(values).then(() => {
-                setOpen('index');
+                setOpen({ open: 'index' });
                 return;
             });
         }
     };
 
     const updateValues = (e: FormEvent<HTMLInputElement>) => {
-        setValues(prev => ({ ...prev, [e.currentTarget?.name]: e.currentTarget?.value } as Values));
+        setValues(
+            prev => ({ ...prev, [e.currentTarget?.name]: e.currentTarget?.value } as { name: string; color?: string }),
+        );
     };
 
     return (
         <Dialog.Confirm
             open={!!open}
-            onClose={() => setOpen('index')}
+            onClose={() => setOpen({ open: 'index' })}
             title={group ? `Modify ${group.name}` : 'Create new group'}
             preventExternalClose
             subDialog

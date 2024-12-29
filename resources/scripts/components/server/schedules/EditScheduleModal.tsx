@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import { Schedule } from '@/api/server/schedules/getServerSchedules';
+import { type Schedule } from '@/api/definitions/server';
 import Field from '@elements/Field';
 import { Form, Formik, FormikHelpers } from 'formik';
 import FormikSwitch from '@elements/FormikSwitch';
-import createOrUpdateSchedule from '@/api/server/schedules/createOrUpdateSchedule';
+import { modifySchedule } from '@/api/server/schedules';
 import { ServerContext } from '@/state/server';
 import { httpErrorToHuman } from '@/api/http';
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -48,7 +48,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes('schedule:edit');
-        createOrUpdateSchedule(uuid, {
+        modifySchedule(uuid, {
             id: schedule?.id,
             name: values.name,
             cron: {

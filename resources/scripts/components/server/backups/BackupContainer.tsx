@@ -6,15 +6,15 @@ import CreateBackupButton from '@/components/server/backups/CreateBackupButton';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import BackupRow from '@/components/server/backups/BackupRow';
 import tw from 'twin.macro';
-import getServerBackups, { Context as ServerBackupContext } from '@/api/swr/getServerBackups';
+import { getBackups, Context } from '@/api/server/backups';
 import { ServerContext } from '@/state/server';
 import ServerContentBlock from '@elements/ServerContentBlock';
 import Pagination from '@elements/Pagination';
 
 const BackupContainer = () => {
-    const { page, setPage } = useContext(ServerBackupContext);
+    const { page, setPage } = useContext(Context);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { data: backups, error, isValidating } = getServerBackups();
+    const { data: backups, error, isValidating } = getBackups();
 
     const backupLimit = ServerContext.useStoreState(state => state.server.data!.featureLimits.backups);
 
@@ -78,8 +78,8 @@ const BackupContainer = () => {
 export default () => {
     const [page, setPage] = useState<number>(1);
     return (
-        <ServerBackupContext.Provider value={{ page, setPage }}>
+        <Context.Provider value={{ page, setPage }}>
             <BackupContainer />
-        </ServerBackupContext.Provider>
+        </Context.Provider>
     );
 };

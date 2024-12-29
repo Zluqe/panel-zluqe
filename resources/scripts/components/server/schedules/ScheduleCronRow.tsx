@@ -1,4 +1,4 @@
-import { Schedule } from '@/api/server/schedules/getServerSchedules';
+import { type Schedule } from '@/api/definitions/server';
 import { useStoreState } from '@/state/hooks';
 import classNames from 'classnames';
 

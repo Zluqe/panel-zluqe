@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Subuser } from '@/state/server/subusers';
+import { type Subuser } from '@definitions/server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faUnlockAlt, faUserLock } from '@fortawesome/free-solid-svg-icons';
 import RemoveSubuserButton from '@/components/server/users/RemoveSubuserButton';
