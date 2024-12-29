@@ -3,7 +3,7 @@ import { ServerContext } from '@/state/server';
 import Modal from '@elements/Modal';
 import tw from 'twin.macro';
 import { Button } from '@elements/button';
-import saveFileContents from '@/api/server/files/saveFileContents';
+import { saveFileContents } from '@/api/server/files';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import useFlash from '@/plugins/useFlash';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
@@ -79,7 +79,7 @@ const EulaModalFeature = () => {
                 .
             </p>
             <div css={tw`mt-8 sm:flex items-center justify-end`}>
-                <Button isSecondary onClick={() => setVisible(false)} css={tw`w-full sm:w-auto border-transparent`}>
+                <Button onClick={() => setVisible(false)} css={tw`w-full sm:w-auto border-transparent`}>
                     Cancel
                 </Button>
                 <Button onClick={onAcceptEULA} css={tw`mt-4 sm:mt-0 sm:ml-4 w-full sm:w-auto`}>

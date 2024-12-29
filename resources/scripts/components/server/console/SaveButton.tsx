@@ -3,7 +3,7 @@ import useFlash from '@/plugins/useFlash';
 import { useEffect, useState } from 'react';
 import { ServerContext } from '@/state/server';
 import { SocketEvent } from '@/components/server/events';
-import saveFileContents from '@/api/server/files/saveFileContents';
+import { saveFileContents } from '@/api/server/files';
 import classNames from 'classnames';
 import { DownloadIcon } from '@heroicons/react/outline';
 
