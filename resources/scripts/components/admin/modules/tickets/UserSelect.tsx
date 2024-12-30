@@ -12,7 +12,7 @@ export default ({ selected, isAdmin }: { selected?: User; isAdmin?: boolean }) =
     const [users, setUsers] = useState<User[] | null>(null);
 
     const onSearch = async (query: string) => {
-        setUsers(await searchUserAccounts({ filters: { username: query, email: query } }));
+        setUsers(await searchUserAccounts({ filters: { username_or_email: query } }));
     };
 
     const onSelect = (user: User | null) => {

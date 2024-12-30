@@ -12,7 +12,7 @@ export default ({ selected }: { selected?: User }) => {
     const [users, setUsers] = useState<User[] | null>(null);
 
     const onSearch = async (query: string) => {
-        setUsers(await searchUserAccounts({ filters: { username: query, email: query } }));
+        setUsers(await searchUserAccounts({ filters: { username_or_email: query } }));
     };
 
     const onSelect = (user: User | null) => {
@@ -39,7 +39,7 @@ export default ({ selected }: { selected?: User }) => {
         >
             {users?.map(d => (
                 <Option key={d.id} selectId={'ownerId'} id={d.id} item={d} active={d.id === user?.id}>
-                    {d.email}
+                    {d.email} ({d.username})
                 </Option>
             ))}
         </SearchableSelect>
