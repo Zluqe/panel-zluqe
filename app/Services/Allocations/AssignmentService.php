@@ -83,7 +83,7 @@ class AssignmentService
                             'node_id' => $node->id,
                             'ip' => $ip->__toString(),
                             'port' => (int) $unit,
-                            'ip_alias' => array_get($data, 'allocation_alias'),
+                            'ip_alias' => array_get($data, 'alias'),
                             'server_id' => null,
                         ];
                     }
@@ -96,7 +96,7 @@ class AssignmentService
                         'node_id' => $node->id,
                         'ip' => $ip->__toString(),
                         'port' => (int) $port,
-                        'ip_alias' => array_get($data, 'allocation_alias'),
+                        'ip_alias' => array_get($data, 'alias'),
                         'server_id' => null,
                     ];
                 }
