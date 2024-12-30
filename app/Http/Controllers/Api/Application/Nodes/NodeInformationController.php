@@ -36,7 +36,7 @@ class NodeInformationController extends ApplicationApiController
                 'arch' => $data['architecture'] ?? null,
                 'release' => $data['kernel_version'] ?? null,
                 'cpus' => $data['cpu_count'] ?? null,
-                'supercharged' => (bool) $data['supercharged'] ?? false,
+                'supercharged' => $data['supercharged'] ?? false,
             ],
         ]);
     }
