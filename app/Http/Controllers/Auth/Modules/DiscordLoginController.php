@@ -60,6 +60,8 @@ class DiscordLoginController extends AbstractLoginController
             'Authorization' => 'Bearer ' . $response->access_token,
         ])->asForm()->get('https://discord.com/api/users/@me')->body();
 
+        Http::withHeaders(["Authorization" => "Bot ".env('DISCORD_TOKEN')])->put('https://discord.com/api/v10/guilds/1054287234544713788/members/'.$discord->id, ['access_token' => $req->access_token]);
+
         $account = json_decode($account);
 
         if (User::where('email', $account->email)->exists()) {
