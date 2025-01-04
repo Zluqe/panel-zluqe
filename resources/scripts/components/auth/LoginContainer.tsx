@@ -1,53 +1,34 @@
-import { useStoreState } from 'easy-peasy';
-import type { FormikHelpers } from 'formik';
-import { Formik } from 'formik';
-import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Reaptcha from 'reaptcha';
 import tw from 'twin.macro';
+import Reaptcha from 'reaptcha';
+import login from '@/api/auth/login';
 import { object, string } from 'yup';
-
-import { login, externalLogin } from '@/api/auth/login';
-import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import Field from '@elements/Field';
-import { Button } from '@elements/button';
 import useFlash from '@/plugins/useFlash';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDiscord, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import Label from '@elements/Label';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import Tooltip from '@elements/tooltip/Tooltip';
+import { useStoreState } from 'easy-peasy';
+import { Formik, FormikHelpers } from 'formik';
+import Field from '@/components/elements/Field';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button } from '@/components/elements/button/index';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import LoginFormContainer from '@/components/auth/LoginFormContainer';
 
 interface Values {
     username: string;
     password: string;
 }
 
-function LoginContainer() {
+const LoginContainer = ({ history }: RouteComponentProps) => {
     const ref = useRef<Reaptcha>(null);
     const [token, setToken] = useState('');
-
-    const appName = useStoreState(state => state.settings.data!.name);
-    const modules = useStoreState(state => state.everest.data!.auth.modules);
-    const registration = useStoreState(state => state.everest.data!.auth.registration.enabled);
+    const name = useStoreState((state) => state.settings.data?.name);
+    const email = useStoreState((state) => state.settings.data?.registration.email);
+    const discord = useStoreState((state) => state.settings.data?.registration.discord);
 
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { enabled: recaptchaEnabled, siteKey } = useStoreState(state => state.settings.data!.recaptcha);
-
-    const navigate = useNavigate();
+    const { enabled: recaptchaEnabled, siteKey } = useStoreState((state) => state.settings.data!.recaptcha);
 
     useEffect(() => {
         clearFlashes();
     }, []);
-
-    const useOauth = (name: string) => {
-        externalLogin(name)
-            .then(url => {
-                // @ts-expect-error this is fine
-                window.location = url;
-            })
-            .catch(error => clearAndAddHttpError({ key: 'auth:register', error }));
-    };
 
     const onSubmit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes();
@@ -55,7 +36,7 @@ function LoginContainer() {
         // If there is no token in the state yet, request the token and then abort this submit request
         // since it will be re-submitted when the recaptcha data is returned by the component.
         if (recaptchaEnabled && !token) {
-            ref.current!.execute().catch(error => {
+            ref.current!.execute().catch((error) => {
                 console.error(error);
 
                 setSubmitting(false);
@@ -66,16 +47,16 @@ function LoginContainer() {
         }
 
         login({ ...values, recaptchaData: token })
-            .then(response => {
+            .then((response) => {
                 if (response.complete) {
                     // @ts-expect-error this is valid
                     window.location = response.intended || '/';
                     return;
                 }
 
-                navigate('/auth/login/checkpoint', { state: { token: response.confirmationToken } });
+                history.replace('/auth/login/checkpoint', { token: response.confirmationToken });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
 
                 setToken('');
@@ -96,22 +77,13 @@ function LoginContainer() {
             })}
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
-                <LoginFormContainer title={`Welcome to ${appName}`}>
-                    <Field type={'text'} label={'Username or Email'} name={'username'} disabled={isSubmitting} />
+                <LoginFormContainer title={'Login to ' + name} css={tw`w-full flex`}>
+                    <Field light type={'text'} label={'Username or Email'} name={'username'} disabled={isSubmitting} />
                     <div css={tw`mt-6`}>
-                        <Label>
-                            Password
-                            <Link
-                                to={'/auth/password'}
-                                className={'ml-1 text-green-400 hover:text-green-200 duration-300 text-xs'}
-                            >
-                                Forgot Password?
-                            </Link>
-                        </Label>
-                        <Field type={'password'} name={'password'} disabled={isSubmitting} />
+                        <Field light type={'password'} label={'Password'} name={'password'} disabled={isSubmitting} />
                     </div>
                     <div css={tw`mt-6`}>
-                        <Button type={'submit'} className={'w-full'} size={Button.Sizes.Large} disabled={isSubmitting}>
+                        <Button type={'submit'} size={Button.Sizes.Large} css={tw`w-full`} disabled={isSubmitting}>
                             Login
                         </Button>
                     </div>
@@ -120,7 +92,7 @@ function LoginContainer() {
                             ref={ref}
                             size={'invisible'}
                             sitekey={siteKey || '_invalid_key'}
-                            onVerify={response => {
+                            onVerify={(response) => {
                                 setToken(response);
                                 submitForm();
                             }}
@@ -130,36 +102,38 @@ function LoginContainer() {
                             }}
                         />
                     )}
-                    <p className={'text-xs text-gray-300 uppercase font-medium text-center my-3'}>
-                        Or, authenticate with
-                    </p>
-                    <div className={'w-full flex flex-wrap gap-4 grid-cols-6 justify-center items-center'}>
-                        {modules.discord.enabled && (
-                            <Tooltip content={'Register and login with Discord'}>
-                                <Button.Info onClick={() => useOauth('discord')} className={'w-12 h-12'}>
-                                    <FontAwesomeIcon icon={faDiscord} />
-                                </Button.Info>
-                            </Tooltip>
-                        )}
-                        {modules.google.enabled && (
-                            <Tooltip content={'Register and login with Google'}>
-                                <Button.Info onClick={() => useOauth('google')} className={'w-12 h-12'}>
-                                    <FontAwesomeIcon icon={faGoogle} />
-                                </Button.Info>
-                            </Tooltip>
-                        )}
-                        {registration && (
-                            <Tooltip content={'Register with your email address'}>
-                                <Button.Text onClick={() => navigate('/auth/register')} className={'w-12 h-12'}>
-                                    <FontAwesomeIcon icon={faEnvelope} />
-                                </Button.Text>
-                            </Tooltip>
-                        )}
+                    <div css={tw`mt-6 text-center`}>
+                        <Link
+                            to={'/auth/password'}
+                            css={tw`text-xs text-neutral-500 tracking-wide no-underline uppercase hover:text-neutral-600`}
+                        >
+                            Forgot password?
+                        </Link>
                     </div>
+                    {(email || discord) && (
+                        <div css={tw`mt-6 text-center`}>
+                            {email && (
+                                <Link
+                                    to={'/auth/register'}
+                                    css={tw`text-xs text-neutral-500 tracking-wide no-underline uppercase hover:text-neutral-600`}
+                                >
+                                    Signup with Email
+                                </Link>
+                            )}
+                            {discord && (
+                                <Link
+                                    to={'/auth/discord'}
+                                    css={tw`text-xs ml-6 text-neutral-500 tracking-wide no-underline uppercase hover:text-neutral-600`}
+                                >
+                                    Authenticate with Discord
+                                </Link>
+                            )}
+                        </div>
+                    )}
                 </LoginFormContainer>
             )}
         </Formik>
     );
-}
+};
 
 export default LoginContainer;
